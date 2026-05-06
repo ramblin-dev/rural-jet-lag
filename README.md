@@ -26,9 +26,7 @@ Each game format from the show gets its own directory with rules, assets, and to
 
 ---
 
-## Existing Resources & Inspiration
-
-These community projects were referenced when designing these adaptations:
+## Related Projects & Resources
 
 ### Map & Logistics Tools
 - [taibeled/JetLagHideAndSeek](https://github.com/taibeled/JetLagHideAndSeek) — Automatic interactive map generation; rural users should switch isochrone mode from walking/transit to **driving**.

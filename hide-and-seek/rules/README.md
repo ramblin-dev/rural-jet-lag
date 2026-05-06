@@ -8,9 +8,8 @@ This directory contains the ruleset for the **Rural Variant** of Jet Lag: Hide a
 
 | File | Contents |
 |------|----------|
-| [`full-ruleset.md`](./full-ruleset.md) | Complete ruleset |
 | [`transportation.md`](./transportation.md) | Vehicle mechanics and movement |
-| [`budgeting.md`](./budgeting.md) | Driving range budget system |
+| [`budgeting.md`](./budgeting.md) | Question costs and card mechanics |
 | [`geography.md`](./geography.md) | Map scale, boundaries, and hiding spots |
 
 ---
