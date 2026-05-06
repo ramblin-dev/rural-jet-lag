@@ -1,6 +1,6 @@
-# Tools — Rural Jet Lag
+# Tools — Rural Hide and Seek
 
-This directory contains scripts and utilities to help set up and run a Rural Jet Lag game.
+This directory contains scripts and utilities to help set up and run a Rural Hide and Seek game.
 
 ---
 
@@ -14,7 +14,7 @@ This directory contains scripts and utilities to help set up and run a Rural Jet
 
 ## Requirements
 
-The tools in this directory require Python 3.8+. Install dependencies with:
+Requires Python 3.8+. Install dependencies with:
 
 ```bash
 pip install -r requirements.txt
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 
 ## driving_isochrone.py
 
-Generates driving-time isochrone maps — areas reachable within a set drive time from a given point.
+Generates driving-time isochrone maps — areas reachable within a set drive time from a given point. Use this before the game starts to visualize the driving zones that define the play area.
 
 ### Usage
 
@@ -50,30 +50,26 @@ Options:
 
 ### Output
 
-The script produces an interactive HTML map (using [Folium](https://python-visualization.github.io/folium/)) showing colored zones around the starting point:
+The script produces an interactive HTML map (using [Folium](https://python-visualization.github.io/folium/)) showing colored driving-time zones around the starting point:
 
 - 🟢 **Zone 1:** 0–15 min drive (innermost)
 - 🟡 **Zone 2:** 15–30 min drive
 - 🟠 **Zone 3:** 30–60 min drive
 - 🔴 **Zone 4:** 60–90 min drive (outer boundary)
 
-Open the output file in any web browser to view or screenshot the map for game setup.
+Open the output file in any web browser. Screenshot the map and share with all players before the game starts.
 
 ---
 
 ## External Tools & Resources
 
-These external tools are also useful for rural game setup:
-
 - **[OpenRouteService Isochrones](https://maps.openrouteservice.org/)** — Web interface for generating isochrones without code.
 - **[Google My Maps](https://mymaps.google.com/)** — Draw and share custom play area boundaries.
 - **[Gaia GPS](https://www.gaiagps.com/)** — Offline maps; great for rural areas with poor cell service.
-- **[Atlas Obscura](https://www.atlasobscura.com/)** — Find roadside oddities and unique landmarks for challenges.
-- **[Roadsideamerica.com](https://www.roadsideamerica.com/)** — US roadside attraction database, searchable by state/county.
-- **[Census Gazetteer](https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.html)** — Official list of incorporated places by population (useful for "Smallest Town" rule).
+- **[Census Gazetteer](https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.html)** — Official list of incorporated places by population (useful for the "Smallest Town Shield" Evasion Card).
 
 ---
 
 ## License
 
-Code in this directory is licensed under the [MIT License](../LICENSE).
+Code in this directory is licensed under the [MIT License](../../LICENSE).

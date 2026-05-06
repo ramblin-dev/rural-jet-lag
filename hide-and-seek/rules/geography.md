@@ -1,6 +1,6 @@
 # Geography & Hiding
 
-> Part of the [Rural Jet Lag Ruleset](./README.md)
+> Part of the [Rural Hide and Seek Ruleset](./README.md)
 
 ---
 
@@ -57,7 +57,7 @@ In rural environments, the landscape offers different hiding opportunities than 
 
 One of the best rural hiding strategies is the **Smallest Town** rule:
 
-> **Rule:** A hider may declare "Smallest Town" when they are within the incorporated limits of the least-populated town in the play area (verified by most recent Census data). While there, seekers must spend one extra Gas Card before they can narrow down the hider's location.
+> **Rule:** A Hider may declare "Smallest Town" when they are within the incorporated limits of the least-populated town in the play area (verified by most recent Census data). While there, Seekers must spend one extra Range Card before they can play a Location Card.
 
 This encourages exploration of obscure, hard-to-find communities and rewards preparation.
 
@@ -65,8 +65,8 @@ This encourages exploration of obscure, hard-to-find communities and rewards pre
 
 ## Population Density Considerations
 
-- **Advantage for hiders:** Low density means fewer witnesses and more obscure hiding spots.
-- **Disadvantage for hiders:** An out-of-state car parked on a gravel road is memorable to locals.
+- **Advantage for Hiders:** Low density means fewer witnesses and more obscure hiding spots.
+- **Disadvantage for Hiders:** An unfamiliar vehicle parked on a gravel road is memorable to locals.
 - **Seeker tip:** Ask locals if they've seen an unfamiliar vehicle — rural communities notice strangers.
 
 ---
@@ -75,7 +75,7 @@ This encourages exploration of obscure, hard-to-find communities and rewards pre
 
 - All players should have GPS navigation available (phone or dedicated device).
 - Pre-download offline maps for the play area in case of poor cell service.
-- Satellite/aerial imagery layers (Google Maps, Apple Maps, or Gaia GPS) help seekers and hiders evaluate terrain.
+- Satellite/aerial imagery layers (Google Maps, Apple Maps, or Gaia GPS) help both teams evaluate terrain.
 
 ---
 
@@ -85,9 +85,9 @@ Before the game:
 1. Agree on the outer boundary and mark it on a shared map (Google My Maps works well).
 2. Identify prohibited areas and mark them.
 3. Confirm all players have offline maps downloaded.
-4. Note gas stations within the play area — they become strategic resources.
-5. Generate driving isochrones from the starting point (see [`/tools/`](../tools/)).
+4. Note fueling and charging stations within the play area — they become strategic resources.
+5. Generate driving isochrones from the starting point (see [`tools/`](../tools/)).
 
 ---
 
-*See also: [Transportation](./transportation.md) | [Budgeting](./budgeting.md) | [Full Ruleset](./full-ruleset.md)*
+*See also: [Transportation](./transportation.md) | [Range Budgeting](./budgeting.md) | [Full Ruleset](./full-ruleset.md)*

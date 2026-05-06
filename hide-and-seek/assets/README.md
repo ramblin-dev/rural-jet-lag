@@ -1,6 +1,6 @@
-# Assets — Rural Jet Lag
+# Assets — Rural Hide and Seek
 
-This directory contains printable card templates and other physical assets for Rural Jet Lag: Hide and Seek.
+This directory contains printable card templates and other physical assets for the Rural Hide and Seek variant.
 
 ---
 
@@ -9,11 +9,7 @@ This directory contains printable card templates and other physical assets for R
 ```
 assets/
 └── cards/
-    ├── README.md          # Card system overview (this file's companion)
-    ├── challenges.md      # Challenge card descriptions
-    ├── powerups.md        # Powerup card descriptions
-    ├── curses.md          # Curse card descriptions
-    └── gas-cards.md       # Gas Card template descriptions
+    └── README.md    # All card descriptions
 ```
 
 ---
@@ -31,7 +27,7 @@ assets/
 - **Inkscape / Illustrator** — For SVG-based custom designs.
 
 ### Laminating
-For outdoor/vehicle use, laminate printed cards or sleeve them in clear card sleeves (standard MTG/poker size).
+For outdoor/vehicle use, laminate printed cards or sleeve them in clear card sleeves (standard poker size).
 
 ---
 
@@ -39,10 +35,9 @@ For outdoor/vehicle use, laminate printed cards or sleeve them in clear card sle
 
 | Card Type | Quantity |
 |-----------|----------|
-| Challenge Cards | 30 |
-| Powerup Cards | 10 |
-| Curse Cards | 10 |
-| Gas Cards | 20 (assorted denominations) |
+| Location Cards | 20 |
+| Evasion Cards | 10 |
+| Range Cards | 20 (assorted denominations) |
 | County-Crossing Cards | 1 per county boundary in your play area |
 
 ---
