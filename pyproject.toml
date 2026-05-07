@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Unofficial fan adaptation of Jet Lag: The Game for rural environments"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "rapidocr-onnxruntime>=1.4.4",
+]

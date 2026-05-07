@@ -13,6 +13,7 @@ An unofficial fan adaptation of **Jet Lag: The Game — Hide and Seek** for rura
 | [`rules/`](./rules/) | Ruleset for the Rural H&S variant |
 | [`assets/`](./assets/) | Printable assets and investigation book templates |
 | [`tools/`](./tools/) | Map generation utilities for pre-game setup |
+| [`reference/`](./reference/) | Links and structural notes about the original Hide + Seek (no verbatim rulebook/card text) |
 
 ---
 
