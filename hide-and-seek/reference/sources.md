@@ -24,7 +24,7 @@ Annotated index of where the original **Jet Lag: The Game — Hide + Seek** rule
   - Notable for the **Experimental Game Designs** section, which includes a [Playing With Cars (Or On Foot)](https://www.lifack.ch/docs/experimental_game_designs/playing_with_cars_or_on_foot/) variant — the closest community precedent to what this repo is building. Summarized in [`notes.md`](./notes.md).
 - **AJV6812/JetLagHideAndSeek (Sydney variant)** — <https://github.com/AJV6812/JetLagHideAndSeek>
   - 14-page TeX-typeset **Sydney variant** by Alex Varughese, credited "Wendover Productions and Alex Varughese." Localized rules for the NSW Opal transit network. Useful as a *structural model* for what a localized variant looks like — same six question categories and hider-deck card-type taxonomy as the base game, with locale-specific distances, stations, and photo subjects swapped in.
-  - Deck composition diverges from lifack: Sydney lists 28 curses and 6 power-up types; lifack ships 24 curses and 7 power-ups (Move is on lifack but not Sydney). Different printings or different curators — when cross-referencing, don't assume curse rosters match.
+  - Deck composition diverges from the base game shipped in Ivan's box: Sydney lists 28 curses and 6 power-up types; Ivan's box has 24 curses and 7 power-ups (Sydney is missing the Move power-up). Different printings or different curators — when cross-referencing, don't assume curse rosters match.
 
 ### Wiki (CC BY-SA — reusable with attribution + share-alike)
 

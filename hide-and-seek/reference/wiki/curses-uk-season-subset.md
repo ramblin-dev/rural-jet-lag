@@ -7,7 +7,7 @@ attribution: Jet Lag: The Wiki contributors
 
 # Hide + Seek: UK — Curse subset
 
-> Selective import. Only the 8 curses listed below have been brought in from the source page. They were selected because they appear in the AJV6812 Sydney-variant card list but not in the lifack base-deck OCR (see [`../notes.md`](../notes.md)). The full UK season curse list lives at the source URL above.
+> Selective import. Only the 8 curses listed below have been brought in from the source page. All 8 are confirmed Vol. 1 expansion-pack curses per Ivan's physical deck inventory. The wiki gives mechanic text for these curses; the official expansion PDF only clarifies six of them. See [`../cards.md`](../cards.md) for the full 50-curse expansion inventory and [`../notes.md`](../notes.md) for the mechanic taxonomy. The full UK season curse list lives at the source URL above.
 
 > This file is licensed **CC BY-SA 4.0** — distinct from the repo's default CC BY 4.0 license. Derivatives must be shared under CC BY-SA.
 

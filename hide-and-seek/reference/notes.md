@@ -98,9 +98,9 @@ What can be plugged into each question's blanks. Subject pools and distance buck
 
 Three card types:
 
-- **Time bonuses** — held until end of round, then added to the hider's time total. Five denominations in the base deck (3, 6, 9, 12, 18 minutes), with copy counts skewed toward smaller bonuses (lifack and Sydney digitizations both show 25 / 15 / 10 / 3 / 2).
-- **Power-ups** — utility cards. Lifack's printing has seven types: Veto, Randomize, Duplicate, Move, two Discard-and-redraw variants, and a Hand-size expander. (The AJV6812 Sydney variant doesn't list a Move power-up, so the deck appears to vary by printing — see [`sources.md`](./sources.md).)
-- **Curses** — penalties imposed on the seekers, played at the hider's discretion. Each has a casting cost. Lifack ships 24 unique curses; the Sydney variant lists 28. The two decks share most names but diverge on a handful (see taxonomy below).
+- **Time bonuses** — held until end of round, then added to the hider's time total. Five denominations in the base deck, with copy counts skewed toward smaller bonuses (25 / 15 / 10 / 3 / 2). Each card prints three values, one per game size — see [`cards.md`](./cards.md) for the table.
+- **Power-ups** — utility cards. The base deck has seven types: Veto Question, Randomize Question, Duplicate Card, Move, two Discard-and-redraw variants, and a Hand-size expander.
+- **Curses** — penalties imposed on the seekers, played at the hider's discretion. Each has a casting cost. The base deck ships 24 unique curses; see [`cards.md`](./cards.md) for the inventory and the taxonomy below for the mechanic clustering.
 
 Hand limit is 6 cards by default; certain power-ups raise it. Drawing past the limit forces an immediate play-or-discard.
 
@@ -108,9 +108,9 @@ The Vol. 1 expansion adds 50 curses, 30 power-ups, and a set of 14 metric-unit r
 
 ### Curse mechanic taxonomy
 
-The 24 base-deck curses (per lifack) cluster into a handful of mechanical families. This grouping is analytical commentary — it's how mechanics behave, not what each card says. For verbatim card text, see the lifack pages (community recreation, © Collin Jones) or the Fandom wiki entries (CC-BY-SA, importable into [`wiki/`](./wiki/)).
+The 24 base-deck curses cluster into a handful of mechanical families. This grouping is analytical commentary — it's how mechanics behave, not what each card says. For verbatim card text, see the lifack pages (community recreation, © Collin Jones) or the Fandom wiki entries (CC-BY-SA, importable into [`wiki/`](./wiki/)).
 
-Curses marked † come from the UK-season Fandom-wiki subset imported into [`wiki/curses-uk-season-subset.md`](./wiki/curses-uk-season-subset.md), not the lifack base deck. They appear in the AJV6812 Sydney variant card list and are included here for completeness when designing rural curses.
+For the canonical name-only inventory of every card (base + expansion, 50 expansion curses included), see [`cards.md`](./cards.md). The taxonomy below covers the 24 base-deck curses plus 8 expansion curses whose mechanics we have via [`wiki/curses-uk-season-subset.md`](./wiki/curses-uk-season-subset.md); the † marker tags those 8. Cards.md has the full 50-curse expansion inventory with markers and family slotting for the curses we have mechanic data on, and explicit "no data" gaps for the 18 we don't.
 
 | Family | What the family does | Curses in this family |
 |--------|---------------------|------------------------|

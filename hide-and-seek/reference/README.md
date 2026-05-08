@@ -12,6 +12,7 @@ We do **not** host the verbatim rulebook, card text, or full Investigation Book 
 
 - [`sources.md`](./sources.md) — annotated links to existing digitizations (official, community, fan-built)
 - [`notes.md`](./notes.md) — our own structural notes (category names, card-type taxonomy, mechanic outlines) that inform the rural adaptation
+- [`cards.md`](./cards.md) — name-only inventory of every base-game and expansion card with adaptation markers
 - [`wiki/`](./wiki/) — content sourced from the Jet Lag Fandom wiki under **CC BY-SA 4.0**, kept in its own subtree so its share-alike license is preserved separately from the repo-default CC BY 4.0
 
 For the verbatim text of the official rulebook and cards, follow the links in [`sources.md`](./sources.md). For local-only reference while drafting (PDFs, scans, etc.), use the repo-root `.input/` directory — it's gitignored and never published.
