@@ -6,6 +6,16 @@ An unofficial fan project adapting **Jet Lag: The Game** for rural environments 
 
 ---
 
+## Before you play
+
+This project is supplemental material — it adapts the rules of an official game, it doesn't replace them. **You'll need the official Hide + Seek home game and the Vol. 1 expansion** to play. The rulebooks, dice, hider deck, and Investigation Book all come in the box.
+
+Buy them from the official store: **[Jet Lag store on Nebula](https://store.nebula.tv/collections/jetlag)**.
+
+Everything in this repo assumes you own both the base game and Vol. 1.
+
+---
+
 ## The Problem
 
 The official fan game criteria and the original mechanics rely heavily on existing transportation infrastructure — subways, buses, trains. In rural America and similar regions, this infrastructure simply does not exist. County seats can be 30 miles apart, the nearest bus stop might be in the next state, and "walking distance" means something very different when the grocery store is 15 miles away.

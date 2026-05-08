@@ -18,7 +18,7 @@ Annotated index of where the original **Jet Lag: The Game — Hide + Seek** rule
 ### Comprehensive guides
 
 - **AJV6812/JetLagHideAndSeek (Sydney variant)** — <https://github.com/AJV6812/JetLagHideAndSeek>
-  - 14-page TeX-typeset Sydney variant by Alex Varughese ("Wendover Productions and Alex Varughese"), localized to the NSW Opal transit network. Useful as a *structural model* for what a localized variant looks like — same six question categories and hider-deck card-type taxonomy as the base game, with locale-specific distances, stations, and photo subjects swapped in. The curated curse subset is a strict subset of Ivan's physical deck, so it's not useful for inventory cross-reference.
+  - 14-page TeX-typeset Sydney variant by Alex Varughese ("Wendover Productions and Alex Varughese"), localized to the NSW Opal transit network. Useful as a *structural model* for what a localized variant looks like — same six question categories and hider-deck card-type taxonomy as the base game, with locale-specific distances, stations, and photo subjects swapped in. The curated curse subset is a strict subset of your physical deck, so it's not useful for inventory cross-reference.
 
 ### Wiki (CC BY-SA — reusable with attribution + share-alike)
 

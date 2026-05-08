@@ -11,7 +11,7 @@ Each card carries an adaptation marker indicating how it lands in the rural vari
 - **✗** — likely needs replacement (the mechanic explicitly references transit, walking-only motion, or another concept that doesn't apply in vehicle play)
 - **?** — uncertain; flagged for design review
 
-Quantities and names come from Ivan's physical deck inventory.
+Quantities and names come from your physical deck inventory.
 
 ---
 
@@ -82,13 +82,13 @@ All power-ups are geography-agnostic and appear to survive unchanged.
 |------|---------:|--------|
 | Blank | 25 |   |
 
-Confirmed against Ivan's physical deck. Customization vector — rural-specific curses can be authored on these without modifying the printed deck. Likely the right place to introduce vehicle/range mechanics.
+Confirmed against your physical deck. Customization vector — rural-specific curses can be authored on these without modifying the printed deck. Likely the right place to introduce vehicle/range mechanics.
 
 ---
 
 ## Expansion Pack Vol. 1
 
-Ivan's box says **50 curses, 30 power-ups, 14 metric cards**. With Ivan's deck inventory in hand:
+Your box says **50 curses, 30 power-ups, 14 metric cards**. With your deck inventory in hand:
 
 - **50 curses** ✓ exact match.
 - **30 power-ups** reconciles by counting time bonuses as a power-up subtype: 12 time-bonus power-ups + 18 other power-ups = 30. We list them in separate subsections below for clarity.

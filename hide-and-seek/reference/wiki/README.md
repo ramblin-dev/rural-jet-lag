@@ -38,4 +38,4 @@ Followed by the imported content.
 
 ## Currently imported
 
-- [`curses-uk-season-subset.md`](./curses-uk-season-subset.md) — 8 curses from the [Hide + Seek: UK / Curses](https://jetlag.fandom.com/wiki/Hide_%2B_Seek:_UK/Curses) page (retrieved 2026-05-06). All 8 are confirmed Vol. 1 expansion-pack cards per Ivan's physical deck. Imported because the wiki gives mechanic text where the official expansion PDF only clarifies six of them.
+- [`curses-uk-season-subset.md`](./curses-uk-season-subset.md) — 8 curses from the [Hide + Seek: UK / Curses](https://jetlag.fandom.com/wiki/Hide_%2B_Seek:_UK/Curses) page (retrieved 2026-05-06). All 8 are confirmed Vol. 1 expansion-pack cards per your physical deck. Imported because the wiki gives mechanic text where the official expansion PDF only clarifies six of them.

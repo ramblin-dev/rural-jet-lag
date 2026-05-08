@@ -4,6 +4,8 @@ An unofficial fan adaptation of **Jet Lag: The Game — Hide and Seek** for rura
 
 > **Disclaimer:** This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Jet Lag: The Game, Nebula, or Wendover Productions. All rights to the original game concept belong to their respective owners.
 
+> **You'll need the official game.** This adaptation assumes you own both the Hide + Seek home game and the Vol. 1 expansion. Buy them from the [Jet Lag store on Nebula](https://store.nebula.tv/collections/jetlag). Rural-variant rules adapt the official mechanics; they don't replace them.
+
 ---
 
 ## Files in This Directory
