@@ -11,7 +11,7 @@ Each card carries an adaptation marker indicating how it lands in the rural vari
 - **✗** — likely needs replacement (the mechanic explicitly references transit, walking-only motion, or another concept that doesn't apply in vehicle play)
 - **?** — uncertain; flagged for design review
 
-Quantities and names come from Ivan's physical deck inventory. The AJV6812 Sydney variant printing differs slightly (no "Move" power-up); see [`sources.md`](./sources.md) for the deck-divergence note.
+Quantities and names come from Ivan's physical deck inventory.
 
 ---
 
