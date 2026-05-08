@@ -26,7 +26,7 @@ The official game ships three size tiers. Map and duration scale together:
 | Medium | A major city, metro area, or region | ~1 day | 60 min | ¼ mile |
 | Large | A large region or whole country | 2–4 days | 180 min | ½ mile |
 
-Lifack publishes target transit-station counts per size (rough order: 30–100, 100–500, 500+) — useful as a complexity calibration even when transit isn't the underlying network. See [Choosing a Transit System on lifack.ch](https://www.lifack.ch/docs/setting_up_your_map/choosing_a_transit_system/) for the full table.
+The official rulebook publishes target transit-station counts per size (rough order: 30–100, 100–500, 500+) — useful as a complexity calibration even when transit isn't the underlying network. See Ivan's rulebook for the full table.
 
 <!-- TODO: pick analogous calibration targets for rural play (e.g. number of valid hide anchors per square mile) -->
 
@@ -56,7 +56,7 @@ The Investigation Book groups questions into six categories. Each has its own dr
 | Tentacles | Among Xs within D of hider, which is nearest? | 4 / 2 | 5 min |
 | Photos | Hider sends a photo of [subject] | 1 (no pick) | 10 min S/M, 20 min L |
 
-Repeat-asks cost more (the cost is multiplied each subsequent time the same question is asked). The Investigation Book is the canonical list — see lifack and the Fandom wiki under [`sources.md`](./sources.md) for the verbatim wording.
+Repeat-asks cost more (the cost is multiplied each subsequent time the same question is asked). The Investigation Book is the canonical list — see Ivan's physical Investigation Book or the Fandom wiki under [`sources.md`](./sources.md) for the verbatim wording.
 
 ### Per-category structure
 
@@ -108,7 +108,7 @@ The Vol. 1 expansion adds 50 curses, 30 power-ups, and a set of 14 metric-unit r
 
 ### Curse mechanic taxonomy
 
-The 24 base-deck curses cluster into a handful of mechanical families. This grouping is analytical commentary — it's how mechanics behave, not what each card says. For verbatim card text, see the lifack pages (community recreation, © Collin Jones) or the Fandom wiki entries (CC-BY-SA, importable into [`wiki/`](./wiki/)).
+The 24 base-deck curses cluster into a handful of mechanical families. This grouping is analytical commentary — it's how mechanics behave, not what each card says. For verbatim card text, see Ivan's physical deck or the Fandom wiki entries (CC-BY-SA, importable into [`wiki/`](./wiki/)).
 
 For the canonical name-only inventory of every card (base + expansion, 50 expansion curses included), see [`cards.md`](./cards.md). The taxonomy below covers the 24 base-deck curses plus 8 expansion curses whose mechanics we have via [`wiki/curses-uk-season-subset.md`](./wiki/curses-uk-season-subset.md); the † marker tags those 8. Cards.md has the full 50-curse expansion inventory with markers and family slotting for the curses we have mechanic data on, and explicit "no data" gaps for the 18 we don't.
 
@@ -132,7 +132,7 @@ For the canonical name-only inventory of every card (base + expansion, 50 expans
 - **Question, info, and communication restrictions** — Urban Explorer (transit-coupled) needs a vehicle-equivalent ("can't ask while driving" is the obvious port). The other six (Drained Brain, Spotty Memory, Void, Plagued Word, Zipped Lip — communication-only) are geography-agnostic and survive as-is. Plagued Word's 5-mile no-ask radius will probably want rescaling alongside the other distance buckets.
 - **Hider economy / zone manipulation** — fully transferable; no geography assumptions. Note that Prosperous Home and Tiny Home both manipulate the hiding-zone radius, which makes them sensitive to whatever "zone" means in the rural variant (a circle around a vehicle-anchored point, vs. a property line, vs. a road segment, etc.).
 
-<!-- TODO: when designing rural curses, decide whether to (a) port lifack's families one-for-one with rescaled distances, (b) add a vehicle-specific family (range-related curses, fuel-stop forced detours, breakdown-style penalties), or (c) drop some families and lean into others -->
+<!-- TODO: when designing rural curses, decide whether to (a) port the existing curse families one-for-one with rescaled distances, (b) add a vehicle-specific family (range-related curses, fuel-stop forced detours, breakdown-style penalties), or (c) drop some families and lean into others -->
 
 ---
 
@@ -140,9 +140,9 @@ For the canonical name-only inventory of every card (base + expansion, 50 expans
 
 > This section is the hinge for the rural adaptation. **Read it before designing rural rules.**
 
-Lifack's rulebook acknowledges that many areas don't have enough public transit to support even the smallest official game, and sketches a "cars or on foot" variant. The variant's design moves are worth knowing — both as a starting point and as a contrast point — for what this repo is building.
+The official rulebook's **Experimental Game Designs** section includes a "Playing With Cars (Or On Foot)" variant for areas without enough transit to support even the smallest game. The variant's design moves are worth knowing — both as a starting point and as a contrast point — for what this repo is building.
 
-The lifack approach (paraphrased — see [Playing With Cars (Or On Foot)](https://www.lifack.ch/docs/experimental_game_designs/playing_with_cars_or_on_foot/) for the source):
+The official approach (paraphrased — see Ivan's rulebook for the canonical text):
 
 - **Map setup**: drop the transit overlay; just draw the map borders. Without stations as anchors, defining what counts as a valid hiding spot needs more care.
 - **Hiding zones**: still a circle of size-dependent radius, but its center moves from a transit station to a *street terminus* — a point where a named street ends, either at an intersection with another named street or at a dead end. The terminus inherits the station's role: photo questions that referenced the station are taken there; questions that referenced the station's name now reference the street's name.
@@ -151,11 +151,11 @@ The lifack approach (paraphrased — see [Playing With Cars (Or On Foot)](https:
 
 ### How the rural variant in this repo will differ
 
-Lifack's variant is a *light* swap: replace one network (transit) with another point-anchor (street termini), keep mechanics roughly intact. That works in suburban or low-density urban settings.
+The official cars/on-foot variant is a *light* swap: replace one network (transit) with another point-anchor (street termini), keep mechanics roughly intact. That works in suburban or low-density urban settings.
 
-The rural variant this repo targets is more aggressive — vehicle range becomes a primary game resource, geography is county-scale, and walkable-distance assumptions in the original mechanics need to be re-grounded against driving distances. So lifack's variant is a useful first checkpoint (it confirms the official ruleset can survive losing transit), but the rural-variant decisions in [`../rules/`](../rules/) will need to go further.
+The rural variant this repo targets is more aggressive — vehicle range becomes a primary game resource, geography is county-scale, and walkable-distance assumptions in the original mechanics need to be re-grounded against driving distances. So the official cars/on-foot variant is a useful first checkpoint (it confirms the ruleset can survive losing transit), but the rural-variant decisions in [`../rules/`](../rules/) will need to go further.
 
-<!-- TODO: per-mechanic decisions that diverge from lifack's approach — what "anchor" replaces a transit station in rural play (county-seat? grain elevator? named road junction?), how vehicle range maps onto hiding-period budgets, etc. -->
+<!-- TODO: per-mechanic decisions that diverge from the official cars/on-foot approach — what "anchor" replaces a transit station in rural play (county-seat? grain elevator? named road junction?), how vehicle range maps onto hiding-period budgets, etc. -->
 
 ---
 
@@ -163,9 +163,9 @@ The rural variant this repo targets is more aggressive — vehicle range becomes
 
 Cross-reference each original mechanic to its rural counterpart in [`../rules/`](../rules/) as decisions are made. Likely decision points:
 
-- Anchor for hiding zones (transit station → ?). Lifack's choice of street terminus is a benchmark; rural may want something else (junction of named county roads, named landmark, etc.).
+- Anchor for hiding zones (transit station → ?). The official cars/on-foot variant uses a street terminus as the benchmark; rural may want something else (junction of named county roads, named landmark, etc.).
 - Walkable-distance assumptions in question costs (radius questions, photo subjects in walking range) → rescaled for driving distance.
 - Photo subjects that assume urban subjects (grocery aisle, station entrance, restaurant interior) → rural-friendly substitutes or removed.
 - End-game "no more transit" trigger → vehicle / range equivalent.
 - Distance buckets (radar, thermometer) → rescaled for county-level play.
-- Curses that reference transit → rewritten to reference vehicles / range, per the lifack convention.
+- Curses that reference transit → rewritten to reference vehicles / range, per the official cars/on-foot variant's convention.

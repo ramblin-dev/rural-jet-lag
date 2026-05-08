@@ -36,7 +36,6 @@ Each game format from the show gets its own directory with rules, assets, and to
 
 ### Card Assets & Templates
 - [Jet Lag Wiki](https://jetlag.fandom.com/) — Card templates and game history.
-- [lifack.ch Unofficial Card Recreation](https://lifack.ch/) — Fan-made recreation of Powerups, Curses, and Blanks.
 - Community Canva templates shared in fan Discord servers.
 
 ### Community
