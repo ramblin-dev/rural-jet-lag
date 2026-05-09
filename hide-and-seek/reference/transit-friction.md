@@ -78,6 +78,67 @@ Berrebi et al. 2021 [15] (US: Portland, Miami, Minneapolis–St-Paul, Atlanta) f
 
 ---
 
+## Stop spacing and station wait time
+
+The two parameters most directly useful for designing artificial "vehicle stations" in a rural variant: how far apart real transit stops are, and how long riders typically wait at one.
+
+### Stop spacing
+
+**Industry planning rules** (transit-agency standards):
+
+- **400m walking-access radius (≈ 800m inter-stop spacing)** for local bus.
+- **800m walking-access radius (≈ 1600m inter-stop spacing)** for rail. (El-geneidy et al. 2013 [16] — these are the conventional "quarter-mile / half-mile" rules used to set service-area buffers.)
+
+**Observed walking access** (what people actually do, not the planning rule):
+
+- **524m** for the 85th-percentile walking distance to a bus stop, **1,259m** to commuter rail — both in Montreal (El-geneidy et al. 2013 [16]). Walking distance varies with route quality, transfer availability, and rider demographics, so these are not universal constants.
+- Most walking-access distances in a feeder-bus residential study fell **between 150 and 240m, none over 400m** (Taplin et al. 2020 [17]).
+- Median tolerable walking distance for community-shuttle stops calibrated at **~418m** (Guo et al. 2018 [18]).
+
+**Frequency–coverage trade-off.** Riders accept longer walks for better service: stated-preference work in 11 cities finds people will walk **226–302m further (Australia) or 370–475m further (UK/US) for a 10-minute headway reduction** (Mulley et al. 2018 [19]). So spacing is not a fixed standard — it co-varies with frequency.
+
+**Mode-by-mode spacing ranges** (transit-planning practice; verify before quoting specific systems):
+
+| Mode | Typical inter-stop spacing | Source / context |
+|------|---------------------------:|------------------|
+| Local urban bus | 200–400m | Dense urban; aligns with the 400m-radius rule [16] |
+| Suburban bus | 400–800m | Lower density |
+| BRT / express bus | 600–1000m | Practice |
+| Light rail | 500–1500m | Practice |
+| Heavy rail / metro | 600–1500m | Aligns with 800m-radius rule [16] |
+| Commuter rail | 1500–5000m+ | [16] (1259m 85th-percentile walk implies wider spacing) |
+
+**Density relationship.** Cervero & Guerra 2011 [12] (cited earlier) anchor the cost-effective density floor: ~30 people/gross acre (≈ 19,200 ppl/mi²) for light rail, ~45 (≈ 28,800 ppl/mi²) for heavy rail. Stop spacing tightens with density on the demand side — higher activity density supports closer stops because each stop captures enough demand to be worth the dwell-time cost — and on the supply side because operating cost per rider falls. Wu et al. 2022 [20] confirm household density is among the significant explanatory variables for stop-spacing tolerance.
+
+**Optimal-spacing intuition** (continuum models like Vuchic and Newell): optimal stop spacing increases with √(walk-speed × dwell-time / demand-density). Sparser demand → wider spacing. Mamun et al. 2014 [27] and Wu et al. 2018 [28] formalize this for specific networks. Closed-form numbers depend on local parameters; what's portable is the structural shape.
+
+### Wait time at a stop (initial and at transfers)
+
+The clearest pattern in the wait-time literature is a **regime split based on headway** (Esfeh et al. 2020 [21], review):
+
+- **High-frequency regime — headway ≲ 10–12 minutes.** Passengers arrive randomly without consulting a schedule; **mean wait ≈ headway / 2**. This is the textbook "half-headway" rule.
+- **Low-frequency regime — headway ≳ 10–12 minutes.** Passengers consult the schedule and time their arrival; **mean wait < headway / 2**, often substantially less. Frumin et al. 2012 [22] (London Overground smartcard data) find that schedule-aware passengers cut their mean scheduled wait by **>3 minutes versus random incidence**.
+
+The threshold is not a hard line — it depends on schedule reliability and service uniformity. Where headways are irregular (bunching), even high-frequency passengers experience longer effective waits than the half-headway rule predicts. Tirachini et al. 2021 [23] review headway-variability metrics and show that bus services in mixed traffic produce systematically larger wait-time variance than rail or segregated busways. Headway irregularity is also separately disliked: Deepa et al. 2023 [24] find variability adversely affects ridership independently of mean frequency.
+
+**Headway ranges by service type and time of day** (transit-planning practice; specific systems vary):
+
+| Service type | Peak headway | Off-peak headway | Late-evening headway |
+|--------------|------------:|-----------------:|---------------------:|
+| Heavy rail / metro | 2–5 min | 5–10 min | 10–30 min |
+| Light rail | 5–10 min | 10–20 min | 20–30 min |
+| Trunk / frequent bus | 5–15 min | 15–30 min | 30–60 min |
+| Local / suburban bus | 15–30 min | 30–60 min | 60+ min or none |
+| Rural / paratransit | 60+ min, often demand-responsive | — | — |
+
+These ranges are summarized from the planning literature in this file's references and from common practice — they are starting points, not measured for any specific system. Cite a specific GTFS feed before quoting numbers for a real network.
+
+**Headway–density relationship.** Higher activity density supports more frequent service because demand per vehicle-trip is higher and operating cost per rider falls (Berrebi et al. 2021 [15]; Frei et al. 2013 [25]). Below cost-effective density thresholds, scheduled fixed-route service stops being viable and operators move toward semi-flexible / on-demand service (Mishra et al. 2023 [26], modeling 5–20 passengers/hour as the low-demand floor). For the rural variant, this means: in a region that real transit does not serve, the equivalent "headway" for an artificial station is properly drawn from the *lowest-frequency* regime — long, variable waits with schedule-awareness from riders.
+
+**Transfer wait** is structurally the same as initial wait once the passenger reaches the connecting platform — the half-headway rule (or schedule-aware reduction) applies to the connecting line's headway. The *additional* disutility beyond clock time is the pure transfer penalty, ~13–18 EIVM (covered in the perceived-cost layer above).
+
+---
+
 ## Operational layer (what transit *does* that produces cost)
 
 A complementary view: the operational features of transit that produce the perceived costs above. Roughly ordered by how strongly each shapes seekers' route choice in a Hide + Seek-style game.
@@ -124,6 +185,41 @@ The actual-cost numbers above suggest a calibration framework that does not requ
 
 What this approach buys: a small set of universal rules with two or three parameters keyed to local conditions, instead of a separate ruleset for "Iowa farmland" vs "Vermont mountains" vs "Nevada desert." What it costs: every parameter that gets pushed to the player adds setup friction. Worth pricing the trade-off explicitly when the rural rules in [`../rules/`](../rules/) get drafted.
 
+### Calibration notes for an OSM-based artificial-station tool *(planning-stage capture)*
+
+Working concept (subject to revision): a tool ingests a polygon of coordinates, queries OpenStreetMap for retail / service POIs (restaurants, cafés, gas stations, bars, etc.), clusters POIs at roughly a 1-mile grouping, and designates each cluster as an artificial "vehicle station." At each station the player rolls 2d6 (the hider dice) and reads off a wait time within a station-specific range; ranges scale with the station's local density.
+
+Where the research above slots in:
+
+**Spacing — used as a validation check, not a placement rule.**
+
+Because stations are placed by POI clustering rather than by formula, the average inter-station distance the tool produces should be sanity-checked against the spacing literature for plausibility:
+
+- Aim for inter-station distances that fall within the **transit-planning ranges by mode** in the Stop-spacing table above. ~1-mile (≈ 1600m) clusters land near the **commuter-rail / metro** end of the spectrum, which is appropriate for a low-density rural region; tighter clusters in towns will fall toward bus / light-rail spacing.
+- If the tool produces clusters that are systematically tighter than 200m or wider than 5–10 km, the clustering parameters are mis-tuned for the local density. Cervero & Guerra's density thresholds [12] anchor what's plausible: very low density (rural) supports rare, widely-spaced stations; densities above ~19,000 ppl/mi² support frequent, closely-spaced ones.
+- The 400m / 800m walking-access rules [16] are *not* directly applicable — the rural tool isn't placing stations to maximize walking access for residents. They serve only as ceiling references: anything tighter than the 400m bus rule is unrealistic for rural artificial stations.
+
+**Wait time — driven directly by station density.**
+
+Headway-by-density is the right shape for the wait-time-range parameter; the tool should map each station's local POI density to a wait-time range that mirrors a comparable service-tier headway, then use the 2d6 roll to draw within the range.
+
+A candidate parameterization (untested — these are starting points):
+
+| Station-cluster density tier | Real-transit analogue | Wait-time range to draw 2d6 from | Mean wait (2d6 expected) |
+|------------------------------|----------------------|---------------------------------:|-------------------------:|
+| Dense (small-town center, several POIs in a tight cluster) | Frequent bus / light rail | 5–15 min | ~10 min |
+| Moderate (cluster of a few POIs along a road) | Local bus / suburban | 10–30 min | ~20 min |
+| Sparse (isolated cluster, single POI in many miles) | Paratransit / demand-responsive | 20–60 min | ~40 min |
+
+The 2d6 distribution (range 2–12, mean 7, mode 7) is well-suited to wait-time draws because it's symmetric around the mean and rare-extreme: the "really lucky" and "really unlucky" tails are ~3% each. A simple mapping is `wait = min_minutes + (roll - 2) × (max_minutes - min_minutes) / 10`. This preserves the 2d6 bell-curve as a soft preference for the middle of the range while allowing an unlucky roll to drag the seeker into the long-tail wait the low-density regime already implies.
+
+Two design caveats from the research:
+
+1. **Half-headway holds only above ~10-min headways.** Below that, riders consult the schedule and effectively beat the random-incidence wait by 3+ minutes [21, 22]. For an artificial-station tool that wants the wait to feel like real transit friction at each station, ranges below ~10 minutes should be used sparingly — and even then, the 2d6 mechanic is fine because there is no schedule to consult in-game, so riders are forced into random-incidence waits regardless.
+2. **Variability matters as much as mean.** Tirachini et al. 2021 [23] and Deepa et al. 2023 [24] both find that headway *variability* (not just average headway) drives perceived service quality and ridership. The 2d6 mechanic implicitly produces variability, which is realistic — but if the design intent is to *feel* like a high-quality transit system at dense stations, the tool may want to compress the wait range at high-density tiers so the variance is lower, not just the mean.
+
+Numbers in the table above are first-pass guesses that need playtesting before they become anything more authoritative.
+
 ---
 
 ## References
@@ -157,3 +253,29 @@ What this approach buys: a small set of universal rules with two or three parame
 [14] [Measuring Access and Egress Distance and Catchment Area of Multiple Feeding Modes for Metro Transferring Using Survey Data](https://consensus.app/papers/details/0497db937f2d55c58b433b0efc887059/?utm_source=claude_code) — Li, X., et al. (2022), *Sustainability*. Cited for: catchment differences urban vs suburban; ~8 min average feeding time for docked bike-sharing.
 
 [15] [On bus ridership and frequency](https://consensus.app/papers/details/b6eb84d6ecd8546ca1439a0afc6a6095/?utm_source=claude_code) — Berrebi, S. J., et al. (2021), *Transportation Research Part A*. Cited for: ridership-frequency elasticity findings — elastic between routes, inelastic within-route over time; low-frequency routes most sensitive.
+
+[16] [New evidence on walking distances to transit stops: identifying redundancies and gaps using variable service areas](https://consensus.app/papers/details/3231685f97f259209ebcf0d768ae23e2/?utm_source=claude_code) — El-geneidy, A., et al. (2013), *Transportation*. Cited for: industry rule (400m bus / 800m rail walking-access radii); 85th-percentile observed walking distances in Montreal — 524m for bus, 1,259m for commuter rail.
+
+[17] [Optimizing bus stop locations for walking access: Stops-first design of a feeder route to enhance a residential plan](https://consensus.app/papers/details/c71c3e0e54ee52d8b2a5c3e5ee906e0c/?utm_source=claude_code) — Taplin, J., et al. (2020), *Environment and Planning B*. Cited for: feeder-bus walking distances 150–240m typical, none over 400m.
+
+[18] [Integrated Optimization of Stop Location and Route Design for Community Shuttle Service](https://consensus.app/papers/details/1cfe6ece57e354609712d4c21a16a236/?utm_source=claude_code) — Guo, X., et al. (2018), *Symmetry*. Cited for: ~418m maximum tolerable walking distance for community-shuttle stops.
+
+[19] [Will bus travellers walk further for a more frequent service? An international study using a stated preference approach](https://consensus.app/papers/details/df682360ff365d02855b583fdf373808/?utm_source=claude_code) — Mulley, C., et al. (2018), *Transport Policy*. Cited for: 11-city stated-preference frequency-coverage trade-off — 226–302m further (Australia) or 370–475m (UK/US) for a 10-min headway reduction.
+
+[20] [To What Extent May Transit Stop Spacing Be Increased before Driving Away Riders? Referring to Evidence of the 2017 NHTS in the United States](https://consensus.app/papers/details/66211ccc79aa5541b20ace7c97545ef2/?utm_source=claude_code) — Wu, T., et al. (2022), *Sustainability*. Cited for: household density and other significant explanatory variables for stop-spacing tolerance.
+
+[21] [Waiting time and headway modelling for urban transit systems – a critical review and proposed approach](https://consensus.app/papers/details/96d44b91751a511a924d40a83e148799/?utm_source=claude_code) — Esfeh, M. A., et al. (2020), *Transport Reviews*. Cited for: high-frequency vs low-frequency regime split for waiting time; half-headway rule applicability.
+
+[22] [Analyzing Passenger Incidence Behavior in Heterogeneous Transit Services Using Smartcard Data and Schedule-Based Assignment](https://consensus.app/papers/details/ae16d705797f5615b289c4cb3fdf1091/?utm_source=claude_code) — Frumin, M. & Zhao, J. (2012), *Transportation Research Record*. Cited for: London Overground smartcard data — schedule-aware passengers reduce mean wait by >3 minutes vs random incidence.
+
+[23] [Headway variability in public transport: a review of metrics, determinants, effects for quality of service and control strategies](https://consensus.app/papers/details/3a82d04e6bb057c2a09d26a83961ed62/?utm_source=claude_code) — Tirachini, A., et al. (2021), *Transport Reviews*. Cited for: headway variability review — bus services in mixed traffic have larger wait-time variance than rail / segregated busways.
+
+[24] [The adverse impact of headway variability on bus transit ridership: Evidence from Bengaluru, India](https://consensus.app/papers/details/c6f2e469968a53e4a339eb6e1ff54d23/?utm_source=claude_code) — Deepa, L., et al. (2023), *Transport Policy*. Cited for: headway variability adversely affects ridership independently of mean frequency.
+
+[25] [Riding More Frequently](https://consensus.app/papers/details/4e88d9a38fe55cf8affad1bc39589a50/?utm_source=claude_code) — Frei, C. & Mahmassani, H. (2013), *Transportation Research Record*. Cited for: stop-level disaggregate headway elasticity of ridership −0.263 to −0.277 in Chicago; aggregate analyses overestimate frequency effects.
+
+[26] [Optimal Design of Integrated Semi-Flexible Transit Services in Low-Demand Conditions](https://consensus.app/papers/details/e330301f1f9f5560a06ab6b4105b89c8/?utm_source=claude_code) — Mishra, S., et al. (2023), *IEEE Access*. Cited for: 5–20 passengers/hour as the low-demand floor below which scheduled fixed-route service stops being viable.
+
+[27] [Access and Connectivity Trade-Offs in Transit Stop Location](https://consensus.app/papers/details/3ecc4d350bd657acb6ae07f154c6457c/?utm_source=claude_code) — Mamun, S. & Lownes, N. E. (2014), *Transportation Research Record*. Cited for: formal stop-location model balancing access and connectivity (New Haven case study).
+
+[28] [Optimum Stop Spacing for Accessibility](https://consensus.app/papers/details/7e7a265e7dce5080bf9534ce4e9e8a93/?utm_source=claude_code) — Wu, H. & Levinson, D. (2018), *European Journal of Transport and Infrastructure Research*. Cited for: analytical model showing optimal stop spacing exists for each transit type — neither too short nor too long maximizes person-weighted accessibility.
