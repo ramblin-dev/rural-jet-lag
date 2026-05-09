@@ -8,7 +8,14 @@ This directory will contain scripts and utilities to help set up and run a Rural
 
 ### `generate_vehicle_stations.py`
 
-Given a polygon of geographic coordinates, queries OpenStreetMap (via the Overpass API) for points of interest, enforces a 400m minimum spacing between selected stations (per the [transit-friction research notes](../reference/transit-friction.md)), and derives a per-station wait-time range based on local POI density.
+Given a polygon of geographic coordinates, queries OpenStreetMap (via the Overpass API) for points of interest, applies a two-tier spacing filter, and derives a per-station wait-time range based on local POI density.
+
+**Two-tier spacing** (defaults from the [transit-friction research notes](../reference/transit-friction.md)):
+
+- `--min-station-spacing-m` — within-cluster minimum, default **300m** (average local urban bus stop spacing).
+- `--min-cluster-spacing-m` — between-cluster minimum, default **1000m** (average light-rail / metro spacing). Also the threshold for cluster membership: two POIs end up in the same cluster iff they're closer than this, or chained through other in-cluster POIs.
+
+The result: groups of stations with bus-spaced internals separated by metro-scale gaps, mirroring how transit stops appear in real cities — clusters around towns and commercial areas, with quiet stretches between.
 
 **Usage** (from the repo root):
 
@@ -29,7 +36,10 @@ To draw a polygon on a map and export it as GeoJSON, the easiest option is **[ge
 
 For ready-to-run example inputs, see [`geojson-samples/`](./geojson-samples/) — a small-town polygon and a city-scale polygon, both drawn in geojson.io.
 
-**Output:** CSV at `hide-and-seek/tools/.output/{name}-{timestamp}.csv` with one row per chosen station — name, category, lat/lon, wait-time range in minutes, density tier (dense / moderate / sparse), nearby-POI count, OSM type/id. The `.output/` folder is gitignored.
+**Outputs:** two files at `hide-and-seek/tools/.output/{name}-{timestamp}.{csv,kml}` (the `.output/` folder is gitignored):
+
+- `.csv` — one row per chosen station: name, category, cluster id, lat/lon, wait-time range in minutes, density tier (dense / moderate / sparse), nearby-POI count, OSM type/id. Best for spreadsheets and follow-up scripting; group by `cluster_id` to inspect clusters.
+- `.kml` — placemarks grouped under a single Folder named after `--name`. Upload to **Google My Maps** ([mymaps.google.com](https://mymaps.google.com) → "Create a new map" → "Import" → drop the file) to get all stations as a single map layer that can be deleted in one click. Google Earth, OsmAnd, GAIA, and QGIS also read the file natively.
 
 POI categories considered (in priority order — earlier categories beat later ones when two POIs are within the 400m spacing window): museums and tourist attractions; parks, nature reserves, and national parks; bars and pubs; restaurants and cafés; fast food; gas stations; convenience stores and supermarkets; malls and department stores. Categories and priorities are defined as constants near the top of the script.
 

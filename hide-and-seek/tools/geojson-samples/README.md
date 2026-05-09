@@ -19,4 +19,4 @@ uv run vehicle-stations \
   --name town-test
 ```
 
-Output goes to `hide-and-seek/tools/.output/` (gitignored).
+Output goes to `hide-and-seek/tools/.output/` (gitignored). Two files per run: a `.csv` (for spreadsheets / scripting) and a `.kml` (for upload to Google My Maps or other mapping tools).

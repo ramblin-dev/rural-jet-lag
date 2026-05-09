@@ -1,11 +1,25 @@
 """Generate vehicle-station coordinates for a rural Hide+Seek game.
 
 Given a polygon of geographic coordinates, queries OpenStreetMap (via the
-Overpass API) for points of interest, enforces a 400m minimum spacing
-between chosen stations (per the transit-friction research notes), and
-derives a per-station wait-time range based on local POI density.
+Overpass API) for points of interest, applies a two-tier spacing filter
+(close-together stations within a cluster, larger gaps between clusters),
+and derives a per-station wait-time range based on local POI density.
 
-Output: CSV at hide-and-seek/tools/.output/{name}-{timestamp}.csv
+Spacing has two parameters, both grounded in the transit-friction research:
+    --min-station-spacing-m  intra-cluster (default 300m, avg local bus)
+    --min-cluster-spacing-m  inter-cluster (default 1000m, avg metro/LRT)
+
+Two POIs end up in the same cluster iff they're closer than the cluster
+spacing or chained through other in-cluster POIs. The result is groups of
+stations on the map separated by visible gaps, mirroring how transit stops
+appear in real cities — bus-stop-spaced clusters around towns, with metro-
+scale gaps between them.
+
+Outputs (both written to hide-and-seek/tools/.output/{name}-{timestamp}.{ext}):
+    .csv  — one row per station for spreadsheets / scripting.
+    .kml  — one Folder of placemarks named after --name, ready to upload
+            to Google My Maps (creates one layer that can be deleted as a
+            unit), Google Earth, OsmAnd, GAIA, or QGIS.
 
 Usage (from the repo root):
     uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game
@@ -53,13 +67,16 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
 
 import requests
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 USER_AGENT = "rural-jet-lag/generate_vehicle_stations (github: rural-jet-lag)"
 OVERPASS_TIMEOUT_SEC = 90
-MIN_STATION_SPACING_M = 400
+# Two-tier spacing — see hide-and-seek/reference/transit-friction.md.
+MIN_STATION_SPACING_M = 300   # within a cluster; average local urban bus stop spacing
+MIN_CLUSTER_SPACING_M = 1000  # between clusters; average light-rail / metro spacing
 DENSITY_RADIUS_M = 1609  # 1 mile
 
 # Category priority — lower number wins when two POIs are within MIN_STATION_SPACING_M.
@@ -247,13 +264,63 @@ def _classify(tags: dict) -> tuple[str | None, int]:
     return best[1], best[0]
 
 
-def filter_min_spacing(pois: list[POI], min_m: float) -> list[POI]:
-    ordered = sorted(pois, key=lambda p: (p.priority, p.name.lower()))
-    kept: list[POI] = []
-    for p in ordered:
-        if all(haversine_m(p.lat, p.lon, k.lat, k.lon) >= min_m for k in kept):
-            kept.append(p)
-    return kept
+def filter_two_tier(
+    pois: list[POI], min_station_m: float, min_cluster_m: float
+) -> list[tuple[POI, int]]:
+    """Two-tier spacing filter.
+
+    Step 1 — group POIs into connected components using ``min_cluster_m`` as
+    the link threshold. Two POIs end up in the same cluster iff there is a
+    chain of POIs between them where every consecutive pair is closer than
+    ``min_cluster_m``. As a consequence, every cross-cluster pair is at
+    least ``min_cluster_m`` apart.
+
+    Step 2 — within each cluster, greedy-filter to ``min_station_m`` minimum
+    spacing, sorting by category priority so museums beat cafés when they
+    conflict.
+
+    Returns a list of (POI, cluster_id) pairs. Cluster IDs are assigned in
+    the order clusters first appear in the input list, starting at 1.
+    """
+    n = len(pois)
+    parent = list(range(n))
+
+    def find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a: int, b: int) -> None:
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            if haversine_m(pois[i].lat, pois[i].lon, pois[j].lat, pois[j].lon) < min_cluster_m:
+                union(i, j)
+
+    cluster_id_of_root: dict[int, int] = {}
+    next_id = 1
+    cluster_members: dict[int, list[POI]] = {}
+    for i, p in enumerate(pois):
+        root = find(i)
+        if root not in cluster_id_of_root:
+            cluster_id_of_root[root] = next_id
+            next_id += 1
+        cid = cluster_id_of_root[root]
+        cluster_members.setdefault(cid, []).append(p)
+
+    out: list[tuple[POI, int]] = []
+    for cid in sorted(cluster_members):
+        ordered = sorted(cluster_members[cid], key=lambda p: (p.priority, p.name.lower()))
+        kept: list[POI] = []
+        for p in ordered:
+            if all(haversine_m(p.lat, p.lon, k.lat, k.lon) >= min_station_m for k in kept):
+                kept.append(p)
+        out.extend((p, cid) for p in kept)
+    return out
 
 
 def count_nearby(p: POI, candidates: list[POI], radius_m: float) -> int:
@@ -270,6 +337,7 @@ def write_csv(out_path: Path, rows: list[dict]) -> None:
     fieldnames = [
         "name",
         "category",
+        "cluster_id",
         "latitude",
         "longitude",
         "wait_min_minutes",
@@ -286,17 +354,69 @@ def write_csv(out_path: Path, rows: list[dict]) -> None:
             w.writerow(row)
 
 
+def write_kml(out_path: Path, layer_name: str, rows: list[dict]) -> None:
+    """Write a KML file with all stations in a single Folder.
+
+    Google My Maps imports the file as one map layer named ``layer_name``,
+    which the user can delete in one click to remove all pins. Google Earth,
+    OsmAnd, GAIA, and QGIS also read the file natively.
+    """
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    generated_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    placemarks = []
+    for r in rows:
+        desc = (
+            f"Category: {r['category']}\n"
+            f"Cluster: {r['cluster_id']}\n"
+            f"Wait time: {r['wait_min_minutes']}–{r['wait_max_minutes']} min "
+            f"({r['density_tier']})\n"
+            f"Nearby POI count: {r['nearby_poi_count']}\n"
+            f"OSM: {r['osm_type']} {r['osm_id']}"
+        )
+        placemarks.append(
+            "      <Placemark>\n"
+            f"        <name>{xml_escape(str(r['name']))}</name>\n"
+            f"        <description>{xml_escape(desc)}</description>\n"
+            f"        <Point><coordinates>{r['longitude']},{r['latitude']},0</coordinates></Point>\n"
+            "      </Placemark>"
+        )
+    body = "\n".join(placemarks)
+    kml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<kml xmlns="http://www.opengis.net/kml/2.2">\n'
+        "  <Document>\n"
+        f"    <name>{xml_escape(layer_name)}</name>\n"
+        f"    <description>Generated by rural-jet-lag vehicle-stations at "
+        f"{generated_at}. {len(rows)} stations.</description>\n"
+        "    <Folder>\n"
+        f"      <name>{xml_escape(layer_name)}</name>\n"
+        f"{body}\n"
+        "    </Folder>\n"
+        "  </Document>\n"
+        "</kml>\n"
+    )
+    out_path.write_text(kml, encoding="utf-8")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--polygon-file", type=Path, required=True,
                     help="GeoJSON or plain-text polygon (lat,lon per line)")
     ap.add_argument("--name", type=str, default="game-area",
                     help="Output filename stem (default: game-area)")
-    ap.add_argument("--min-spacing-m", type=float, default=MIN_STATION_SPACING_M,
-                    help=f"Minimum spacing between stations in meters (default: {MIN_STATION_SPACING_M})")
+    ap.add_argument("--min-station-spacing-m", type=float, default=MIN_STATION_SPACING_M,
+                    help=f"Minimum spacing between stations within a cluster, in meters "
+                         f"(default: {MIN_STATION_SPACING_M} — average local urban bus stop spacing)")
+    ap.add_argument("--min-cluster-spacing-m", type=float, default=MIN_CLUSTER_SPACING_M,
+                    help=f"Minimum spacing between clusters, in meters (also the threshold for "
+                         f"cluster membership — POIs closer than this are linked into the same "
+                         f"cluster). Default: {MIN_CLUSTER_SPACING_M} — average light-rail / metro spacing.")
     ap.add_argument("--density-radius-m", type=float, default=DENSITY_RADIUS_M,
                     help=f"Radius for local POI density count (default: {DENSITY_RADIUS_M})")
     args = ap.parse_args()
+
+    if args.min_cluster_spacing_m <= args.min_station_spacing_m:
+        ap.error("--min-cluster-spacing-m must be greater than --min-station-spacing-m")
 
     polygon = load_polygon(args.polygon_file)
     print(f"Polygon: {len(polygon) - 1} unique points", file=sys.stderr)
@@ -313,20 +433,26 @@ def main() -> int:
         print("No POIs found — check the polygon and tag list.", file=sys.stderr)
         return 1
 
-    stations = filter_min_spacing(candidates, args.min_spacing_m)
+    stations_with_cluster = filter_two_tier(
+        candidates, args.min_station_spacing_m, args.min_cluster_spacing_m
+    )
+    cluster_count = len({cid for _, cid in stations_with_cluster})
     print(
-        f"Selected {len(stations)} stations after {args.min_spacing_m:.0f}m spacing filter",
+        f"Selected {len(stations_with_cluster)} stations across {cluster_count} clusters "
+        f"(intra-cluster ≥ {args.min_station_spacing_m:.0f}m, "
+        f"inter-cluster ≥ {args.min_cluster_spacing_m:.0f}m)",
         file=sys.stderr,
     )
 
     rows: list[dict] = []
-    for st in stations:
+    for st, cid in stations_with_cluster:
         nearby = count_nearby(st, candidates, args.density_radius_m)
         wmin, wmax, tier = wait_range_for_density(nearby)
         rows.append(
             {
                 "name": st.name,
                 "category": st.category,
+                "cluster_id": cid,
                 "latitude": f"{st.lat:.6f}",
                 "longitude": f"{st.lon:.6f}",
                 "wait_min_minutes": wmin,
@@ -340,9 +466,13 @@ def main() -> int:
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out_dir = Path(__file__).resolve().parent / ".output"
-    out_path = out_dir / f"{args.name}-{timestamp}.csv"
-    write_csv(out_path, rows)
-    print(f"Wrote {out_path}", file=sys.stderr)
+    stem = f"{args.name}-{timestamp}"
+    csv_path = out_dir / f"{stem}.csv"
+    kml_path = out_dir / f"{stem}.kml"
+    write_csv(csv_path, rows)
+    write_kml(kml_path, args.name, rows)
+    print(f"Wrote {csv_path}", file=sys.stderr)
+    print(f"Wrote {kml_path}", file=sys.stderr)
     return 0
 
 
