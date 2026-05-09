@@ -128,54 +128,54 @@ Markers reflect mechanic data from the official expansion PDF and from `wiki/cur
 
 | Curse | Metric | Marker | Likely family |
 |-------|:------:|:------:|---------------|
-| Curse of the 5-Minute King |   |   |   |
-| Curse of the Anonymous Benefactor |   |   |   |
+| Curse of the 5-Minute King |   |   | Hider economy / zone manipulation |
+| Curse of the Anonymous Benefactor |   | ⚠ | Detour gating |
 | Curse of the Archaeologist |   |   | Skill-challenge gating |
 | Curse of the Bargain Hunter |   | ⚠ | Detour gating / Acquisition |
-| Curse of the Blind Wanderer | ✓ |   |   |
-| Curse of the Chasm |   |   |   |
+| Curse of the Blind Wanderer | ✓ |   | Movement restrictions |
+| Curse of the Chasm |   |   | Question/info restrictions |
 | Curse of the Clone |   |   | Acquisition / clothing |
 | Curse of the Curious Explorer | ✓ | ⚠ | Detour gating |
 | Curse of the Data Leak |   | ✗ | Movement restrictions |
-| Curse of the Divine Blessing |   |   |   |
-| Curse of the Empty Mind |   |   | Question/info restrictions |
+| Curse of the Divine Blessing |   |   | Hider economy / zone manipulation |
+| Curse of the Empty Mind |   |   | Hider economy / zone manipulation |
 | Curse of the Express Route |   | ✗ | Movement restrictions |
 | Curse of Featherless Flight |   |   | Skill-challenge gating |
-| Curse of the Freewheeler | ✓ |   |   |
+| Curse of the Freewheeler | ✓ | ✗ | Movement restrictions (transit-coupled) |
 | Curse of the Gilded Inquiry |   |   | Question/info restrictions |
-| Curse of the Grass-Toucher | ✓ |   |   |
+| Curse of the Grass-Toucher | ✓ |   | Movement restrictions / Detour gating |
 | Curse of the Hide-and-Seek-Ception | ✓ |   | Communication (multi-seeker only) |
 | Curse of the Impenetrable Fog |   |   | Movement restrictions |
-| Curse of the Landline | ✓ |   |   |
+| Curse of the Landline | ✓ | ⚠ | Question/info/communication restrictions |
 | Curse of the Long Shot | ✓ | ✗ | Movement restrictions (transit freeze) |
-| Curse of the Mind Meld |   |   |   |
-| Curse of the Non-Dominant Hand |   |   |   |
+| Curse of the Mind Meld |   |   | Communication (multi-seeker only) |
+| Curse of the Non-Dominant Hand |   |   | Skill-challenge gating |
 | Curse of the Okaihau Express |   |   | Skill-challenge gating |
-| Curse of the Open Mind |   |   |   |
-| Curse of the Oracle |   |   |   |
+| Curse of the Open Mind |   |   | Hider economy / zone manipulation |
+| Curse of the Oracle |   |   | Skill-challenge gating |
 | Curse of the Passenger Princess |   |   | Communication (multi-seeker only) |
 | Curse of the Plagued Word | ✓ | ⚠ | Question/info restrictions |
-| Curse of the Planespotter | ✓ |   |   |
+| Curse of the Planespotter | ✓ | ⚠ | Photo conditions |
 | Curse of the Pomologist |   |   | Skill-challenge gating |
 | Curse of the Pong Champion | ✓ |   | Skill-challenge gating |
 | Curse of the Post Office | ✓ | ⚠ | Detour gating |
-| Curse of the Prophet |   |   |   |
+| Curse of the Prophet |   |   | Hider economy / zone manipulation |
 | Curse of the Prosperous Home |   |   | Hider economy / zone manipulation |
 | Curse of the Queue |   |   | Detour gating |
 | Curse of the Quill | ✓ |   | Skill-challenge gating |
 | Curse of the Rewind |   |   | Movement restrictions |
 | Curse of the Runner |   |   | Movement restrictions |
 | Curse of the Seabird | ✓ | ⚠ | Photo conditions |
-| Curse of the Seventh Seal |   |   |   |
+| Curse of the Seventh Seal |   |   | Hider economy / zone manipulation |
 | Curse of the Shark |   |   | Question/info restrictions (?) |
 | Curse of the Shrewd Critic | ✓ | ⚠ | Question/info restrictions |
 | Curse of the Sniper |   |   | Photo conditions |
 | Curse of the Soothsayer |   |   | Hider economy / zone manipulation |
-| Curse of the Strider |   |   |   |
-| Curse of the Strongman |   |   |   |
+| Curse of the Strider |   | ✗ | Movement restrictions (on-foot only) |
+| Curse of the Strongman |   |   | Skill-challenge gating |
 | Curse of the Tiny Home |   |   | Hider economy / zone manipulation |
 | Curse of the Trickster |   |   | Question/info restrictions |
-| Curse of the Untethered Spirit |   |   |   |
+| Curse of the Untethered Spirit |   |   | Hider economy / zone manipulation |
 | Curse of the Void |   |   | Question/info restrictions |
 | Curse of the Zipped Lip |   |   | Question/info/communication restrictions |
 
@@ -184,8 +184,9 @@ Markers reflect mechanic data from the official expansion PDF and from `wiki/cur
 
 ## Remaining gaps
 
-Inventory is now complete by name. The remaining gap is **mechanic detail for the 18 expansion curses without markers / family**:
+Mechanic detail is now in hand for every curse via OCR'd scans of the physical expansion deck (held in `.input/expansion-cards-ocr/`, gitignored). All 50 expansion curses have a marker and a likely family. The "Remaining gaps" item is now empty in mechanical-data terms.
 
-5-Minute King, Anonymous Benefactor, Blind Wanderer, Chasm, Divine Blessing, Freewheeler, Grass-Toucher, Landline, Mind Meld, Non-Dominant Hand, Open Mind, Oracle, Planespotter, Prophet, Seventh Seal, Strider, Strongman, Untethered Spirit.
+Open follow-ups instead live in the design layer:
 
-Their mechanics are visible only on the physical cards; the official expansion PDF doesn't clarify them and they aren't on any wiki page we've imported. Filling those in unlocks marker assignment and family slotting. A one-line family classification per curse is enough — no verbatim card text needs to enter the repo.
+- **Untested markers.** Markers are *predictions* from reading the mechanics, not measured outcomes. Several calls (e.g. Anonymous Benefactor and Landline as ⚠ for low-density / low-outlet rural; Strider and Freewheeler as ✗ for foot-/transit-locked travel) reflect inference, not playtesting. Treat them as starting points for design review.
+- **Empty Mind re-slotting.** Originally listed as a Question/info restriction; its actual mechanic is deck/hand manipulation (search the deck and add three cards to hand), so it now sits under Hider economy / zone manipulation. The [`notes.md`](./notes.md) taxonomy commentary that pre-dated the OCR may still describe it under the older slot — flag if you spot drift.
