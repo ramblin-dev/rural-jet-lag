@@ -7,4 +7,15 @@ requires-python = ">=3.10"
 dependencies = [
     "pypdf>=6.10.2",
     "rapidocr-onnxruntime>=1.4.4",
+    "requests>=2.33.1",
 ]
+
+[project.scripts]
+vehicle-stations = "rural_jet_lag.vehicle_stations:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["rural_jet_lag"]

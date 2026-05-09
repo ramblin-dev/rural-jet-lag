@@ -24,7 +24,11 @@ Top-level folders are **per-game**, not per-concern. Each Jet Lag format gets it
 
 Currently only `hide-and-seek/` exists. When adding a new format (e.g. `tag/`), mirror this structure and update both the root `README.md` and `CONTRIBUTING.md` tables.
 
+There is also a top-level `rural_jet_lag/` Python package that holds **console-script shims only** — small wrappers that delegate to per-game tool scripts so they can be invoked as `uv run <command>` from the repo root via `[project.scripts]` in `pyproject.toml`. Real tool implementations live in `<game>/tools/`, not here. When adding a new console command, add a wrapper in `rural_jet_lag/` and an entry in `[project.scripts]`; don't move the underlying script out of its game folder.
+
 The repo-root `.input/` is **gitignored** and serves as a personal-reference cache for scans, saved web pages, and PDFs of source material that we don't want in the repo. Never check anything into `.input/`, and don't suggest publishing its contents. It exists so we can read source material when verifying inventory or designing rules without committing it.
+
+Tool scripts write outputs to `.output/` directories (also gitignored repo-wide). Don't commit anything from those folders.
 
 ## Domain conventions (important — easy to get wrong)
 
@@ -35,12 +39,13 @@ The repo-root `.input/` is **gitignored** and serves as a personal-reference cac
 
 ## Python tooling
 
-Single root `pyproject.toml` manages dependencies for **all** game `tools/` directories — don't create per-game pyproject files. Managed with [uv](https://github.com/astral-sh/uv); Python pinned to 3.12 via `.python-version`. Current deps are minimal — `rapidocr-onnxruntime` for OCR'ing card images during inventory work.
+Single root `pyproject.toml` manages dependencies for **all** game `tools/` directories — don't create per-game pyproject files. Managed with [uv](https://github.com/astral-sh/uv); Python pinned to 3.12 via `.python-version`. The build backend is `hatchling`, configured to package the `rural_jet_lag/` shim package so `[project.scripts]` console commands work via `uv run`.
 
 ```bash
 uv add <package>                     # add a dep (preferred over editing pyproject.toml by hand)
-uv sync                              # install
-uv run python hide-and-seek/tools/<script>.py
+uv sync                              # install (rebuilds the project package automatically)
+uv run vehicle-stations --help       # registered console command
+uv run python hide-and-seek/tools/<script>.py   # direct script invocation
 ```
 
-There are no tests, lint config, or build pipeline yet — add them when the first real tool lands, not preemptively.
+There are no tests or lint config yet — add them when the first non-trivial tool lands, not preemptively.

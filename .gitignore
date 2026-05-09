@@ -219,3 +219,6 @@ __marimo__/
 
 # input files
 .input/
+
+# tool output
+.output/
