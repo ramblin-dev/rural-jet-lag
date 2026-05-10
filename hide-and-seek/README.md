@@ -15,7 +15,7 @@ An unofficial fan adaptation of **Jet Lag: The Game — Hide and Seek** for rura
 | [`rules.md`](./rules.md) | Ruleset for the Rural H&S variant — adapts only the transportation layer; everything else defers to the official rulebook |
 | [`setup.md`](./setup.md) | How to set up a rural game (drawing a play area, generating vehicle stations, importing them to a map app) |
 | [`assets/`](./assets/) | Printable assets and investigation book templates |
-| [`tools/`](./tools/) | Map generation utilities for pre-game setup |
+| [`tools/`](./tools/) | Hide and Seek-specific utilities (the cross-game vehicle-stations generator lives in [`/tools/`](../tools/)) |
 | [`reference/`](./reference/) | Links and structural notes about the original Hide + Seek (no verbatim rulebook/card text) |
 
 ---

@@ -11,7 +11,7 @@ How to set up a Rural Hide + Seek game from scratch. Nothing here changes the of
 - Your physical Hide + Seek box (base game and the Vol. 1 expansion). See the [Before you play](../README.md#before-you-play) section of the top-level README for where to buy it.
 - A vehicle for each team.
 - Phones with location sharing enabled — the original game's live-tracking convention applies unchanged.
-- A computer to run the vehicle-stations tool. Python 3.12, [uv](https://github.com/astral-sh/uv), and a clone of this repo. See [`tools/README.md`](./tools/README.md) for the tool's full usage and options.
+- A computer to run the vehicle-stations tool. Python 3.12, [uv](https://github.com/astral-sh/uv), and a clone of this repo. See [`/tools/README.md`](../tools/README.md) for the tool's full usage and options, and [`/vehicle-stations.md`](../vehicle-stations.md) for what stations are and how the in-game mechanic uses them.
 
 ---
 
@@ -19,7 +19,7 @@ How to set up a Rural Hide + Seek game from scratch. Nothing here changes the of
 
 Draw a polygon over your intended play area in [geojson.io](https://geojson.io) (easiest) or [felt.com](https://felt.com). Save the result as a GeoJSON file. Either the polygon tool or the line tool works — the vehicle-stations tool accepts both.
 
-For ready-to-run examples, see [`tools/geojson-samples/`](./tools/geojson-samples/).
+For ready-to-run examples, see [`/tools/geojson-samples/`](../tools/geojson-samples/).
 
 A few notes on choosing the area:
 
@@ -36,7 +36,7 @@ From the repo root:
 uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game
 ```
 
-Two files appear in `hide-and-seek/tools/.output/`:
+Two files appear in `tools/.output/`:
 
 - `my-game-{timestamp}.csv` — for spreadsheets and reference. Includes name, category, cluster id, lat / lon, wait-time range, density tier, nearby-POI count.
 - `my-game-{timestamp}.kml` — for upload to a mapping app. Single Folder containing all stations.

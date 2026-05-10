@@ -1,4 +1,8 @@
-"""Generate vehicle-station coordinates for a rural Hide+Seek game.
+"""Generate vehicle-station coordinates for a rural Jet Lag game.
+
+Game-agnostic — produces the station map that the cars-as-trains framing
+in /vehicle-stations.md needs, regardless of which Jet Lag format is
+being adapted (Hide + Seek, Tag, etc.).
 
 Given a polygon of geographic coordinates, queries OpenStreetMap (via the
 Overpass API) for points of interest, applies a two-tier spacing filter
@@ -15,7 +19,7 @@ stations on the map separated by visible gaps, mirroring how transit stops
 appear in real cities — bus-stop-spaced clusters around towns, with metro-
 scale gaps between them.
 
-Outputs (both written to hide-and-seek/tools/.output/{name}-{timestamp}.{ext}):
+Outputs (both written to tools/.output/{name}-{timestamp}.{ext}):
     .csv  — one row per station for spreadsheets / scripting.
     .kml  — one Folder of placemarks named after --name, ready to upload
             to Google My Maps (creates one layer that can be deleted as a
@@ -25,7 +29,7 @@ Usage (from the repo root):
     uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game
 
 Or run the script directly:
-    uv run python hide-and-seek/tools/generate_vehicle_stations.py \\
+    uv run python tools/generate_vehicle_stations.py \\
         --polygon-file path/to/polygon.geojson --name my-game
 
 Polygon input formats:
@@ -37,7 +41,7 @@ Polygon input formats:
     Plain text  — one "lat,lon" per line, blank lines and #-comments ok.
 
 Sample polygons:
-    See hide-and-seek/tools/geojson-samples/ for example inputs.
+    See tools/geojson-samples/ for example inputs.
 
 Drawing a polygon on a map and exporting as GeoJSON:
     https://geojson.io       — easiest. Click the polygon tool, draw the
@@ -74,7 +78,7 @@ import requests
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 USER_AGENT = "rural-jet-lag/generate_vehicle_stations (github: rural-jet-lag)"
 OVERPASS_TIMEOUT_SEC = 90
-# Two-tier spacing — see hide-and-seek/reference/transit-friction.md.
+# Two-tier spacing — see /vehicle-stations.md and hide-and-seek/reference/transit-friction.md.
 MIN_STATION_SPACING_M = 300   # within a cluster; average local urban bus stop spacing
 MIN_CLUSTER_SPACING_M = 1000  # between clusters; average light-rail / metro spacing
 DENSITY_RADIUS_M = 1609  # 1 mile

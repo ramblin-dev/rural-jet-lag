@@ -1,8 +1,8 @@
 """Console-script entry point for `uv run vehicle-stations`.
 
-The actual implementation lives at `hide-and-seek/tools/generate_vehicle_stations.py`.
+The actual implementation lives at `tools/generate_vehicle_stations.py`.
 This is a thin shim so the script is reachable from the repo root via the
-uv-registered console command without restructuring the per-game tools tree.
+uv-registered console command.
 """
 
 from __future__ import annotations
@@ -13,7 +13,6 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parent.parent
-    / "hide-and-seek"
     / "tools"
     / "generate_vehicle_stations.py"
 )

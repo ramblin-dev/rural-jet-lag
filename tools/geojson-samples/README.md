@@ -15,8 +15,8 @@ Both files were drawn in [geojson.io](https://geojson.io) and exported as `LineS
 
 ```bash
 uv run vehicle-stations \
-  --polygon-file hide-and-seek/tools/geojson-samples/town.geojson \
+  --polygon-file tools/geojson-samples/town.geojson \
   --name town-test
 ```
 
-Output goes to `hide-and-seek/tools/.output/` (gitignored). Two files per run: a `.csv` (for spreadsheets / scripting) and a `.kml` (for upload to Google My Maps or other mapping tools).
+Output goes to `tools/.output/` (gitignored). Two files per run: a `.csv` (for spreadsheets / scripting) and a `.kml` (for upload to Google My Maps or other mapping tools).

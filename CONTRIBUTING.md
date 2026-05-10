@@ -12,6 +12,8 @@ Each Jet Lag game format has its own top-level directory. When contributing, wor
 |-----------|------|
 | [`/hide-and-seek`](./hide-and-seek/) | Hide and Seek — rural driving variant |
 
+Cross-game material — the shared cars-as-trains mechanic write-up at [`/vehicle-stations.md`](./vehicle-stations.md) and any tools that work across formats in [`/tools/`](./tools/) — lives at the repo root.
+
 ---
 
 ## Ways to Contribute
@@ -25,7 +27,8 @@ Found an ambiguity in the ruleset? Open an issue or submit a PR to the game's `r
 - Please ensure your designs don't reproduce copyrighted artwork from the official show.
 
 ### 🛠️ Tools & Scripts
-- Improvements to map tools or new utilities belong in the game's `tools/` directory.
+- Tools that work across game formats belong in the top-level [`/tools/`](./tools/) directory.
+- Tools specific to a single format belong in that game's `tools/` directory.
 - All code contributions are covered by the [MIT License](./LICENSE).
 - Include a docstring or `README.md` section explaining how to use your tool.
 

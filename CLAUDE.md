@@ -12,20 +12,25 @@ Today this repo is mostly **content scaffolding, not code**. Most rule and asset
 
 ## Repository layout
 
-Top-level folders are **per-game**, not per-concern. Each Jet Lag format gets its own directory with the same internal shape:
+Top-level folders are mostly **per-game**, with a small set of shared cross-game folders. Each Jet Lag format gets its own directory with the same internal shape:
 
 ```
 <game>/
   rules.md    # the ruleset (single file; defers to the official rulebook for everything we don't override)
   setup.md    # how to set up a game (e.g. running tools, importing maps)
   assets/     # printable materials (e.g. investigation-book/)
-  tools/      # Python utilities for game setup
+  tools/      # game-specific Python utilities
   reference/  # structural notes about the original game (see Domain conventions)
 ```
 
-Currently only `hide-and-seek/` exists. When adding a new format (e.g. `tag/`), mirror this structure and update both the root `README.md` and `CONTRIBUTING.md` tables.
+Currently only `hide-and-seek/` exists. When adding a new format (e.g. `tag/`), mirror this structure and update the root `README.md` and `CONTRIBUTING.md` tables.
 
-There is also a top-level `rural_jet_lag/` Python package that holds **console-script shims only** — small wrappers that delegate to per-game tool scripts so they can be invoked as `uv run <command>` from the repo root via `[project.scripts]` in `pyproject.toml`. Real tool implementations live in `<game>/tools/`, not here. When adding a new console command, add a wrapper in `rural_jet_lag/` and an entry in `[project.scripts]`; don't move the underlying script out of its game folder.
+The cross-game pieces:
+
+- `vehicle-stations.md` (repo root) — the canonical write-up of the cars-as-trains mechanic that every rural Jet Lag adaptation in this repo shares (what a station is, how the 2d6 departure roll works, route declaration / mid-route changes). Per-game `rules.md` files reference it instead of restating the mechanic. When you change the cross-game mechanic, edit it here, not in the per-game files.
+- `tools/` (repo root) — Python utilities that work across formats (currently the vehicle-stations generator and its GeoJSON samples). Game-specific scripts still live in `<game>/tools/`. New utilities go in whichever folder matches their scope.
+
+There is also a top-level `rural_jet_lag/` Python package that holds **console-script shims only** — small wrappers so the underlying scripts can be invoked as `uv run <command>` from the repo root via `[project.scripts]` in `pyproject.toml`. Real tool implementations live in either `tools/` (cross-game) or `<game>/tools/` (game-specific), not in `rural_jet_lag/`. When adding a new console command, add a wrapper in `rural_jet_lag/` and an entry in `[project.scripts]`.
 
 The repo-root `.input/` is **gitignored** and serves as a personal-reference cache for scans, saved web pages, and PDFs of source material that we don't want in the repo. Never check anything into `.input/`, and don't suggest publishing its contents. It exists so we can read source material when verifying inventory or designing rules without committing it.
 

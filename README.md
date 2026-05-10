@@ -22,13 +22,13 @@ The official fan game criteria and the original mechanics rely heavily on existi
 
 ## The Solution
 
-This project substitutes public transit with **personal vehicles**, and adapts the rules, budgets, and map scales to fit a rural setting. Think county roads, grain silos, and water towers instead of metro lines and train stations.
+This project substitutes public transit with **personal vehicles**, and adapts the rules, budgets, and map scales to fit a rural setting. Think county roads, grain silos, and water towers instead of metro lines and train stations. The shared cars-as-trains mechanic — vehicle stations, departure rolls, and how it replaces bus and train lines across all Jet Lag formats — is written up in [`vehicle-stations.md`](./vehicle-stations.md).
 
 ---
 
 ## Games
 
-Each game format from the show gets its own directory with rules, assets, and tools tailored to that game's specific mechanics.
+Each game format from the show gets its own directory with rules and any format-specific assets and tools. Cross-game tooling lives in [`/tools/`](./tools/).
 
 | Directory | Game | Status |
 |-----------|------|--------|
