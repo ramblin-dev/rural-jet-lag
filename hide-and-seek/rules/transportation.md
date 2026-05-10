@@ -21,7 +21,9 @@ A **route** is a pre-declared sequence of stations from your current location to
 
 ### Declaring your route
 
-Before you start moving, **text the route to the hider**: starting station, intermediate stations, destination station. That text is the route declaration — the hider keeps it for verification, and the destination station you name is binding.
+Before you start moving, **commit to your route**: starting station, intermediate stations, destination station. Write it down or agree on it as a team — but once you've committed, the destination station is binding and the path is fixed. You can change your mind only as described in [Changing your route mid-trip](#changing-your-route-mid-trip).
+
+You don't share the route with the hider by default — the seeker team is trusted to follow the route they committed to. The Vol. 1 *Data Leak* curse, when in play, is what forces route-sharing on top of the default.
 
 Seekers always have at least two players, so the non-driving seeker watches the phone continuously and can read curses or other messages from the hider while the team is on the move. There is no need to pull over at intermediate stations to check messages.
 
@@ -31,7 +33,7 @@ You may pass any intermediate station along your declared route without pulling 
 
 It does not matter whether you get out of the vehicle. What makes a stop a stop is that the route ended there.
 
-> **Why the destination is a forced stop.** Without this rule, seekers could declare very short routes (one or two stations) to share less of their path with the hider per declaration. Routes ending in a forced stop mean that short routes also incur more frequent departure rolls and more frequent delays — there's no way to opt out of the trade-off.
+> **Why the destination is a forced stop.** Without this rule, seekers could declare a route ending at the next station they're already approaching, hop through with no roll, declare another, and effectively never incur a departure roll. The forced stop ensures every route imposes at least one roll's worth of friction. Short routes get to that roll sooner, so they incur more total rolls per mile traveled; long routes amortize the friction over a longer commitment.
 
 ---
 
@@ -66,7 +68,7 @@ You leave a station by **driving off in your vehicle.** If you don't drive off w
 
 A mid-route change is just ending your current route early and starting a new one from there:
 
-1. Pick a station along your current route to be your new endpoint, and **text the hider** that this station is now your destination.
+1. Pick a station along your current route to be your new endpoint. Treat it as your destination from this point forward.
 2. Drive there. That station is the end of your current route.
 3. From that station, declare a new route to wherever you want to go next. Make a departure roll for the new route, as you would for any route.
 4. Once your wait clears, drive off on the new route.
