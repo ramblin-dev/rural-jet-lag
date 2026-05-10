@@ -1,12 +1,14 @@
 # Design Backlog — Hide and Seek
 
-Ideas we've raised but aren't building yet. When one moves into active work, promote it out of this file into the relevant directory (`rules/`, `assets/`, etc.) and delete the entry here.
+Ideas we've raised but aren't building yet. When one moves into active work, promote it out of this file into the relevant location (`rules.md`, `assets/`, etc.) and delete the entry here.
 
 ---
 
 ## Deck builds
 
-A `decks/` (or `deck-builds/`) folder, sibling to `rules/`, holding one markdown file per recommended deck configuration. Each file would name the build, describe the kind of rural area it suits (e.g. dense farmland counties, low-density mountain regions, mixed small-town + back-roads), and list the curated card subset to play with — including which base/expansion cards to include or pull, and any rural-specific cards authored on the blank stock.
+A `decks/` (or `deck-builds/`) folder alongside `rules.md`, holding one markdown file per recommended deck configuration. Each file would name the build, describe the kind of rural area it suits (e.g. dense farmland counties, low-density mountain regions, mixed small-town + back-roads), and list the curated card subset to play with — including which base/expansion cards to include or pull, and any rural-specific cards authored on the blank stock.
+
+> **Note (post cars-as-trains decision):** the rural variant now uses the original deck unchanged — see [`rules.md`](./rules.md) "Approach". The candidate deck-build sketches below were drafted under the older assumption that the ✗-marked transit-coupled curses would need replacement; treat them as historical context that needs a rewrite, not as live design proposals. The deck-builds idea itself may still be useful (e.g. for tuning by rural area type) but the cards-to-include/exclude logic has to be redone.
 
 Why park this:
 
@@ -36,7 +38,7 @@ Three candidate builds below. None are tuned; they are starting points for revie
 Targets a county with one or two small towns of low-thousands population and a rural-road network between them. Game radius assumed in the M tier (~15–30 miles).
 
 - **Drop entirely (✗):** Gambler's Feet, Express Route, U-Turn, Urban Explorer, Long Shot, Freewheeler, Strider, Data Leak. All transit- or foot-locked; no clean rural port without rewriting them.
-- **Adapt and keep (⚠):** Bridge Troll, Distant Cuisine, Mediocre Travel Agent, Impressionable Consumer, Jammed Door, Luxury Car, Unguided Tourist, Water Weight, Bargain Hunter, Curious Explorer, Plagued Word, Post Office, Seabird, Shrewd Critic, Anonymous Benefactor, Landline, Planespotter — each needs a distance / density rescale. TODO: pick rescale rules in [`rules/`](./rules/), then come back here.
+- **Adapt and keep (⚠):** Bridge Troll, Distant Cuisine, Mediocre Travel Agent, Impressionable Consumer, Jammed Door, Luxury Car, Unguided Tourist, Water Weight, Bargain Hunter, Curious Explorer, Plagued Word, Post Office, Seabird, Shrewd Critic, Anonymous Benefactor, Landline, Planespotter — each needs a distance / density rescale. TODO: pick rescale rules in [`rules.md`](./rules.md), then come back here.
 - **Keep as-is:** the unmarked majority — skill challenges, communication restrictions, hider-economy curses, the photo curses without urban-density assumptions.
 - **Multi-seeker only — flag when single-seeker:** Mind Meld, Passenger Princess, Hide-and-Seek-Ception.
 - **Open question:** rural-specific blanks. The 25 blanks in the base deck are the design vector. Candidates: a vehicle-range / fuel-detour curse, a livestock-or-crop photo curse, a county-line-crossing detour, a sunset-time-pressure curse. Park the list here; commit when authored.

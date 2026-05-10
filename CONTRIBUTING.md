@@ -17,7 +17,7 @@ Each Jet Lag game format has its own top-level directory. When contributing, wor
 ## Ways to Contribute
 
 ### 📋 Rules Clarifications
-Found an ambiguity in the ruleset? Open an issue or submit a PR to the relevant file in the game's `rules/` directory.
+Found an ambiguity in the ruleset? Open an issue or submit a PR to the game's `rules.md` file.
 
 ### 🃏 Card Designs
 - Add printable card templates or updated designs to the game's `assets/cards/` directory.
@@ -30,7 +30,7 @@ Found an ambiguity in the ruleset? Open an issue or submit a PR to the relevant 
 - Include a docstring or `README.md` section explaining how to use your tool.
 
 ### 🎮 New Game Formats
-Adding support for a new Jet Lag game type? Create a new top-level folder (e.g., `/tag/`) following the same structure as `/hide-and-seek/`: a `README.md`, `rules/`, `assets/`, and `tools/` subdirectory.
+Adding support for a new Jet Lag game type? Create a new top-level folder (e.g., `/tag/`) following the same structure as `/hide-and-seek/`: a `README.md`, `rules.md`, `setup.md`, and `assets/`, `tools/`, `reference/` subdirectories.
 
 ---
 

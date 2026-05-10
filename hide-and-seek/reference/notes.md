@@ -2,7 +2,7 @@
 
 High-level structural notes only — **not** a reproduction of the rulebook. For verbatim rules, follow the links in [`sources.md`](./sources.md).
 
-> This file describes the *shape* of the original game so the rural adaptation in [`../rules/`](../rules/) can build on it deliberately. It's paraphrased structural reference, not source text. Numbers and category names below are factual; the framing is in our own words.
+> This file describes the *shape* of the original game so the rural adaptation in [`../rules.md`](../rules.md) can build on it deliberately. It's paraphrased structural reference, not source text. Numbers and category names below are factual; the framing is in our own words.
 
 ---
 
@@ -153,7 +153,7 @@ The official approach (paraphrased — see your rulebook for the canonical text)
 
 The official cars/on-foot variant is a *light* swap: replace one network (transit) with another point-anchor (street termini), keep mechanics roughly intact. That works in suburban or low-density urban settings.
 
-The rural variant this repo targets is more aggressive — vehicle range becomes a primary game resource, geography is county-scale, and walkable-distance assumptions in the original mechanics need to be re-grounded against driving distances. So the official cars/on-foot variant is a useful first checkpoint (it confirms the ruleset can survive losing transit), but the rural-variant decisions in [`../rules/`](../rules/) will need to go further.
+The rural variant this repo targets goes a different direction: rather than removing transit and reworking the rest, it re-imposes transit-equivalent friction on top of unrestricted driving by inventing artificial **vehicle stations** (see [`../rules.md`](../rules.md) and [`./transit-friction.md`](./transit-friction.md)). That keeps the rest of the official ruleset intact — including the hider deck — at the cost of one new mechanic (departure rolls at stations). The official cars/on-foot variant is documented in this section as historical context; the rural variant in this repo deliberately does not inherit it.
 
 <!-- TODO: per-mechanic decisions that diverge from the official cars/on-foot approach — what "anchor" replaces a transit station in rural play (county-seat? grain elevator? named road junction?), how vehicle range maps onto hiding-period budgets, etc. -->
 
@@ -161,7 +161,7 @@ The rural variant this repo targets is more aggressive — vehicle range becomes
 
 ## Adaptation pointers
 
-Cross-reference each original mechanic to its rural counterpart in [`../rules/`](../rules/) as decisions are made. Likely decision points:
+Cross-reference each original mechanic to its rural counterpart in [`../rules.md`](../rules.md) as decisions are made. Likely decision points:
 
 - Anchor for hiding zones (transit station → ?). The official cars/on-foot variant uses a street terminus as the benchmark; rural may want something else (junction of named county roads, named landmark, etc.).
 - Walkable-distance assumptions in question costs (radius questions, photo subjects in walking range) → rescaled for driving distance.

@@ -16,7 +16,8 @@ Top-level folders are **per-game**, not per-concern. Each Jet Lag format gets it
 
 ```
 <game>/
-  rules/      # markdown ruleset, one file per topic
+  rules.md    # the ruleset (single file; defers to the official rulebook for everything we don't override)
+  setup.md    # how to set up a game (e.g. running tools, importing maps)
   assets/     # printable materials (e.g. investigation-book/)
   tools/      # Python utilities for game setup
   reference/  # structural notes about the original game (see Domain conventions)
@@ -33,7 +34,8 @@ Tool scripts write outputs to `.output/` directories (also gitignored repo-wide)
 ## Domain conventions (important — easy to get wrong)
 
 - **Vehicle-agnostic "range" language.** Don't write "gas," "fuel," or "tank." Use "range" / "driving distance" / "vehicle range" so the rules work for EVs, ICE, hybrids, etc. This was an explicit cleanup (commit `0feb3a6`).
-- **Investigation book ≠ card deck.** Seekers ask yes/no geographic questions from a pre-printed *booklet* (some locked until "end game" is declared). Don't model it as a deck of cards. The cost mechanic is inverted from what you might assume: each Seeker question triggers a **card draw for the Hider team** — there is no travel/range budget for Seekers (see `hide-and-seek/rules/budgeting.md`).
+- **Investigation book ≠ card deck.** Seekers ask yes/no geographic questions from a pre-printed *booklet* (some locked until "end game" is declared). Don't model it as a deck of cards. The cost mechanic is inverted from what you might assume: each Seeker question triggers a **card draw for the Hider team** — there is no travel/range budget for Seekers.
+- **Rural variant defers to the official rulebook for everything except transportation.** The hider deck, hiding zone, Investigation Book, end-game trigger, and scoring are all unchanged from the official Hide + Seek rules. The only addition is the artificial "vehicle stations" + departure-roll mechanic in `hide-and-seek/rules.md`. Don't redesign mechanics that the rural variant explicitly inherits — including curses we previously thought might need replacement, which work as printed under the cars-as-trains framing.
 - **Reference subtree is non-reproducing.** `<game>/reference/` holds analytical and structural commentary on the original game, not verbatim source text. Card and question *names* are factual inventory and fine to list; *mechanics* get paraphrased into our own words; *card text and rulebook prose* never get copied in. The one exception is `<game>/reference/wiki/` — that subtree is licensed CC BY-SA 4.0 (separate from the repo-default CC BY 4.0) and hosts wiki imports under that license with attribution. See `hide-and-seek/reference/README.md` for the full posture.
 - **Two licenses, applied by file type.** Code (`tools/`, scripts) → MIT (`LICENSE`). Content (rules, card designs, assets, docs) → CC BY 4.0 (`LICENSE-ASSETS`). The `<game>/reference/wiki/` subtree carves out a CC BY-SA 4.0 region for wiki-sourced content. When adding a new file, make sure it lands in a directory whose README already declares the right license, or add the declaration.
 

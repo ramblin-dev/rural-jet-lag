@@ -1,6 +1,6 @@
 # Hide and Seek — Reference Material
 
-Reference notes and links to the original **Jet Lag: The Game — Hide + Seek**, used while designing the rural adaptation in [`../rules/`](../rules/).
+Reference notes and links to the original **Jet Lag: The Game — Hide + Seek**, used while designing the rural adaptation in [`../rules.md`](../rules.md).
 
 > **Disclaimer:** This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Jet Lag: The Game, Nebula, or Wendover Productions. The Hide + Seek rulebook, card text, and Investigation Book are © Wendover Productions / Nebula. All rights to the original game concept and its text belong to their respective owners.
 
@@ -22,4 +22,4 @@ For the verbatim text of the official rulebook and cards, follow the links in [`
 
 ## Adaptation pointer
 
-When mechanics from the original game need to be adapted (vehicle range instead of transit, county scale instead of metro scale, etc.), the **rural-side** rules go in [`../rules/`](../rules/) — not here. This directory documents the **original** game so the adaptation has a stable reference to point at.
+When mechanics from the original game need to be adapted (vehicle stations standing in for transit stops, departure rolls re-imposing trip-friction, etc.), the **rural-side** rules go in [`../rules.md`](../rules.md) — not here. This directory documents the **original** game so the adaptation has a stable reference to point at.
