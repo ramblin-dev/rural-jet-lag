@@ -2,7 +2,7 @@
 
 High-level structural notes only — **not** a reproduction of the rulebook. For verbatim rules, follow the links in [`sources.md`](./sources.md).
 
-> This file describes the *shape* of the original game so the rural adaptation in [`../rules.md`](../rules.md) can build on it deliberately. It's paraphrased structural reference, not source text. Numbers and category names below are factual; the framing is in our own words.
+> Paraphrased structural reference for the original game. Numbers and category names below are factual; the framing is in our own words. Rural-variant rules and design decisions live in [`../rules.md`](../rules.md), not here — this file is purely about the official Hide + Seek.
 
 ---
 
@@ -26,9 +26,7 @@ The official game ships three size tiers. Map and duration scale together:
 | Medium | A major city, metro area, or region | ~1 day | 60 min | ¼ mile |
 | Large | A large region or whole country | 2–4 days | 180 min | ½ mile |
 
-The official rulebook publishes target transit-station counts per size (rough order: 30–100, 100–500, 500+) — useful as a complexity calibration even when transit isn't the underlying network. See your rulebook for the full table.
-
-<!-- TODO: pick analogous calibration targets for rural play (e.g. number of valid hide anchors per square mile) -->
+The official rulebook publishes target transit-station counts per size (rough order: 30–100, 100–500, 500+). See your rulebook for the full table.
 
 ---
 
@@ -60,7 +58,7 @@ Repeat-asks cost more (the cost is multiplied each subsequent time the same ques
 
 ### Per-category structure
 
-What can be plugged into each question's blanks. Subject pools and distance buckets are what the rural adaptation will most need to re-ground.
+What can be plugged into each question's blanks.
 
 **Matching** and **Measuring** share most of their subject pools, organized into rough buckets:
 
@@ -83,15 +81,6 @@ What can be plugged into each question's blanks. Subject pools and distance buck
 - *Add at Medium and Large:* tallest building visible from station, trace nearest street/path, two buildings, restaurant interior, train platform, park, grocery store aisle, place of worship
 - *Add at Large:* ½ mile of streets traced, tallest mountain visible from station, biggest body of water in zone, five buildings
 
-<!-- TODO: per-category translation decisions for the rural variant
-     - Matching/Measuring: which transit-anchored subjects translate (rail station → ?), which natural/POI subjects survive, which administrative-division references rescale meaningfully at county scale
-     - Radar: rescale buckets — rural play likely needs ranges starting much larger (1 mile floor or higher) and extending further (200+ miles)
-     - Thermometer: same rescale concern; the ½-mile-everywhere baseline is walking-scale
-     - Tentacles: rural-density subjects (gas stations? grain elevators? county seats?) at appropriate radii
-     - Photos: the urban-centric subjects (train platform, restaurant interior, grocery store aisle) need rural substitutes; "any building visible from station" needs an anchor replacement
--->
-
-
 ---
 
 ## Hider deck composition
@@ -110,7 +99,7 @@ The Vol. 1 expansion adds 50 curses, 30 power-ups, and a set of 14 metric-unit r
 
 The 24 base-deck curses cluster into a handful of mechanical families. This grouping is analytical commentary — it's how mechanics behave, not what each card says. For verbatim card text, see your physical deck or the Fandom wiki entries (CC-BY-SA, importable into [`wiki/`](./wiki/)).
 
-For the canonical name-only inventory of every card (base + expansion, 50 expansion curses included), see [`cards.md`](./cards.md). The taxonomy below covers the 24 base-deck curses plus 8 expansion curses whose mechanics we have via [`wiki/curses-uk-season-subset.md`](./wiki/curses-uk-season-subset.md); the † marker tags those 8. Cards.md has the full 50-curse expansion inventory with markers and family slotting for the curses we have mechanic data on, and explicit "no data" gaps for the 18 we don't.
+For the canonical name-only inventory of every card, see [`cards.md`](./cards.md). The taxonomy below covers the 24 base-deck curses plus 8 expansion curses whose mechanics we have via [`wiki/curses-uk-season-subset.md`](./wiki/curses-uk-season-subset.md); the † marker tags those 8.
 
 | Family | What the family does | Curses in this family |
 |--------|---------------------|------------------------|
@@ -122,50 +111,15 @@ For the canonical name-only inventory of every card (base + expansion, 50 expans
 | Question, info, and communication restrictions | Reduce or constrain the seekers' question pool, ask conditions, or coordination | Drained Brain · Spotty Memory · Urban Explorer · Void† · Plagued Word† · Zipped Lip† |
 | Hider economy / zone manipulation | Mechanical advantage for the hider — extra draws, bigger time bonuses, zone resizing | Overflowing Chalice · Prosperous Home† · Tiny Home† |
 
-#### Family-by-family relevance to the rural adaptation
-
-- **Movement restrictions** — mostly need rewriting. Right Turn translates cleanly to driving; Gambler's Feet (per-step dice), U-Turn and Express Route (both transit-anchored) don't; Rewind (location-anchored) survives unchanged; Jammed Door (per-doorway dice) survives but its role shrinks when most movement is between buildings via vehicle.
-- **Detour gating** — survives, but distances need rescaling. "Within X miles" tuned for transit-walkable scale is too small for county play. Queue (any line, anywhere) is fully transferable.
-- **Skill-challenge gating** — most transferable family. These are standalone physical/puzzle tasks decoupled from transit. Likely the safest set to keep.
-- **Acquisition / carrying handicaps** — survives in spirit, but the design tension flips: vehicles make carrying trivial. Either lean into vehicle-carry mechanics (e.g. items that must be visible on a person, not in a trunk) or rebalance toward objects that constrain regardless of vehicle.
-- **Photo conditions** — survives. Subjects may need rural-friendly substitutes (e.g. a "more expensive car" is harder to find in low-traffic regions; a wild-animal match is easier).
-- **Question, info, and communication restrictions** — Urban Explorer (transit-coupled) needs a vehicle-equivalent ("can't ask while driving" is the obvious port). The other six (Drained Brain, Spotty Memory, Void, Plagued Word, Zipped Lip — communication-only) are geography-agnostic and survive as-is. Plagued Word's 5-mile no-ask radius will probably want rescaling alongside the other distance buckets.
-- **Hider economy / zone manipulation** — fully transferable; no geography assumptions. Note that Prosperous Home and Tiny Home both manipulate the hiding-zone radius, which makes them sensitive to whatever "zone" means in the rural variant (a circle around a vehicle-anchored point, vs. a property line, vs. a road segment, etc.).
-
-<!-- TODO: when designing rural curses, decide whether to (a) port the existing curse families one-for-one with rescaled distances, (b) add a vehicle-specific family (range-related curses, fuel-stop forced detours, breakdown-style penalties), or (c) drop some families and lean into others -->
-
 ---
 
-## Playing without public transit
+## The "Playing With Cars (Or On Foot)" experimental variant
 
-> This section is the hinge for the rural adaptation. **Read it before designing rural rules.**
-
-The official rulebook's **Experimental Game Designs** section includes a "Playing With Cars (Or On Foot)" variant for areas without enough transit to support even the smallest game. The variant's design moves are worth knowing — both as a starting point and as a contrast point — for what this repo is building.
-
-The official approach (paraphrased — see your rulebook for the canonical text):
+The official rulebook's **Experimental Game Designs** section includes a "Playing With Cars (Or On Foot)" variant for areas without enough transit to support even the smallest game. Paraphrased — see your rulebook for the canonical text:
 
 - **Map setup**: drop the transit overlay; just draw the map borders. Without stations as anchors, defining what counts as a valid hiding spot needs more care.
 - **Hiding zones**: still a circle of size-dependent radius, but its center moves from a transit station to a *street terminus* — a point where a named street ends, either at an intersection with another named street or at a dead end. The terminus inherits the station's role: photo questions that referenced the station are taken there; questions that referenced the station's name now reference the street's name.
 - **Questions**: most carry over unchanged. Drop questions that reference transit frequency. Questions that refer to the hider's station now refer to the street terminus.
 - **Curses**: any curse that's blocked while seekers are on transit is also blocked while seekers are in a moving car. Curses that target "transportation" or "transit" treat cars as transit.
 
-### How the rural variant in this repo will differ
-
-The official cars/on-foot variant is a *light* swap: replace one network (transit) with another point-anchor (street termini), keep mechanics roughly intact. That works in suburban or low-density urban settings.
-
-The rural variant this repo targets goes a different direction: rather than removing transit and reworking the rest, it re-imposes transit-equivalent friction on top of unrestricted driving by inventing artificial **vehicle stations** (see [`../rules.md`](../rules.md) and [`./transit-friction.md`](./transit-friction.md)). That keeps the rest of the official ruleset intact — including the hider deck — at the cost of one new mechanic (departure rolls at stations). The official cars/on-foot variant is documented in this section as historical context; the rural variant in this repo deliberately does not inherit it.
-
-<!-- TODO: per-mechanic decisions that diverge from the official cars/on-foot approach — what "anchor" replaces a transit station in rural play (county-seat? grain elevator? named road junction?), how vehicle range maps onto hiding-period budgets, etc. -->
-
----
-
-## Adaptation pointers
-
-Cross-reference each original mechanic to its rural counterpart in [`../rules.md`](../rules.md) as decisions are made. Likely decision points:
-
-- Anchor for hiding zones (transit station → ?). The official cars/on-foot variant uses a street terminus as the benchmark; rural may want something else (junction of named county roads, named landmark, etc.).
-- Walkable-distance assumptions in question costs (radius questions, photo subjects in walking range) → rescaled for driving distance.
-- Photo subjects that assume urban subjects (grocery aisle, station entrance, restaurant interior) → rural-friendly substitutes or removed.
-- End-game "no more transit" trigger → vehicle / range equivalent.
-- Distance buckets (radar, thermometer) → rescaled for county-level play.
-- Curses that reference transit → rewritten to reference vehicles / range, per the official cars/on-foot variant's convention.
+The rural variant in this repo deliberately does not inherit this experimental design — see [`../rules.md`](../rules.md) "Approach" for the alternative path it takes. This section is documented here as part of the official-game structural reference.

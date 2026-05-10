@@ -173,8 +173,6 @@ If the design goal is to recreate the trip-shaping pressure transit imposes, ran
 | Service-area coverage (7) | Off-network penalties — entering certain map regions costs draws or time, modeling the "bus-to-train chain" friction. |
 | Disruptions (8) | Stochastic delay cards — drawn periodically, force detours or dwells. |
 
-The replacement-card design exercise in [`../design-backlog.md`](../design-backlog.md) should probably be re-grounded against this taxonomy when it resumes: each ✗-marked card needs a replacement that produces friction in *one of the categories above*, rather than just a vehicle-flavoured rewrite of the original mechanic.
-
 ### Toward density- and distance-parameterized rules *(inference)*
 
 The actual-cost numbers above suggest a calibration framework that does not require bespoke per-region rule tuning. Three load-bearing ideas:
