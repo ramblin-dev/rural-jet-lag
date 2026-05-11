@@ -30,10 +30,10 @@ A few notes on choosing the area:
 
 ## Step 2 — Generate vehicle stations
 
-From the repo root:
+From the repo root, passing your chosen game size so cluster boundaries match the official hiding-zone radius (¼ mile for S/M, ½ mile for L):
 
 ```bash
-uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game
+uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game --game-size M
 ```
 
 Two files appear in `tools/.output/`:
@@ -41,7 +41,7 @@ Two files appear in `tools/.output/`:
 - `my-game-{timestamp}.csv` — for spreadsheets and reference. Includes name, category, cluster id, lat / lon, wait-time range, density tier, nearby-POI count.
 - `my-game-{timestamp}.kml` — for upload to a mapping app. Single Folder containing all stations.
 
-The two-tier spacing defaults (300 m within a cluster, 1000 m between clusters) come from the transit research notes. Override with `--min-station-spacing-m` / `--min-cluster-spacing-m` if you want denser or sparser station layouts. Full options: `uv run vehicle-stations --help`.
+The intra-cluster spacing default (300 m) comes from the transit research notes; cluster radius is driven by `--game-size` (or falls back to 1000 m if omitted). Override either with `--min-station-spacing-m` / `--cluster-radius-m` for tighter or looser layouts. Full options: `uv run vehicle-stations --help`.
 
 ---
 
@@ -57,9 +57,11 @@ Google Earth, OsmAnd, GAIA, and QGIS also read the file natively if you'd rather
 
 ---
 
-## Step 4 — Pick a game size
+## Step 4 — Confirm the game size
 
-Use the official S/M/L choice based on your map's footprint and the time you have. The wait-time tiers in the tool's output (dense / moderate / sparse) are independent of game size — they reflect local POI density at each station, not the size of the game.
+You should have already passed `--game-size` to the tool in Step 2. Double-check that the official S/M/L choice matches your map's footprint and the time you have — the same value drives both the cluster radius the tool used and the in-game hiding-zone radius (¼ mile for S/M, ½ mile for L). If you guessed wrong, re-run Step 2 with a different value.
+
+The wait-time tiers in the tool's output (dense / moderate / sparse) are independent of game size — they reflect local POI density at each station, not the size of the game.
 
 ---
 

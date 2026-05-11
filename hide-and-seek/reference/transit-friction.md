@@ -112,6 +112,26 @@ The two parameters most directly useful for designing artificial "vehicle statio
 
 **Optimal-spacing intuition** (continuum models like Vuchic and Newell): optimal stop spacing increases with √(walk-speed × dwell-time / demand-density). Sparser demand → wider spacing. Mamun et al. 2014 [27] and Wu et al. 2018 [28] formalize this for specific networks. Closed-form numbers depend on local parameters; what's portable is the structural shape.
 
+### Stops per area (density) and the per-cluster cap
+
+Stop spacing above is a **linear** measure (distance along a route between stops). The **areal density** of stops (stops per km²) is a different lens, and it's the one that matters when sizing a cap on how many stations belong inside a discrete cluster — multiple lines crossing a neighborhood produce a higher per-area density than linear spacing alone implies.
+
+**Empirical urban bus-stop densities** (machine-learning models on city ridership data):
+
+- **Shanghai optimum ≈ 11 stops/km²** for maximizing bus-metro-transfer ridership (Liu et al. 2022 [29]). Bus-stop density was the third-strongest predictor of transfer ridership in their XGBoost model, after bus-network density and metro-station closeness centrality.
+- **Beijing diminishing-returns threshold ≈ 15 stops/km²** — above this, the marginal effect of additional stops on passenger travel distance flattens (Liu et al. 2025 [30]).
+
+**Translating to the 400m walking-access radius** (the canonical bus service radius from El-geneidy et al. 2013 [16]). A 400m circle covers π × 0.4² ≈ 0.503 km², so the densities above imply roughly:
+
+| Density regime | Stops/km² | Stops within a 400m radius |
+|----------------|----------:|---------------------------:|
+| Typical urban single-line (one stop per walking radius) | ~2 | ~1 |
+| Typical urban with crossing lines | ~5 | ~2–3 |
+| Shanghai optimum [29] | ~11 | ~5–6 |
+| Beijing saturation threshold [30] | ~15 | ~7–8 |
+
+**Implication for the rural-variant per-cluster cap *(reasoned inference)*.** The artificial-station tool's clusters are typically 400m–800m across in small-town play. A per-cluster cap of **4 stations** sits at the upper end of "typical urban with crossing lines" without modeling Shanghai or Beijing densities, which fits the rural framing where transit is structurally absent and a small handful of stations per town is realistic. The empirical numbers above anchor the upper-bound references; the specific choice of 4 is design judgement, not a measured calibration target, and it is exposed as a CLI flag for tuning.
+
 ### Wait time at a stop (initial and at transfers)
 
 The clearest pattern in the wait-time literature is a **regime split based on headway** (Esfeh et al. 2020 [21], review):
@@ -277,3 +297,7 @@ Numbers in the table above are first-pass guesses that need playtesting before t
 [27] [Access and Connectivity Trade-Offs in Transit Stop Location](https://consensus.app/papers/details/3ecc4d350bd657acb6ae07f154c6457c/?utm_source=claude_code) — Mamun, S. & Lownes, N. E. (2014), *Transportation Research Record*. Cited for: formal stop-location model balancing access and connectivity (New Haven case study).
 
 [28] [Optimum Stop Spacing for Accessibility](https://consensus.app/papers/details/7e7a265e7dce5080bf9534ce4e9e8a93/?utm_source=claude_code) — Wu, H. & Levinson, D. (2018), *European Journal of Transport and Infrastructure Research*. Cited for: analytical model showing optimal stop spacing exists for each transit type — neither too short nor too long maximizes person-weighted accessibility.
+
+[29] [Exploring the Nonlinear Effects of Built Environment on Bus-Transfer Ridership: Take Shanghai as an Example](https://consensus.app/papers/details/37b7b35f320a58c38f39fc17afeceb62/?utm_source=claude_code) — Liu, D., et al. (2022), *Applied Sciences*. Cited for: ~11 stops/km² Shanghai optimum bus-stop density for maximizing bus-metro-transfer ridership; bus-stop density as third-strongest predictor (17.27% feature importance) in an XGBoost model.
+
+[30] [Investigating the non-linear influence of the built environment on passengers' travel distance within metro and bus networks using smart card data](https://consensus.app/papers/details/558ea534d4535dcd8f1b8003c493303a/?utm_source=claude_code) — Liu, Y., et al. (2025), *Multimodal Transportation*. Cited for: ~15 stops/km² Beijing diminishing-returns threshold for bus-stop-density effect on passenger travel distance.

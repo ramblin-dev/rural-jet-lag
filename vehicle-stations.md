@@ -45,7 +45,7 @@ Any rule in the official Jet Lag rulebooks that references transit translates as
 | Transfer | Ending one route at a station and declaring a new one (with its own roll) |
 | End of the line | The last station in your declared route |
 
-What this preserves: every change in plan incurs a wait, longer trips amortize fewer rolls per mile (so they "run faster" the same way long transit lines do), and transfers cost real time. What you gain: stations are picked from places you'd actually want to visit (museums, parks, attractions, restaurants) rather than the real-world stops a transit agency optimized for route and passenger efficiency, so the station map tends to be more interesting to play across. What you lose: pre-fixed lines and timetables — every station connects to every other station, and the schedule is rolled fresh per departure.
+What this preserves: every change in plan incurs a wait, longer trips amortize fewer rolls per mile (so they "run faster" the same way long transit lines do), and transfers cost real time. What you gain: stations are picked from places you'd actually want to visit (parks, museums, cafés, bookstores) rather than the real-world stops a transit agency optimized for route and passenger efficiency, so the station map tends to be more interesting to play across. What you lose: pre-fixed lines and timetables — every station connects to every other station, and the schedule is rolled fresh per departure.
 
 ---
 
@@ -72,9 +72,12 @@ A **route** is a pre-declared sequence of stations from your current location to
 
 - **A route's declared sequence cannot include the same station twice** — every station in the sequence must be distinct.
 - **You may pass any intermediate station along your declared route without pulling over.**
-- **You must stop at the destination station you declared.** That is the end of your route. Whether or not you get out of the vehicle is irrelevant — the route ended there, and that counts as a stop.
+- **You must stop at the destination station you declared.** That is the end of your route.
+- **You must get out of your vehicle before declaring or rolling for the next route.** Stretching your legs and actually looking at the place counts; staying buckled in does not. This applies at every route end: destination stops, mid-route change points, and the start of the very first route of the day.
 
-Why the destination is a forced stop: without this rule, players could declare a route ending at the next station they're already approaching, hop through with no roll, declare another, and effectively never incur a departure roll. The forced stop ensures every route imposes at least one roll's worth of friction. Short routes get to that roll sooner, so they incur more total rolls per mile traveled; long routes amortize the friction over a longer commitment.
+Why the dismount rule: vehicle stations are picked from places that are interesting to be at — parks, museums, cafés, bookstores, arcades. Without a get-out requirement the station becomes a math token on a map. Forcing a brief dismount turns each stop into a reason to actually take a look at the site, which is half the point of choosing those POIs in the first place.
+
+Why the destination is a forced stop (separately from the dismount): without it, players could declare a route ending at the next station they're already approaching, hop through with no roll, declare another, and effectively never incur a departure roll. The forced stop ensures every route imposes at least one roll's worth of friction. Short routes get to that roll sooner, so they incur more total rolls per mile traveled; long routes amortize the friction over a longer commitment.
 
 ### Changing your route mid-trip
 
@@ -82,10 +85,11 @@ A mid-route change is just ending your current route early and starting a new on
 
 1. Pick a station along your current route to be your new endpoint. Treat it as your destination from this point forward.
 2. Drive there. That station is the end of your current route.
-3. From that station, declare a new route to wherever you want to go next. Make a departure roll for the new route, as you would for any route.
-4. Once your wait clears, drive off on the new route.
+3. **Get out of the vehicle.** As above.
+4. From that station, declare a new route to wherever you want to go next. Make a departure roll for the new route, as you would for any route.
+5. Once your wait clears, drive off on the new route.
 
-There is no separate "transfer" mechanic — a mid-route change is just two routes back-to-back, each with its own declaration and departure roll.
+There is no separate "transfer" mechanic — a mid-route change is just two routes back-to-back, each with its own declaration, dismount, and departure roll.
 
 ---
 

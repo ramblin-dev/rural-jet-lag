@@ -30,7 +30,7 @@ The cross-game pieces:
 - `vehicle-stations.md` (repo root) — the canonical write-up of the cars-as-trains mechanic that every rural Jet Lag adaptation in this repo shares (what a station is, how the 2d6 departure roll works, route declaration / mid-route changes). Per-game `rules.md` files reference it instead of restating the mechanic. When you change the cross-game mechanic, edit it here, not in the per-game files.
 - `tools/` (repo root) — Python utilities that work across formats (currently the vehicle-stations generator and its GeoJSON samples). Game-specific scripts still live in `<game>/tools/`. New utilities go in whichever folder matches their scope.
 
-There is also a top-level `rural_jet_lag/` Python package that holds **console-script shims only** — small wrappers so the underlying scripts can be invoked as `uv run <command>` from the repo root via `[project.scripts]` in `pyproject.toml`. Real tool implementations live in either `tools/` (cross-game) or `<game>/tools/` (game-specific), not in `rural_jet_lag/`. When adding a new console command, add a wrapper in `rural_jet_lag/` and an entry in `[project.scripts]`.
+Console scripts are registered in `[project.scripts]` in `pyproject.toml` and point directly at the underlying tool's `main()` function (e.g. `vehicle-stations = "tools.generate_vehicle_stations:main"`). The `tools/` directory has an `__init__.py` so hatch can package it and the entry points resolve. There is no shim layer — to register a new console command, add an entry in `[project.scripts]` pointing at the script's module path. (Game-specific tools under `<game>/tools/` can't currently be exposed as console scripts because the directory names contain hyphens, which aren't valid in Python module paths; invoke those scripts directly with `uv run python <game>/tools/<script>.py`.)
 
 The repo-root `.input/` is **gitignored** and serves as a personal-reference cache for scans, saved web pages, and PDFs of source material that we don't want in the repo. Never check anything into `.input/`, and don't suggest publishing its contents. It exists so we can read source material when verifying inventory or designing rules without committing it.
 
@@ -46,7 +46,7 @@ Tool scripts write outputs to `.output/` directories (also gitignored repo-wide)
 
 ## Python tooling
 
-Single root `pyproject.toml` manages dependencies for **all** game `tools/` directories — don't create per-game pyproject files. Managed with [uv](https://github.com/astral-sh/uv); Python pinned to 3.12 via `.python-version`. The build backend is `hatchling`, configured to package the `rural_jet_lag/` shim package so `[project.scripts]` console commands work via `uv run`.
+Single root `pyproject.toml` manages dependencies for **all** tool directories (cross-game `tools/` and per-game `<game>/tools/`) — don't create per-game pyproject files. Managed with [uv](https://github.com/astral-sh/uv); Python pinned to 3.12 via `.python-version`. The build backend is `hatchling`, configured to package the cross-game `tools/` directory so `[project.scripts]` console commands resolve via `uv run`.
 
 ```bash
 uv add <package>                     # add a dep (preferred over editing pyproject.toml by hand)
