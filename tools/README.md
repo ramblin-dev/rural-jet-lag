@@ -10,17 +10,32 @@ For the *gameplay mechanic* these tools support — what vehicle stations are, h
 
 Given a polygon of geographic coordinates, queries OpenStreetMap (via the Overpass API) for points of interest, applies a two-tier spacing filter, and derives a per-station wait-time range based on local POI density. Game-agnostic — the output is a station map any rural Jet Lag format can use.
 
-**Clustering and spacing** (defaults from the [transit-friction research notes](../hide-and-seek/reference/transit-friction.md)):
+**Game-size inference** (the recommended path — zero flags needed):
 
-- `--game-size` — official Hide + Seek game size (`S`, `M`, or `L`; also accepts `small`/`medium`/`large`). When set, defaults `--cluster-radius-m` to the official hiding-zone radius for that size: **S/M → 402m (¼ mile)**, **L → 805m (½ mile)**, per the home-game rulebook's "Hiding Zones" article. Setting this makes each cluster roughly coincide with the legal roaming area a hider has once they pick a station inside it.
-- `--cluster-radius-m` — maximum distance from a cluster's seed POI to any of its members, default **1000m** (or the `--game-size` value if that flag is set, with `--cluster-radius-m` always winning if both are passed). Clustering uses **seed-and-grow**: the tool repeatedly picks the highest-priority unassigned POI as a seed and absorbs every unassigned POI within `cluster-radius-m`, until everything is assigned. This avoids single-linkage chaining — in a dense commercial corridor, two distinct real-world nodes (say, a mall and a downtown 3km apart, connected by a strip of cafés) stay as separate clusters instead of collapsing into one giant cluster.
-- `--min-station-spacing-m` — within-cluster minimum spacing between kept stations, default **300m** (average local urban bus stop spacing).
+If you pass none of `--game-size`, `--cluster-radius-m`, or `--max-stations-per-cluster`, the tool:
 
-Precedence for cluster radius: explicit `--cluster-radius-m` > `--game-size` mapping > 1000m fallback. The stderr summary line prints which source was used (`[explicit]`, `[game-size L]`, or `[default]`) so it's auditable per run.
+1. Computes the polygon area (subtracting OSM water bodies by default — pass `--no-water-subtract` to skip the extra Overpass call, or `--subtract-polygon FILE` to also remove other land you're excluding like a closed military range).
+2. Bins that area into the rulebook's S/M/L map-size tiers (from "Choosing a Transit System": S ≤ 100 sq mi / 259 km²; M 100–1000 sq mi / 259–2590 km²; L 1000+ sq mi / 2590+ km²).
+3. Sets `--cluster-radius-m` to the corresponding official hiding-zone radius (¼ mile for S/M, ½ mile for L).
+4. Auto-tunes `--max-stations-per-cluster` to land the station count inside the rulebook's S/M/L station band (S 30–100, M 100–500, L 500+ — the L band only lower-bounds).
 
-**Per-cluster station cap:**
+The stderr summary prints every step of the inference chain so it's auditable per run:
 
-- `--max-stations-per-cluster` — keeps only the highest-priority N stations per cluster after the spacing filter, default **4**. Pass `0` to disable. The default is anchored to empirical urban bus-stop density: Liu et al. 2022 report ~11 stops/km² as the Shanghai optimum for bus-metro-transfer ridership; Liu et al. 2025 find a ~15 stops/km² diminishing-returns threshold in Beijing. Inside a 400m walking-access radius (≈ 0.5 km²) those translate to roughly 5–6 (optimum) and 7–8 (saturation). A cap of 4 lands at the upper end of "typical urban" without modeling Shanghai/Beijing densities, which fits the rural variant. See [`transit-friction.md`](../hide-and-seek/reference/transit-friction.md#stops-per-area-density-and-the-per-cluster-cap) for the citations and reasoning.
+```
+Polygon: 8 unique points
+Water polygons fetched: 296
+Game size: M (inferred from area (330 km² gross − 2 km² water = 329 km² net))
+Cluster radius: 402m (game-size M)
+...
+Selected 182 stations across 182 clusters (..., cap 1/cluster (auto-tuned for game-size M (target 100–500 stations, swept 1..1)))
+```
+
+**Manual overrides** — any of these wins over inference, others stay auto:
+
+- `--game-size {S,M,L}` (also accepts `small`/`medium`/`large`) — skip the area-bin step; use the official hiding-zone radius for that size (S/M → 402m / ¼ mile; L → 805m / ½ mile) and auto-tune cap to that size's station band.
+- `--cluster-radius-m` — skip both the area-bin step (for radius) and the game-size mapping; use this value directly. Clustering uses **seed-and-grow**: pick the highest-priority unassigned POI as a seed, absorb every unassigned POI within `cluster-radius-m`, repeat until everything is assigned. This avoids single-linkage chaining — in a dense commercial corridor, two distinct real-world nodes (say, a mall and a downtown 3km apart, connected by a strip of cafés) stay as separate clusters instead of collapsing into one giant cluster.
+- `--max-stations-per-cluster` — skip cap auto-tuning; use this value. Pass `0` to disable the cap entirely. (Default when nothing is inferable and this is unset: 4, anchored to empirical urban bus-stop density — see [`transit-friction.md`](../hide-and-seek/reference/transit-friction.md#stops-per-area-density-and-the-per-cluster-cap).)
+- `--min-station-spacing-m` — within-cluster minimum spacing between kept stations, default **300m** (average local urban bus stop spacing). Not affected by `--game-size`.
 
 **Playing-hours check:**
 

@@ -726,6 +726,7 @@ dependencies = [
     { name = "pypdf" },
     { name = "rapidocr-onnxruntime" },
     { name = "requests" },
+    { name = "shapely" },
 ]
 
 [package.metadata]
@@ -734,6 +735,7 @@ requires-dist = [
     { name = "pypdf", specifier = ">=6.10.2" },
     { name = "rapidocr-onnxruntime", specifier = ">=1.4.4" },
     { name = "requests", specifier = ">=2.33.1" },
+    { name = "shapely", specifier = ">=2.1.2" },
 ]
 
 [[package]]

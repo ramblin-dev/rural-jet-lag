@@ -30,18 +30,22 @@ A few notes on choosing the area:
 
 ## Step 2 — Generate vehicle stations
 
-From the repo root, passing your chosen game size so cluster boundaries match the official hiding-zone radius (¼ mile for S/M, ½ mile for L):
+From the repo root:
 
 ```bash
-uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game --game-size M
+uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game
 ```
+
+That's it. With no other flags, the tool computes the polygon's area (subtracting OSM water bodies), bins it into the rulebook's S/M/L map-size tier, sets the cluster radius to the official hiding-zone radius for that tier (¼ mile for S/M, ½ mile for L), and auto-tunes the per-cluster station cap so the total station count lands inside the rulebook's S/M/L station band (S 30–100, M 100–500, L 500+). Every inference step prints to stderr so you can see why the tool chose what it chose.
+
+If you already know the tier you want, pass `--game-size {S,M,L}` to skip the area-binning step. To exclude additional land from the area calc (a national-forest boundary you're skipping, a closed military range), pass `--subtract-polygon FILE` with another GeoJSON. To skip the OSM water query entirely (faster on huge polygons where it can time out), pass `--no-water-subtract`.
 
 Two files appear in `tools/.output/`:
 
-- `my-game-{timestamp}.csv` — for spreadsheets and reference. Includes name, category, cluster id, lat / lon, wait-time range, density tier, nearby-POI count.
+- `my-game-{timestamp}.csv` — for spreadsheets and reference. Includes name, category, cluster id, lat / lon, wait-time range, density tier, nearby-POI count, open-during-play status, raw OSM `opening_hours` string.
 - `my-game-{timestamp}.kml` — for upload to a mapping app. Single Folder containing all stations.
 
-The intra-cluster spacing default (300 m) comes from the transit research notes; cluster radius is driven by `--game-size` (or falls back to 1000 m if omitted). Override either with `--min-station-spacing-m` / `--cluster-radius-m` for tighter or looser layouts. Full options: `uv run vehicle-stations --help`.
+For finer control (intra-cluster spacing, manual cap, etc.), see `uv run vehicle-stations --help` and the [tools README](../tools/README.md).
 
 ---
 
@@ -59,7 +63,7 @@ Google Earth, OsmAnd, GAIA, and QGIS also read the file natively if you'd rather
 
 ## Step 4 — Confirm the game size
 
-You should have already passed `--game-size` to the tool in Step 2. Double-check that the official S/M/L choice matches your map's footprint and the time you have — the same value drives both the cluster radius the tool used and the in-game hiding-zone radius (¼ mile for S/M, ½ mile for L). If you guessed wrong, re-run Step 2 with a different value.
+Look at the stderr summary from Step 2 — it prints the inferred game size and the area chain (e.g. `Game size: M (inferred from area (330 km² gross − 2 km² water = 329 km² net))`). Double-check the S/M/L tier matches your map's footprint and the time you have. The same tier drives both the cluster radius the tool used and the in-game hiding-zone radius (¼ mile for S/M, ½ mile for L). If the inference is wrong (e.g. the tool couldn't subtract water for a coastal polygon and over-estimated area), re-run Step 2 with an explicit `--game-size`.
 
 The wait-time tiers in the tool's output (dense / moderate / sparse) are independent of game size — they reflect local POI density at each station, not the size of the game.
 

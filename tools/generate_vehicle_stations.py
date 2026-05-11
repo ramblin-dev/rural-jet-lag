@@ -9,11 +9,21 @@ Overpass API) for points of interest, clusters them by seed-and-grow with
 a fixed radius, applies an intra-cluster spacing filter, and derives a
 per-station wait-time range based on local POI density.
 
-Two parameters control the layout, both grounded in the transit-friction
-research:
-    --min-station-spacing-m  intra-cluster (default 300m, avg local bus)
-    --cluster-radius-m       max distance from a cluster's seed POI to its
-                             members (default 1000m)
+If you pass none of --game-size / --cluster-radius-m / --max-stations-per-cluster,
+the tool auto-infers them from the polygon: it computes area (subtracting
+OSM water polygons by default), bins into the rulebook's S/M/L tier, sets
+the cluster radius to the official hiding-zone radius for that tier
+(¼ mile for S/M, ½ mile for L), and auto-tunes the per-cluster cap so the
+total station count lands inside the rulebook's S/M/L station band.
+
+Manual overrides:
+    --game-size {S,M,L}        skip area binning; use this tier
+    --cluster-radius-m         skip game-size mapping; use this radius
+    --max-stations-per-cluster skip cap auto-tuning; use this cap
+    --min-station-spacing-m    within-cluster minimum (default 300m,
+                               average local urban bus stop spacing)
+    --no-water-subtract        skip the Overpass water query during area calc
+    --subtract-polygon FILE    additional polygon to subtract from play area
 
 Clusters are grown by repeatedly picking the highest-priority unassigned
 POI as a seed and absorbing every unassigned POI within the cluster radius.
@@ -78,6 +88,8 @@ from xml.sax.saxutils import escape as xml_escape
 
 import requests
 from opening_hours import OpeningHours
+from shapely.geometry import Polygon
+from shapely.ops import unary_union
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 USER_AGENT = "rural-jet-lag/generate_vehicle_stations (github: rural-jet-lag)"
@@ -97,6 +109,25 @@ HIDING_ZONE_RADIUS_M_BY_GAME_SIZE = {
     "M": 402,  # ¼ mile = 402.336 m
     "L": 805,  # ½ mile = 804.672 m
 }
+# Map-size area bands from the rulebook's "Choosing a Transit System" article.
+# Imperial source figures: S = 10–100 sq mi, M = 100–1000 sq mi, L = 1000+ sq mi.
+# Converted: 10 sq mi ≈ 26 km², 100 ≈ 259 km², 1000 ≈ 2590 km². Used to infer
+# the game size from polygon area when --game-size is not set.
+GAME_SIZE_AREA_FLOOR_KM2 = {
+    "S": 0.0,
+    "M": 259.0,   # 100 sq mi
+    "L": 2590.0,  # 1000 sq mi
+}
+# Station-count bands from the same rulebook article (S/M closed range; L lower-bounded).
+# Used to auto-tune --max-stations-per-cluster when neither --max-stations-per-cluster
+# nor the cap is otherwise pinned.
+GAME_SIZE_STATION_BANDS = {
+    "S": (30, 100),
+    "M": (100, 500),
+    "L": (500, float("inf")),
+}
+# Cap values to sweep when auto-tuning. Caps are tiny ints; full linear search.
+AUTO_TUNE_CAP_RANGE = range(1, 13)
 # Per-cluster station cap. Anchored to empirical urban bus-stop density:
 # Liu et al. 2022 report ~11 stops/km² as the Shanghai optimum for bus-metro
 # transfer ridership; Liu et al. 2025 find a ~15 stops/km² diminishing-returns
@@ -193,6 +224,25 @@ def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     dl = math.radians(lon2 - lon1)
     a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
     return 2 * r * math.asin(math.sqrt(a))
+
+
+def _polygon_centroid(ring: list[tuple[float, float]]) -> tuple[float, float]:
+    """Simple unweighted centroid of (lat, lon) points. Good enough for picking
+    a projection origin; not a true centroid of an area on a sphere."""
+    n = len(ring) - 1 if ring[0] == ring[-1] else len(ring)
+    lat = sum(p[0] for p in ring[:n]) / n
+    lon = sum(p[1] for p in ring[:n]) / n
+    return lat, lon
+
+
+def project_ring_to_km(
+    ring: list[tuple[float, float]], lat0: float, lon0: float,
+) -> list[tuple[float, float]]:
+    """Equirectangular projection of a (lat, lon) ring to local (x, y) km
+    coordinates centered at (lat0, lon0). Accurate to ~1% for polygons up to
+    ~100 km across, ~5% at ~500 km — sufficient for binning into S/M/L tiers."""
+    cos_lat0 = math.cos(math.radians(lat0))
+    return [((lon - lon0) * 111.0 * cos_lat0, (lat - lat0) * 111.0) for lat, lon in ring]
 
 
 @dataclass(frozen=True)
@@ -384,6 +434,163 @@ def query_overpass(query: str) -> list[dict]:
     )
     r.raise_for_status()
     return r.json().get("elements", [])
+
+
+# Tags that mark a polygon as a body of water / non-playable land cover.
+# Subtracted from the play area when computing map size for game-size inference.
+WATER_TAG_FILTERS: list[tuple[str, str]] = [
+    ("natural", "water"),
+    ("natural", "bay"),
+    ("waterway", "riverbank"),
+    ("waterway", "dock"),
+    ("landuse", "reservoir"),
+    ("landuse", "basin"),
+]
+
+
+def query_water_polygons(polygon: list[tuple[float, float]]) -> list[list[tuple[float, float]]]:
+    """Query Overpass for water polygons inside the play polygon.
+
+    Returns a list of (lat, lon) outer-ring polylines, one per water way.
+    Multipolygon relations are skipped — most water bodies in OSM are tagged
+    on the way level, and relation handling adds complexity disproportionate
+    to the value (areas already subtracted from intersection are correct;
+    skipping a few coastline relations underestimates water slightly, which
+    biases the game-size inference toward larger, not smaller).
+    """
+    poly_str = " ".join(f"{lat} {lon}" for lat, lon in polygon)
+    parts: list[str] = []
+    for key, value in WATER_TAG_FILTERS:
+        parts.append(f'  way["{key}"="{value}"](poly:"{poly_str}");')
+    body = "\n".join(parts)
+    query = f"[out:json][timeout:{OVERPASS_TIMEOUT_SEC}];\n(\n{body}\n);\nout geom;"
+    elements = query_overpass(query)
+    rings: list[list[tuple[float, float]]] = []
+    for el in elements:
+        geom = el.get("geometry") or []
+        if len(geom) < 3:
+            continue
+        ring = [(g["lat"], g["lon"]) for g in geom]
+        if ring[0] != ring[-1]:
+            ring.append(ring[0])
+        rings.append(ring)
+    return rings
+
+
+@dataclass(frozen=True)
+class PlayArea:
+    gross_km2: float          # polygon area, no subtractions
+    net_km2: float            # after all subtractions
+    water_km2: float          # area subtracted as water (0 if disabled)
+    user_excl_km2: float      # area subtracted from --subtract-polygon (0 if not used)
+
+
+def compute_play_area(
+    polygon: list[tuple[float, float]],
+    subtract_water: bool,
+    extra_subtract_ring: list[tuple[float, float]] | None,
+) -> PlayArea:
+    """Compute play area in km², optionally subtracting water and a user polygon.
+
+    Uses an equirectangular projection centered on the polygon centroid so
+    shapely's planar `.area` returns km². Distortion is < 1% up to ~100 km
+    across and ~5% at ~500 km — enough resolution to bin into S/M/L tiers.
+    """
+    lat0, lon0 = _polygon_centroid(polygon)
+    play_xy = project_ring_to_km(polygon, lat0, lon0)
+    play = Polygon(play_xy)
+    if not play.is_valid:
+        play = play.buffer(0)  # repair common self-touching issues
+    gross_km2 = float(play.area)
+
+    excl_polys = []
+    water_km2 = 0.0
+    user_excl_km2 = 0.0
+
+    if subtract_water:
+        try:
+            rings = query_water_polygons(polygon)
+            print(f"Water polygons fetched: {len(rings)}", file=sys.stderr)
+            water_geoms = []
+            for ring in rings:
+                p = Polygon(project_ring_to_km(ring, lat0, lon0))
+                if not p.is_valid:
+                    p = p.buffer(0)
+                if p.is_empty:
+                    continue
+                water_geoms.append(p)
+            if water_geoms:
+                water_union = unary_union(water_geoms)
+                water_inside = water_union.intersection(play)
+                water_km2 = float(water_inside.area)
+                excl_polys.append(water_union)
+        except Exception as e:
+            print(f"warning: water subtraction failed ({e}); using gross area", file=sys.stderr)
+
+    if extra_subtract_ring is not None:
+        try:
+            user_poly = Polygon(project_ring_to_km(extra_subtract_ring, lat0, lon0))
+            if not user_poly.is_valid:
+                user_poly = user_poly.buffer(0)
+            user_excl_km2 = float(user_poly.intersection(play).area)
+            excl_polys.append(user_poly)
+        except Exception as e:
+            print(f"warning: --subtract-polygon failed ({e})", file=sys.stderr)
+
+    if excl_polys:
+        net = play.difference(unary_union(excl_polys))
+        net_km2 = float(net.area)
+    else:
+        net_km2 = gross_km2
+
+    return PlayArea(
+        gross_km2=gross_km2,
+        net_km2=max(0.0, net_km2),
+        water_km2=water_km2,
+        user_excl_km2=user_excl_km2,
+    )
+
+
+def infer_game_size(area_km2: float) -> str:
+    """Map a polygon area in km² to an S/M/L game size per the rulebook's
+    'Choosing a Transit System' bands."""
+    if area_km2 >= GAME_SIZE_AREA_FLOOR_KM2["L"]:
+        return "L"
+    if area_km2 >= GAME_SIZE_AREA_FLOOR_KM2["M"]:
+        return "M"
+    return "S"
+
+
+def auto_tune_cap(
+    candidates: list[POI],
+    min_station_m: float,
+    cluster_radius_m: float,
+    target_band: tuple[float, float],
+    cap_range: range = AUTO_TUNE_CAP_RANGE,
+) -> tuple[list[tuple[POI, int]], list[Rejection], int, list[tuple[int, int]]]:
+    """Sweep cap values in ``cap_range`` and return the smallest cap whose
+    station count falls inside ``target_band``. If no cap fits, return the
+    one whose count is closest to the band.
+
+    Returns ``(kept, rejected, chosen_cap, trail)`` where ``trail`` is a list
+    of ``(cap, count)`` pairs for stderr/debug attribution.
+    """
+    lo, hi = target_band
+    best = None  # (diff, cap, count, kept, rejected)
+    trail: list[tuple[int, int]] = []
+    for cap in cap_range:
+        kept, rejected = filter_two_tier(
+            candidates, min_station_m, cluster_radius_m, max_per_cluster=cap,
+        )
+        count = len(kept)
+        trail.append((cap, count))
+        if lo <= count <= hi:
+            return kept, rejected, cap, trail
+        diff = max(lo - count, 0.0, count - hi)  # gap to nearest band edge
+        if best is None or diff < best[0]:
+            best = (diff, cap, count, kept, rejected)
+    _, cap, _, kept, rejected = best  # type: ignore[misc]
+    return kept, rejected, cap, trail
 
 
 def parse_pois(elements: list[dict], window: PlayingWindow) -> list[POI]:
@@ -699,11 +906,20 @@ def main() -> int:
                          f"(or the official hiding-zone radius if --game-size is set).")
     ap.add_argument("--density-radius-m", type=float, default=DENSITY_RADIUS_M,
                     help=f"Radius for local POI density count (default: {DENSITY_RADIUS_M})")
-    ap.add_argument("--max-stations-per-cluster", type=int, default=MAX_STATIONS_PER_CLUSTER,
+    ap.add_argument("--max-stations-per-cluster", type=int, default=None,
                     help=f"Maximum stations per cluster — keeps the highest-priority N after "
-                         f"the spacing filter. Default: {MAX_STATIONS_PER_CLUSTER}, anchored to "
-                         f"empirical urban bus-stop density (≤ ~5–6 stops in a 400m walking-access "
-                         f"radius at the Shanghai bus-metro-transfer optimum). Pass 0 to disable.")
+                         f"the spacing filter. If unset and the game size is known (explicit or "
+                         f"inferred), the tool auto-tunes this cap to land the total station "
+                         f"count inside the rulebook's S/M/L band. Otherwise defaults to "
+                         f"{MAX_STATIONS_PER_CLUSTER}. Pass 0 to disable the cap entirely.")
+    ap.add_argument("--water-subtract", action=argparse.BooleanOptionalAction, default=True,
+                    help="Subtract OSM water polygons (lakes, rivers, reservoirs) from the play "
+                         "polygon when computing area for game-size inference. Adds one extra "
+                         "Overpass call. Pass --no-water-subtract to skip.")
+    ap.add_argument("--subtract-polygon", type=Path, default=None,
+                    help="Additional GeoJSON/text polygon to subtract from the play area before "
+                         "inferring game size (e.g. a national-forest boundary you're skipping, "
+                         "a closed military range). Same format as --polygon-file.")
     ap.add_argument("--playing-hours", type=str, default=DEFAULT_PLAYING_HOURS,
                     help=f"Time-of-day window during which the game will be played. Used to "
                          f"deprioritize POIs whose OSM `opening_hours` tag indicates they're "
@@ -719,21 +935,8 @@ def main() -> int:
                          "`uv run vehicle-stations … --debug-candidates | grep cluster=5` works.")
     args = ap.parse_args()
 
-    # Resolve cluster radius: explicit --cluster-radius-m wins; else --game-size; else CLUSTER_RADIUS_M.
-    if args.cluster_radius_m is not None:
-        cluster_radius_m = args.cluster_radius_m
-        radius_source = "explicit"
-    elif args.game_size is not None:
-        cluster_radius_m = HIDING_ZONE_RADIUS_M_BY_GAME_SIZE[args.game_size]
-        radius_source = f"game-size {args.game_size}"
-    else:
-        cluster_radius_m = CLUSTER_RADIUS_M
-        radius_source = "default"
-    if cluster_radius_m <= args.min_station_spacing_m:
-        ap.error("--cluster-radius-m must be greater than --min-station-spacing-m")
-    if args.max_stations_per_cluster < 0:
+    if args.max_stations_per_cluster is not None and args.max_stations_per_cluster < 0:
         ap.error("--max-stations-per-cluster must be 0 or a positive integer")
-    max_per_cluster = args.max_stations_per_cluster or None
 
     try:
         play_start, play_end = parse_playing_hours(args.playing_hours)
@@ -748,8 +951,55 @@ def main() -> int:
     polygon = load_polygon(args.polygon_file)
     print(f"Polygon: {len(polygon) - 1} unique points", file=sys.stderr)
 
+    # Resolve game size: explicit --game-size wins; else infer from polygon area.
+    extra_excl_ring = None
+    if args.subtract_polygon is not None:
+        extra_excl_ring = load_polygon(args.subtract_polygon)
+    if args.game_size is not None:
+        game_size = args.game_size
+        game_size_source = "explicit"
+        area_info = None
+    else:
+        try:
+            area_info = compute_play_area(
+                polygon,
+                subtract_water=args.water_subtract,
+                extra_subtract_ring=extra_excl_ring,
+            )
+            game_size = infer_game_size(area_info.net_km2)
+            chain = f"{area_info.gross_km2:.0f} km² gross"
+            if area_info.water_km2 > 0:
+                chain += f" − {area_info.water_km2:.0f} km² water"
+            if area_info.user_excl_km2 > 0:
+                chain += f" − {area_info.user_excl_km2:.0f} km² user-excluded"
+            if area_info.water_km2 > 0 or area_info.user_excl_km2 > 0:
+                chain += f" = {area_info.net_km2:.0f} km² net"
+            game_size_source = f"inferred from area ({chain})"
+        except Exception as e:
+            print(f"warning: area calc failed ({e}); falling back to defaults", file=sys.stderr)
+            area_info = None
+            game_size = None
+            game_size_source = None
+
+    # Resolve cluster radius: explicit > game-size mapping > default.
+    if args.cluster_radius_m is not None:
+        cluster_radius_m = args.cluster_radius_m
+        radius_source = "explicit"
+    elif game_size is not None:
+        cluster_radius_m = HIDING_ZONE_RADIUS_M_BY_GAME_SIZE[game_size]
+        radius_source = f"game-size {game_size}"
+    else:
+        cluster_radius_m = CLUSTER_RADIUS_M
+        radius_source = "default"
+    if cluster_radius_m <= args.min_station_spacing_m:
+        ap.error("--cluster-radius-m must be greater than --min-station-spacing-m")
+
+    if game_size is not None:
+        print(f"Game size: {game_size} ({game_size_source})", file=sys.stderr)
+    print(f"Cluster radius: {cluster_radius_m:.0f}m ({radius_source})", file=sys.stderr)
+
     query = build_overpass_query(polygon)
-    print("Querying Overpass…", file=sys.stderr)
+    print("Querying Overpass for POIs…", file=sys.stderr)
     t0 = wall_time.time()
     elements = query_overpass(query)
     print(f"Got {len(elements)} elements in {wall_time.time() - t0:.1f}s", file=sys.stderr)
@@ -767,14 +1017,43 @@ def main() -> int:
         print("No POIs found — check the polygon and tag list.", file=sys.stderr)
         return 1
 
-    stations_with_cluster, rejections = filter_two_tier(
-        candidates,
-        args.min_station_spacing_m,
-        cluster_radius_m,
-        max_per_cluster=max_per_cluster,
-    )
+    # Resolve cap: explicit > auto-tune (if game size known) > default.
+    if args.max_stations_per_cluster is not None:
+        max_per_cluster = args.max_stations_per_cluster or None
+        cap_source = "explicit"
+        stations_with_cluster, rejections = filter_two_tier(
+            candidates, args.min_station_spacing_m, cluster_radius_m,
+            max_per_cluster=max_per_cluster,
+        )
+    elif game_size is not None:
+        target_band = GAME_SIZE_STATION_BANDS[game_size]
+        stations_with_cluster, rejections, max_per_cluster, trail = auto_tune_cap(
+            candidates, args.min_station_spacing_m, cluster_radius_m, target_band,
+        )
+        lo, hi = target_band
+        hi_str = "∞" if hi == float("inf") else f"{hi:.0f}"
+        in_band = lo <= len(stations_with_cluster) <= hi
+        cap_source = (
+            f"auto-tuned for game-size {game_size} (target {lo:.0f}–{hi_str} stations, "
+            f"swept {trail[0][0]}..{trail[-1][0]})"
+        )
+        if not in_band:
+            print(
+                f"warning: could not fit station count into band {lo:.0f}–{hi_str}; "
+                f"closest was {len(stations_with_cluster)} at cap={max_per_cluster}. "
+                f"Try a tighter polygon or override --max-stations-per-cluster.",
+                file=sys.stderr,
+            )
+    else:
+        max_per_cluster = MAX_STATIONS_PER_CLUSTER
+        cap_source = "default"
+        stations_with_cluster, rejections = filter_two_tier(
+            candidates, args.min_station_spacing_m, cluster_radius_m,
+            max_per_cluster=max_per_cluster,
+        )
+
     cluster_count = len({cid for _, cid in stations_with_cluster})
-    cap_note = f", cap {max_per_cluster}/cluster" if max_per_cluster is not None else ""
+    cap_note = f", cap {max_per_cluster}/cluster ({cap_source})" if max_per_cluster else ", no cap"
     print(
         f"Selected {len(stations_with_cluster)} stations across {cluster_count} clusters "
         f"(intra-cluster ≥ {args.min_station_spacing_m:.0f}m, "
