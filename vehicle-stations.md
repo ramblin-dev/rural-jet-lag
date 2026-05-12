@@ -79,6 +79,16 @@ Why the dismount rule: vehicle stations are picked from places that are interest
 
 Why the destination is a forced stop (separately from the dismount): without it, players could declare a route ending at the next station they're already approaching, hop through with no roll, declare another, and effectively never incur a departure roll. The forced stop ensures every route imposes at least one roll's worth of friction. Short routes get to that roll sooner, so they incur more total rolls per mile traveled; long routes amortize the friction over a longer commitment.
 
+### Arrival cooldown when transit is also in play
+
+If your game includes any real transit (a bus, train, tram, or ferry line that players are allowed to ride), every vehicle route — personal or by-request — picks up a **post-arrival cooldown** to keep transit options competitive:
+
+1. **Note your departure time** when you actually drive off from the starting station (after the wait clears, not when you rolled).
+2. **On arrival at your destination station, wait 2× the drive time** before you may dismount-and-declare your next route or board another mode. (Example: a 12-minute drive incurs a 24-minute cooldown on arrival.)
+3. The cooldown is dead time at the destination station — you can stretch, eat, browse the POI you stopped at, but you can't start the next departure roll until it clears.
+
+Why 2× the drive time: transit is roughly **3× slower** than driving over a comparable trip — that's the midpoint of the 2–3.5× per-minute commercial-speed gap and the 2–4× door-to-door range derived in [`hide-and-seek/reference/transit-friction.md`](./hide-and-seek/reference/transit-friction.md#implied-speed-gap). A 1× drive plus a 2× post-arrival cooldown sums to **3× the drive time on the clock**, putting a vehicle leg roughly on par with the transit alternative. Without this, every mixed-mode game would just favor driving. In games with no real transit at all, this rule does nothing useful and is skipped.
+
 ### Changing your route mid-trip
 
 A mid-route change is just ending your current route early and starting a new one from there:
@@ -118,7 +128,7 @@ The mechanic is mode-agnostic, so any combination works:
 - **Real transit + ride-sharing** — use a real bus line where it exists, fall back to Uber elsewhere.
 - **All three** — real transit + personal vehicles + by-request transport.
 
-Each mode resolves at the station the same way: declare → roll → wait → depart. Personal vehicles use the basic mechanic above; by-request transport adds the ride-timing allowance; real bus / train / ferry lines follow the official rulebook unchanged.
+Each mode resolves at the station the same way: declare → roll → wait → depart. Personal vehicles use the basic mechanic above; by-request transport adds the ride-timing allowance; real bus / train / ferry lines follow the official rulebook unchanged. In any game where real transit is one of the modes in play, vehicle routes (personal and by-request) also pay the **arrival cooldown** described above — that's what keeps the slower transit option competitive.
 
 ---
 
