@@ -1,8 +1,8 @@
 # Transit friction — research notes
 
-Background research for the rural Hide + Seek variant: how does public transit produce *trip-making friction* (waiting, transferring, route topology, last-mile walks)? The original game leans on those frictions to shape seekers' decisions; a vehicle-based rural variant strips most of them out by default and so has to engineer artificial replacements.
+Background research for the rural Jet Lag adaptations in this repo: how does public transit produce *trip-making friction* (waiting, transferring, route topology, last-mile walks)? The original Jet Lag formats lean on those frictions to shape players' decisions; a vehicle-based rural variant strips most of them out by default and so has to engineer artificial replacements. The findings here feed directly into the cross-game [`vehicle-stations.md`](../vehicle-stations.md) mechanic.
 
-> Original synthesis citing external academic sources. **Per-citation claims are facts from the cited paper; the framing and the rural-design implications are reasoned inference**, not measured findings — see [`./README.md`](./README.md) and [`../../CLAUDE.md`](../../CLAUDE.md) on the writing posture this file follows.
+> Original synthesis citing external academic sources. **Per-citation claims are facts from the cited paper; the framing and the rural-design implications are reasoned inference**, not measured findings — see [`./README.md`](./README.md) and [`../CLAUDE.md`](../CLAUDE.md) on the writing posture this file follows.
 
 ---
 
@@ -24,7 +24,7 @@ Iseki & Taylor 2009 [5] propose a five-attribute framework for transfer-facility
 
 ## Actual time costs and modal speeds (observed, not perceived)
 
-The perceived-cost layer above is about how riders *experience* time. This section is about how much time actually elapses on the clock — what trip-makers measure with a stopwatch. Both layers matter for game calibration: perceived cost shaped the original game's curse design (transfer-style penalties feel justified because they hurt), but actual time determines how fast seekers can physically reach the hider.
+The perceived-cost layer above is about how riders *experience* time. This section is about how much time actually elapses on the clock — what trip-makers measure with a stopwatch. Both layers matter for game calibration: perceived cost shaped the original Jet Lag formats' penalty-card design (transfer-style penalties feel justified because they hurt), but actual time determines how fast players can physically reach each other.
 
 ### Door-to-door PT-vs-car travel time ratio
 
@@ -54,8 +54,8 @@ For comparison, **typical rural driving** (county roads + occasional highway, US
 
 Rural driving is about **2–3.5× faster per minute** than urban transit's commercial speed — and that's before adding the access / wait / transfer time that grows the door-to-door gap to the ~2× ratio Liao et al. measure [7]. For the rural variant, this means:
 
-- A seeker who drives unconstrained in rural play moves roughly **2–4× faster than the original game's implicit transit-bound seeker** would over a trip of equivalent distance.
-- Rural rules that want to preserve the original game's pacing need to slow seekers' *effective* speed by a comparable factor — through artificial friction, not just by capping vehicle range.
+- A player who drives unconstrained in rural play moves roughly **2–4× faster than the original game's implicit transit-bound player** would over a trip of equivalent distance.
+- Rural rules that want to preserve the original game's pacing need to slow players' *effective* speed by a comparable factor — through artificial friction, not just by capping vehicle range.
 
 This is reasoned inference from the modal-speed and door-to-door numbers; it is not a measured calibration.
 
@@ -161,7 +161,7 @@ These ranges are summarized from the planning literature in this file's referenc
 
 ## Operational layer (what transit *does* that produces cost)
 
-A complementary view: the operational features of transit that produce the perceived costs above. Roughly ordered by how strongly each shapes seekers' route choice in a Hide + Seek-style game.
+A complementary view: the operational features of transit that produce the perceived costs above. Roughly ordered by how strongly each shapes players' route choice in a Jet Lag-style game.
 
 1. **Network topology.** The graph constrains paths. Going from A to B may force passage through hub C. Hub-and-spoke, radial, and grid networks produce different "you can't get there directly" effects. Petruccelli et al. 2021 frame this as the trade-off between feeder-trunk integration (more transfers, more rides per mile) and direct-link patterns (fewer transfers, less coverage) [1].
 2. **Headway / wait time.** The gap between vehicles. In heavily-served urban systems peak headways can drop to a few minutes; off-peak headways on suburban or low-frequency services commonly stretch to 15–30+ minutes (general — verify per-system before quoting specific numbers). Doubles to triples the perceived cost of any short trip via the ~1.75–2× wait-time weight [1, 6].
@@ -172,13 +172,13 @@ A complementary view: the operational features of transit that produce the perce
 7. **Service-area coverage.** The network only covers part of the map. Outer zones often require chaining a low-frequency feeder bus to a trunk line, compounding waits and transfers. Lachapelle et al. 2023 link this to the equity finding above [2].
 8. **Disruptions.** Engineering works, weather, incidents. Stochastic friction; a route that worked yesterday may not exist today.
 9. **Information availability.** Iseki & Taylor 2009 treat schedule / route information as part of the access-cost component [5] — not knowing when the next vehicle arrives is itself a cost.
-10. **Comfort / crowding.** Treated in the literature as a multiplier on IVT (a full bus during rush hour feels longer than it is) [4]. Less directly translatable to a Hide + Seek-style design.
+10. **Comfort / crowding.** Treated in the literature as a multiplier on IVT (a full bus during rush hour feels longer than it is) [4]. Less directly translatable to a Jet Lag-style design.
 
 ---
 
 ## Implications for the rural variant *(inference, not measured)*
 
-A vehicle-only rural variant strips out most of categories 1, 3, 4, 5, and 6 by default. The road network is dense and routable in many directions; seekers don't transfer; they don't wait; they don't walk a last mile to reach a building; pull-over is possible almost anywhere. **Vehicle range is the only naturally-occurring constraint, and it sits closest to category 5 (operating hours / span of service)** — a temporal-budget cap.
+A vehicle-only rural variant strips out most of categories 1, 3, 4, 5, and 6 by default. The road network is dense and routable in many directions; players don't transfer; they don't wait; they don't walk a last mile to reach a building; pull-over is possible almost anywhere. **Vehicle range is the only naturally-occurring constraint, and it sits closest to category 5 (operating hours / span of service)** — a temporal-budget cap.
 
 If the design goal is to recreate the trip-shaping pressure transit imposes, range alone is unlikely to be enough. The candidate moves below map each transit-friction category to a possible driving-side analogue. They are starting points for design, not recommendations.
 
@@ -188,7 +188,7 @@ If the design goal is to recreate the trip-shaping pressure transit imposes, ran
 | Headway / wait time (2) | Mandatory dwells — must remain at a location class (gas station, town square, fixed checkpoint) for N minutes before resuming. |
 | Transfer penalty (3) | Vehicle-class swap or check-in rituals at dwell sites; explicit "pass-through-X" fees in the action economy. |
 | Last-mile walk (4) | Photo / proof-of-presence requirements — must dismount and capture a pedestrian-scale object (a sign, a doorway) before the question counts. |
-| Operating hours (5) | Vehicle range cap; daylight-only seeking; no-drive windows tied to time of day. |
+| Operating hours (5) | Vehicle range cap; daylight-only play; no-drive windows tied to time of day. |
 | Route commitment (6) | Cooldowns on road-segment reuse — same segment cannot be re-driven within N hours; once committed to a county-road, exit only at named junctions. |
 | Service-area coverage (7) | Off-network penalties — entering certain map regions costs draws or time, modeling the "bus-to-train chain" friction. |
 | Disruptions (8) | Stochastic delay cards — drawn periodically, force detours or dwells. |
@@ -197,15 +197,15 @@ If the design goal is to recreate the trip-shaping pressure transit imposes, ran
 
 The actual-cost numbers above suggest a calibration framework that does not require bespoke per-region rule tuning. Three load-bearing ideas:
 
-1. **Target effective seeker speed, not raw speed.** If the original game implicitly assumes seekers move at urban-transit door-to-door pace (commercial speeds ~10–25 mph for the underlying mode [10, 11], inflated to ~2× car-equivalent over trips longer than ~3 km [7]), then the rural-variant calibration target is a **seeker effective speed comparable to that** — not free-form rural driving at 50+ mph. Artificial friction (mandatory dwells, forced waypoints, segment-reuse cooldowns) should be sized to bring effective speed down to roughly the speed the original game implicitly assumed.
+1. **Target effective player speed, not raw speed.** If the original Jet Lag formats implicitly assume players move at urban-transit door-to-door pace (commercial speeds ~10–25 mph for the underlying mode [10, 11], inflated to ~2× car-equivalent over trips longer than ~3 km [7]), then the rural-variant calibration target is a **player effective speed comparable to that** — not free-form rural driving at 50+ mph. Artificial friction (mandatory dwells, forced waypoints, segment-reuse cooldowns) should be sized to bring effective speed down to roughly the speed the original formats implicitly assumed.
 2. **Parameterize friction intensity on density.** Cervero & Guerra's density thresholds [12] mean rural play occupies a regime where transit is structurally absent. The intensity of artificial friction the rural variant imposes can be parameterized on local density — denser rural regions (small-town corridors) can borrow more from the original game's mechanics with rescaled distances; very low-density regions (open backcountry) need stronger artificial friction because rural driving speeds are highest there. A function of the form `friction_factor = f(population_density, distance_between_anchors)` is the structural shape — specific coefficients require playtesting.
 3. **Bucket distances by game-size tier rather than by absolute distance.** The original game's three size tiers (S/M/L) already encode a distance bucket scheme: a "1-mile" radius means something different at S than at L. The rural variant can re-pick those bucket values per tier so that, e.g., a "Radar" question's 1-mile-equivalent in rural-L is whatever distance corresponds to the same fraction-of-game-radius the original 1 mile covered in transit-L. This avoids per-region rule tuning by absorbing geographic variation into tier choice.
 
-What this approach buys: a small set of universal rules with two or three parameters keyed to local conditions, instead of a separate ruleset for "Iowa farmland" vs "Vermont mountains" vs "Nevada desert." What it costs: every parameter that gets pushed to the player adds setup friction. Worth pricing the trade-off explicitly when the rural rules in [`../rules.md`](../rules.md) get drafted.
+What this approach buys: a small set of universal rules with two or three parameters keyed to local conditions, instead of a separate ruleset for "Iowa farmland" vs "Vermont mountains" vs "Nevada desert." What it costs: every parameter that gets pushed to the player adds setup friction. Worth pricing the trade-off explicitly in each per-game `rules.md` and the cross-game [`vehicle-stations.md`](../vehicle-stations.md).
 
 ### Calibration notes for an OSM-based artificial-station tool *(planning-stage capture)*
 
-Working concept (subject to revision): a tool ingests a polygon of coordinates, queries OpenStreetMap for retail / service POIs (restaurants, cafés, gas stations, bars, etc.), clusters POIs at roughly a 1-mile grouping, and designates each cluster as an artificial "vehicle station." At each station the player rolls 2d6 (the hider dice) and reads off a wait time within a station-specific range; ranges scale with the station's local density.
+Working concept (subject to revision): a tool ingests a polygon of coordinates, queries OpenStreetMap for retail / service POIs (restaurants, cafés, gas stations, bars, etc.), clusters POIs at roughly a 1-mile grouping, and designates each cluster as an artificial "vehicle station." At each station the player rolls 2d6 and reads off a wait time within a station-specific range; ranges scale with the station's local density.
 
 Where the research above slots in:
 
@@ -229,7 +229,7 @@ A candidate parameterization (untested — these are starting points):
 | Moderate (cluster of a few POIs along a road) | Local bus / suburban | 10–30 min | ~20 min |
 | Sparse (isolated cluster, single POI in many miles) | Paratransit / demand-responsive | 20–60 min | ~40 min |
 
-The 2d6 distribution (range 2–12, mean 7, mode 7) is well-suited to wait-time draws because it's symmetric around the mean and rare-extreme: the "really lucky" and "really unlucky" tails are ~3% each. A simple mapping is `wait = min_minutes + (roll - 2) × (max_minutes - min_minutes) / 10`. This preserves the 2d6 bell-curve as a soft preference for the middle of the range while allowing an unlucky roll to drag the seeker into the long-tail wait the low-density regime already implies.
+The 2d6 distribution (range 2–12, mean 7, mode 7) is well-suited to wait-time draws because it's symmetric around the mean and rare-extreme: the "really lucky" and "really unlucky" tails are ~3% each. A simple mapping is `wait = min_minutes + (roll - 2) × (max_minutes - min_minutes) / 10`. This preserves the 2d6 bell-curve as a soft preference for the middle of the range while allowing an unlucky roll to drag the player into the long-tail wait the low-density regime already implies.
 
 Two design caveats from the research:
 

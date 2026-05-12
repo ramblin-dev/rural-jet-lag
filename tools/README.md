@@ -34,7 +34,7 @@ Selected 182 stations across 182 clusters (..., cap 1/cluster (auto-tuned for ga
 
 - `--game-size {S,M,L}` (also accepts `small`/`medium`/`large`) — skip the area-bin step; use the official hiding-zone radius for that size (S/M → 402m / ¼ mile; L → 805m / ½ mile) and auto-tune cap to that size's station band.
 - `--cluster-radius-m` — skip both the area-bin step (for radius) and the game-size mapping; use this value directly. Clustering uses **seed-and-grow**: pick the highest-priority unassigned POI as a seed, absorb every unassigned POI within `cluster-radius-m`, repeat until everything is assigned. This avoids single-linkage chaining — in a dense commercial corridor, two distinct real-world nodes (say, a mall and a downtown 3km apart, connected by a strip of cafés) stay as separate clusters instead of collapsing into one giant cluster.
-- `--max-stations-per-cluster` — skip cap auto-tuning; use this value. Pass `0` to disable the cap entirely. (Default when nothing is inferable and this is unset: 4, anchored to empirical urban bus-stop density — see [`transit-friction.md`](../hide-and-seek/reference/transit-friction.md#stops-per-area-density-and-the-per-cluster-cap).)
+- `--max-stations-per-cluster` — skip cap auto-tuning; use this value. Pass `0` to disable the cap entirely. (Default when nothing is inferable and this is unset: 4, anchored to empirical urban bus-stop density — see [`transit-friction.md`](../reference/transit-friction.md#stops-per-area-density-and-the-per-cluster-cap).)
 - `--min-station-spacing-m` — within-cluster minimum spacing between kept stations, default **300m** (average local urban bus stop spacing). Not affected by `--game-size`.
 
 **Real public-transit stations (always included by default):**
@@ -111,7 +111,7 @@ POI categories considered, in priority order — earlier categories beat later o
 
 Categories and priorities are defined as constants near the top of the script and are easy to tweak.
 
-Wait-time tier breakpoints (also tunable in the script) match the table in [`transit-friction.md`](../hide-and-seek/reference/transit-friction.md): ≥15 nearby POIs → dense (5–15 min), 5–14 → moderate (10–30), 0–4 → sparse (20–60). The local-density radius is 1 mile.
+Wait-time tier breakpoints (also tunable in the script) match the table in [`transit-friction.md`](../reference/transit-friction.md): ≥15 nearby POIs → dense (5–15 min), 5–14 → moderate (10–30), 0–4 → sparse (20–60). The local-density radius is 1 mile.
 
 **Etiquette:** the Overpass API is a free public service — be polite. Don't run this against giant polygons in tight loops. Set a meaningful `User-Agent` (the script does this).
 
