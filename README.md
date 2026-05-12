@@ -1,12 +1,12 @@
 # Rural Jet Lag
 
-An unofficial fan project adapting **Jet Lag: The Game** for rural environments where public transit does not exist.
+An unofficial fan project adapting **Jet Lag: The Game** for rural areas with little to no public transit.
 
 > **Disclaimer:** This repository is an unofficial fan project. It is not affiliated with, endorsed by, or connected to the official Jet Lag: The Game, Nebula, or Wendover Productions. All rights to the original game concept belong to their respective owners.
 
 ---
 
-Hide + Seek (and most Jet Lag formats) leans on the friction of public transit — schedule waits, transfers, station topology — to shape interesting decisions. Rural areas often don't have that infrastructure. This project replaces transit with **personal vehicles** governed by a generated set of "vehicle stations" and a 2d6 departure roll on every trip, preserving the original game's pacing without requiring buses or trains. The shared cars-as-trains mechanic is written up in [`vehicle-stations.md`](./vehicle-stations.md).
+Hide + Seek (and most Jet Lag formats) leans on the friction of public transit — schedule waits, transfers, station topology — to shape interesting decisions. In rural areas where transit is thin or absent, that friction disappears the moment a player gets in a car. This project introduces rules that make **personal vehicles behave like buses and trains**: a generated map of "vehicle stations" plus a 2d6 departure roll on every trip, preserving the original game's pacing. Real bus and train lines in your play area, if any, still play per the official rulebook alongside vehicle stations — nothing is removed. Full write-up of the cars-as-trains mechanic in [`vehicle-stations.md`](./vehicle-stations.md).
 
 ---
 

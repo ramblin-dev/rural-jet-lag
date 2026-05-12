@@ -1,6 +1,6 @@
 # Hide and Seek — Rural Variant
 
-An unofficial fan adaptation of **Jet Lag: The Game — Hide and Seek** for rural environments where public transit does not exist.
+An unofficial fan adaptation of **Jet Lag: The Game — Hide and Seek** for rural environments where public transit is thin or absent.
 
 > **Disclaimer:** This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Jet Lag: The Game, Nebula, or Wendover Productions. All rights to the original game concept belong to their respective owners.
 

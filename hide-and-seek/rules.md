@@ -8,7 +8,7 @@
 
 ## Approach
 
-The rural variant changes only one thing about Hide + Seek: **how seekers (and the hider, while traveling to their hiding zone) move between locations.** Public transit is replaced by personal vehicles, with vehicles required to behave like buses or trains via the [vehicle-stations mechanic](../vehicle-stations.md) — pre-declared routes between generated stations, with a 2d6 departure roll on every trip. That cross-game write-up is the canonical reference for stations, routes, departure rolls, and mid-route changes; this file covers only the Hide + Seek-specific application.
+The rural variant changes only one thing about Hide + Seek: **how seekers (and the hider, while traveling to their hiding zone) travel by personal vehicle.** Cars are required to behave like buses or trains via the [vehicle-stations mechanic](../vehicle-stations.md) — pre-declared routes between generated stations, with a 2d6 departure roll on every trip. Real bus or train lines in your play area, if any, still play per the official rulebook alongside vehicle stations. That cross-game write-up is the canonical reference for stations, routes, departure rolls, and mid-route changes; this file covers only the Hide + Seek-specific application.
 
 This approach **preserves the rest of the official rulebook unchanged**. In particular, no card replacements are needed:
 

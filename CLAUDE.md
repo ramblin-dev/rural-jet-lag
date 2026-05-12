@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-An **unofficial fan adaptation** of Jet Lag: The Game for rural environments where public transit doesn't exist (vehicles replace transit; county-scale maps replace metro maps). Not affiliated with Jet Lag: The Game, Nebula, or Wendover Productions — keep that disclaimer wording when touching top-level READMEs, and never reproduce copyrighted text or artwork from the rulebooks, cards, Investigation Book, or show.
+An **unofficial fan adaptation** of Jet Lag: The Game for rural environments where public transit is thin or absent (cars play under transit-like rules via the vehicle-stations mechanic; county-scale maps stand in for metro maps; real bus/train lines, if any, still play per the official rulebook alongside vehicle stations). Not affiliated with Jet Lag: The Game, Nebula, or Wendover Productions — keep that disclaimer wording when touching top-level READMEs, and never reproduce copyrighted text or artwork from the rulebooks, cards, Investigation Book, or show.
 
 This repo is **supplemental material**, not a standalone game. The READMEs link to the [official Jet Lag store on Nebula](https://store.nebula.tv/collections/jetlag) and assume readers own both the base Hide + Seek home game and the Vol. 1 expansion. Rural-variant rules adapt the official mechanics; they don't replace them.
 

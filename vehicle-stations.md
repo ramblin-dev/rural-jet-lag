@@ -32,7 +32,7 @@ See [`tools/README.md`](./tools/) for how to generate the station map for your p
 
 ---
 
-## How stations replace bus and train lines
+## How vehicle stations fit alongside bus and train lines
 
 Any rule in the official Jet Lag rulebooks that references transit translates as follows:
 
@@ -95,7 +95,7 @@ There is no separate "transfer" mechanic — a mid-route change is just two rout
 
 ## What this mechanic doesn't change
 
-The vehicle-stations layer replaces *transit* and only transit. It does not by itself re-balance:
+The vehicle-stations layer governs how *cars* move and nothing else. It does not by itself re-balance:
 
 - The official rulebook's card decks, question books, or scoring.
 - Game-size tiers (S/M/L) or any time-budget mechanics specific to a format.
