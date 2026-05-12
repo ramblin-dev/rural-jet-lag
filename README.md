@@ -6,23 +6,20 @@ An unofficial fan project adapting **Jet Lag: The Game** for rural environments 
 
 ---
 
-## Before you play
-
-This project is supplemental material — it adapts the rules of an official game, it doesn't replace them. **You'll need the official Hide + Seek home game and the Vol. 1 expansion** to play. The rulebooks, dice, hider deck, and Investigation Book all come in the box.
-
-Buy them from the official store: **[Jet Lag store on Nebula](https://store.nebula.tv/collections/jetlag)**.
-
-Everything in this repo assumes you own both the base game and Vol. 1.
+Hide + Seek (and most Jet Lag formats) leans on the friction of public transit — schedule waits, transfers, station topology — to shape interesting decisions. Rural areas often don't have that infrastructure. This project replaces transit with **personal vehicles** governed by a generated set of "vehicle stations" and a 2d6 departure roll on every trip, preserving the original game's pacing without requiring buses or trains. The shared cars-as-trains mechanic is written up in [`vehicle-stations.md`](./vehicle-stations.md).
 
 ---
 
-## The Problem
+## Set up and play a rural Hide + Seek game
 
-The official fan game criteria and the original mechanics rely heavily on existing transportation infrastructure — subways, buses, trains. In rural America and similar regions, this infrastructure simply does not exist. County seats can be 30 miles apart, the nearest bus stop might be in the next state, and "walking distance" means something very different when the grocery store is 15 miles away.
-
-## The Solution
-
-This project substitutes public transit with **personal vehicles**, and adapts the rules, budgets, and map scales to fit a rural setting. Think county roads, grain silos, and water towers instead of metro lines and train stations. The shared cars-as-trains mechanic — vehicle stations, departure rolls, and how it replaces bus and train lines across all Jet Lag formats — is written up in [`vehicle-stations.md`](./vehicle-stations.md).
+1. **Get the official game.** Buy the [Hide + Seek home game and Vol. 1 expansion from Nebula](https://store.nebula.tv/collections/jetlag). This project is supplemental — it adapts the official rules, it doesn't replace them. The rulebooks, dice, hider deck, and Investigation Book all come in the box.
+2. **Draw your play area.** Open [geojson.io](https://geojson.io), draw a polygon over your intended rural play area, and save as GeoJSON.
+3. **Generate vehicle stations.** From the repo root, run:
+   ```bash
+   uv run vehicle-stations --polygon-file your-area.geojson --name my-game
+   ```
+   With no other flags, the tool infers the official S/M/L game size from polygon area, sets cluster radius to the hiding-zone radius for that size, and auto-tunes the per-cluster cap to land the station count inside the rulebook's band. Outputs a `.kml` you can import into Google My Maps as a single shareable map layer.
+4. **Play.** Follow the official rulebook for everything *except* seeker / hider transportation, which uses the rural cars-as-trains mechanic in [`vehicle-stations.md`](./vehicle-stations.md). Per-format rules live in [`hide-and-seek/rules.md`](./hide-and-seek/rules.md); the full setup walkthrough is in [`hide-and-seek/setup.md`](./hide-and-seek/setup.md).
 
 ---
 
@@ -33,25 +30,6 @@ Each game format from the show gets its own directory with rules and any format-
 | Directory | Game | Status |
 |-----------|------|--------|
 | [`/hide-and-seek`](./hide-and-seek/) | Hide and Seek — rural driving variant | ✅ Active |
-
----
-
-## Related Projects & Resources
-
-### Map & Logistics Tools
-- [taibeled/JetLagHideAndSeek](https://github.com/taibeled/JetLagHideAndSeek) — Automatic interactive map generation; rural users should switch isochrone mode from walking/transit to **driving**.
-- [LordKnish/jet-lag-portal](https://github.com/LordKnish/jet-lag-portal) — Web portal for coordinating a private hide-and-seek game; card systems and progress tracking.
-- [JackCampbell5/JetLag-Hide-And-Seek](https://github.com/JackCampbell5/JetLag-Hide-And-Seek) — Fan-made web implementation of the card game.
-- [jltg-community/awesome-jetlag-hide-and-seek](https://github.com/jltg-community/awesome-jetlag-hide-and-seek) — Curated list of resources.
-
-### Card Assets & Templates
-- [Jet Lag Wiki](https://jetlag.fandom.com/) — Card templates and game history.
-- Community Canva templates shared in fan Discord servers.
-
-### Community
-- **Subreddit:** [r/JetLagTheGame](https://www.reddit.com/r/JetLagTheGame/) — Discussions on rural play exist (search: "Hide and Seek Card Game in Rural Areas").
-- **Jet Lag Wiki:** [jetlag.fandom.com](https://jetlag.fandom.com/) — Card templates and game history.
-- **Discord:** Check the subreddit sidebar for active community servers.
 
 ---
 
@@ -69,3 +47,11 @@ This project uses a dual-license approach:
 - **Content** (rules, card designs, assets, documentation): [CC BY 4.0](./LICENSE-ASSETS)
 
 See each license file for full terms.
+
+---
+
+## Community
+
+- **Subreddit:** [r/JetLagTheGame](https://www.reddit.com/r/JetLagTheGame/) — Discussions on rural play exist (search: "Hide and Seek Card Game in Rural Areas").
+- **Curated resource list:** [jltg-community/awesome-jetlag-hide-and-seek](https://github.com/jltg-community/awesome-jetlag-hide-and-seek) — Maintained index of fan tools, decks, and rule variants.
+- **Jet Lag Wiki:** [jetlag.fandom.com](https://jetlag.fandom.com/) — Card templates and game history.

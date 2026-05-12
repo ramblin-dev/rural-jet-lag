@@ -66,7 +66,7 @@ Cervero & Guerra 2011 [12] (US light-rail and heavy-rail systems) find density t
 - **~30 people per gross acre near stations** for light rail (≈ 19,200 people/mi²).
 - **~45 people per gross acre near stations** for heavy rail (≈ 28,800 people/mi²).
 
-For reference, US rural counties are typically under 100 people/mi², small towns under 5,000 people/mi², dense urban cores 25,000+ people/mi². **Rural areas sit two-to-three orders of magnitude below the densities at which fixed-route transit can be cost-recoverable** — explaining structurally why no transit exists to adapt around. The rural variant is not "behind" on transit; it occupies a regime where transit is fundamentally not a viable mode.
+For reference (US figures as an example, other countries vary): rural counties are typically under 100 people/mi², small towns under 5,000 people/mi², dense urban cores 25,000+ people/mi². **Rural areas sit two-to-three orders of magnitude below the densities at which fixed-route transit can be cost-recoverable** — explaining structurally why no transit exists to adapt around. The rural variant is not "behind" on transit; it occupies a regime where transit is fundamentally not a viable mode.
 
 ### Walking-access distances
 
@@ -184,7 +184,7 @@ If the design goal is to recreate the trip-shaping pressure transit imposes, ran
 
 | Transit friction category | Candidate driving analogue |
 |--------------------------|----------------------------|
-| Network topology (1) | Forced waypoints — must pass through county seats, named junctions, or other anchors before continuing. |
+| Network topology (1) | Forced waypoints — must pass through administrative centers, named junctions, or other anchors before continuing. |
 | Headway / wait time (2) | Mandatory dwells — must remain at a location class (gas station, town square, fixed checkpoint) for N minutes before resuming. |
 | Transfer penalty (3) | Vehicle-class swap or check-in rituals at dwell sites; explicit "pass-through-X" fees in the action economy. |
 | Last-mile walk (4) | Photo / proof-of-presence requirements — must dismount and capture a pedestrian-scale object (a sign, a doorway) before the question counts. |
