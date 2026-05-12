@@ -95,19 +95,18 @@ There is no separate "transfer" mechanic — a mid-route change is just two rout
 
 ## By-request transport (ride-sharing, taxis, hotel shuttles)
 
-Some play areas have no real transit, or no players with personal vehicles, but do have on-demand ride options — Uber, Lyft, Via, local taxi services, hotel shuttles, etc. These play under a small variant of the basic mechanic that credits the ride's estimated arrival time against the rolled wait.
+Some play areas have no real transit, or no players with personal vehicles, but do have on-demand ride options — Uber, Lyft, Via, local taxi services, hotel shuttles, etc. These play under the basic mechanic with one allowance: you may time your ride request so the vehicle arrives at the end of your rolled wait.
 
 When you're ready to leave a station by by-request transport:
 
-1. **Open the app and read the ETA** for a vehicle to reach your station. (Don't request the ride yet.)
-2. **Declare your route** and make a normal 2d6 departure roll against the starting station's wait-time range.
-3. **Adjusted wait = rolled wait − ride ETA, clamped to a 0 minimum.** Wait that adjusted amount of time.
-4. **Request the ride** when the adjusted wait clears.
-5. The ride arrives (after its ETA elapses) and you depart on your declared route.
+1. **Declare your route** and make a normal 2d6 departure roll against the starting station's wait-time range.
+2. **Wait the rolled time.** During the wait you may check ride-app ETAs as often as you like, but don't request the ride yet.
+3. **Time the request** so the vehicle is scheduled to arrive at the station no earlier than the end of your rolled wait. (In practice: when the app's quoted ETA equals the time remaining on your wait, request the ride.)
+4. The ride picks you up and you depart on your declared route.
 
-> **Why the ETA credit.** Without it, by-request riders would be double-penalized — once for the station roll, once for the ride to arrive. Crediting the ETA against the rolled wait means total time-to-vehicle-arrival ≈ rolled wait when the ride is faster than the schedule, and ≈ the ride's ETA when the ride is slower than the schedule. Same friction shape as transit; same expected pacing.
+> **Why timing the request is allowed.** Without it, by-request riders would be double-penalized — once for the station roll, once for the ride to arrive. Letting the rider line up the two waits keeps total time-to-vehicle-arrival roughly equal to the rolled wait, the same friction shape as transit.
 
-**Changing your mind before requesting** — you may switch services, switch destination, or call off the trip entirely *up until you actually request the ride*. Doing so counts as a **missed departure** and requires a fresh departure roll (just like missing a departure on a personal-vehicle route). Once requested, the ride is committed and you ride it to the destination you declared.
+**Changing your mind before requesting** — you may switch services, switch destination, or call off the trip entirely *up until you actually request the ride*. Doing so counts as a **missed departure** and requires a fresh departure roll. Once requested, the ride is committed and you ride it to the destination you declared.
 
 ### Mixing transport modes in one game
 
@@ -119,7 +118,7 @@ The mechanic is mode-agnostic, so any combination works:
 - **Real transit + ride-sharing** — use a real bus line where it exists, fall back to Uber elsewhere.
 - **All three** — real transit + personal vehicles + by-request transport.
 
-Each mode resolves at the station the same way: declare → roll → wait → depart. Personal vehicles use the basic mechanic above; by-request transport uses the ETA-credit variant; real bus / train / ferry lines follow the official rulebook unchanged.
+Each mode resolves at the station the same way: declare → roll → wait → depart. Personal vehicles use the basic mechanic above; by-request transport adds the ride-timing allowance; real bus / train / ferry lines follow the official rulebook unchanged.
 
 ---
 
