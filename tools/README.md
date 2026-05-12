@@ -37,6 +37,16 @@ Selected 182 stations across 182 clusters (..., cap 1/cluster (auto-tuned for ga
 - `--max-stations-per-cluster` — skip cap auto-tuning; use this value. Pass `0` to disable the cap entirely. (Default when nothing is inferable and this is unset: 4, anchored to empirical urban bus-stop density — see [`transit-friction.md`](../hide-and-seek/reference/transit-friction.md#stops-per-area-density-and-the-per-cluster-cap).)
 - `--min-station-spacing-m` — within-cluster minimum spacing between kept stations, default **300m** (average local urban bus stop spacing). Not affected by `--game-size`.
 
+**Real public-transit stations (always included by default):**
+
+If the play area happens to contain real bus terminals, train stations, tram stops, ferry terminals, or other public-transit stations, the tool pulls them in alongside the generated POI stations. The rural cars-as-trains layer is meant to coexist with real transit, not displace it. Behavior:
+
+- **Tags included** (priority 0, above all POI tiers): `railway=station`, `railway=halt`, `railway=tram_stop`, `amenity=bus_station`, `amenity=ferry_terminal`, `aerialway=station`, `public_transport=station`. Individual `highway=bus_stop` flag-stops are intentionally skipped — they'd flood urban output without adding game-meaningful meeting points.
+- **Exempt from the per-cluster cap.** Real transit is additive: a downtown cluster capped at 4 POI stations can still gain its real bus terminal on top. Auto-tune still works — the total (POI + transit) is what's compared against the rulebook band.
+- **Exempt from the closed-hours penalty.** Transit stations function as meeting points even when ticket-office hours are constrained; their `opening_hours` tag (if present) usually refers to the terminal building, not platform access.
+- **Subject to the 300m intra-cluster spacing filter** so two transit stations within walking distance of each other get deduplicated to one pin.
+- `--no-include-transit-stations` skips them entirely.
+
 **Playing-hours check:**
 
 - `--playing-hours` — time-of-day window during which the game will be played, default **`7am-7pm`**. Accepts `7am-7pm`, `7:30am-7:30pm`, `07:00-19:00`, etc.

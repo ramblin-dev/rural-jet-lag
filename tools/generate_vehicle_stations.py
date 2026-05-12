@@ -16,6 +16,12 @@ the cluster radius to the official hiding-zone radius for that tier
 (¼ mile for S/M, ½ mile for L), and auto-tunes the per-cluster cap so the
 total station count lands inside the rulebook's S/M/L station band.
 
+Real public-transit stations from OSM (train stations, tram stops, bus
+stations, ferry terminals, etc.) are included alongside the generated POI
+stations by default. They're exempt from the per-cluster cap (additive) and
+from the closed-hours penalty (always-accessible meeting points). Pass
+--no-include-transit-stations to skip them.
+
 Manual overrides:
     --game-size {S,M,L}        skip area binning; use this tier
     --cluster-radius-m         skip game-size mapping; use this radius
@@ -24,6 +30,7 @@ Manual overrides:
                                average local urban bus stop spacing)
     --no-water-subtract        skip the Overpass water query during area calc
     --subtract-polygon FILE    additional polygon to subtract from play area
+    --no-include-transit-stations  skip real OSM transit stations entirely
 
 Clusters are grown by repeatedly picking the highest-priority unassigned
 POI as a seed and absorbing every unassigned POI within the cluster radius.
@@ -200,8 +207,33 @@ POI_CATEGORIES: list[tuple[int, str, str, str]] = [
     # pattern, so they only win when nothing else is nearby.
     (7, "amenity", "restaurant", "restaurant"),
 ]
-LABEL_BY_KV = {(k, v): label for _, k, v, label in POI_CATEGORIES}
-PRIORITY_BY_KV = {(k, v): p for p, k, v, _ in POI_CATEGORIES}
+
+# Real public-transit stations always get included alongside generated POIs:
+# if a play area has actual bus terminals, train stations, ferry terminals,
+# etc., those are obvious meeting points and the rural cars-as-trains layer
+# is meant to coexist with them (not replace them). All entries here use
+# priority 0 — above any POI tier — and they are exempted from the per-
+# cluster cap (they're additive, not competing). Spacing still applies so
+# duplicates / very close stations get deduplicated.
+#
+# Skipped intentionally: `highway=bus_stop`. Those tag individual on-street
+# stops, often every 200m in urban areas, which would flood the output; the
+# game's "vehicle station" abstraction wants meeting points (stations and
+# terminals), not every flag-stop along a route.
+TRANSIT_STATION_CATEGORIES: list[tuple[int, str, str, str]] = [
+    (0, "railway", "station", "train_station"),
+    (0, "railway", "halt", "train_halt"),
+    (0, "railway", "tram_stop", "tram_stop"),
+    (0, "amenity", "bus_station", "bus_station"),
+    (0, "amenity", "ferry_terminal", "ferry_terminal"),
+    (0, "aerialway", "station", "cable_car_station"),
+    (0, "public_transport", "station", "transit_station"),
+]
+TRANSIT_CATEGORY_LABELS = frozenset(label for _, _, _, label in TRANSIT_STATION_CATEGORIES)
+
+ALL_CATEGORIES: list[tuple[int, str, str, str]] = TRANSIT_STATION_CATEGORIES + POI_CATEGORIES
+LABEL_BY_KV = {(k, v): label for _, k, v, label in ALL_CATEGORIES}
+PRIORITY_BY_KV = {(k, v): p for p, k, v, _ in ALL_CATEGORIES}
 
 
 def wait_range_for_density(nearby_count: int) -> tuple[int, int, str]:
@@ -408,11 +440,15 @@ def _extract_geojson_ring(data: dict) -> list[list[float]]:
     raise ValueError(f"unsupported GeoJSON type: {data.get('type')}")
 
 
-def build_overpass_query(polygon: list[tuple[float, float]]) -> str:
+def build_overpass_query(
+    polygon: list[tuple[float, float]],
+    include_transit: bool = True,
+) -> str:
     poly_str = " ".join(f"{lat} {lon}" for lat, lon in polygon)
+    categories = TRANSIT_STATION_CATEGORIES + POI_CATEGORIES if include_transit else POI_CATEGORIES
     parts: list[str] = []
     seen_filters: set[tuple[str, str]] = set()
-    for _, key, value, _ in POI_CATEGORIES:
+    for _, key, value, _ in categories:
         if (key, value) in seen_filters:
             continue
         seen_filters.add((key, value))
@@ -618,7 +654,15 @@ def parse_pois(elements: list[dict], window: PlayingWindow) -> list[POI]:
         name = tags.get("name") or f"unnamed {category}"
         opening_hours_spec = tags.get("opening_hours") or None
         open_during = is_open_during_play(opening_hours_spec, window)
-        priority = base_priority + (CLOSED_PRIORITY_PENALTY if open_during is False else 0)
+        # Real transit stations skip the closed-hours penalty: they're
+        # functionally always accessible as physical meeting points, even
+        # when scheduled service hours vary. The tag's opening_hours, when
+        # present, usually means the ticket office or terminal building.
+        is_transit = category in TRANSIT_CATEGORY_LABELS
+        if is_transit or open_during is not False:
+            priority = base_priority
+        else:
+            priority = base_priority + CLOSED_PRIORITY_PENALTY
         pois.append(
             POI(
                 osm_id=osm_id,
@@ -715,9 +759,11 @@ def filter_two_tier(
     for cid in sorted(cluster_members):
         ordered = sorted(cluster_members[cid], key=lambda p: (p.priority, p.name.lower()))
         kept: list[POI] = []
-        cap_hit = False
+        non_transit_kept = 0
+        cap_hit = False  # only blocks non-transit; transit is additive
         for p in ordered:
-            if cap_hit:
+            is_transit = p.category in TRANSIT_CATEGORY_LABELS
+            if cap_hit and not is_transit:
                 rejected.append(Rejection(p, cid, "cluster_cap", None))
                 continue
             blocker: POI | None = None
@@ -729,8 +775,10 @@ def filter_two_tier(
                 rejected.append(Rejection(p, cid, "spacing", blocker.name))
                 continue
             kept.append(p)
-            if max_per_cluster is not None and len(kept) >= max_per_cluster:
-                cap_hit = True
+            if not is_transit:
+                non_transit_kept += 1
+                if max_per_cluster is not None and non_transit_kept >= max_per_cluster:
+                    cap_hit = True
         out.extend((p, cid) for p in kept)
     return out, rejected
 
@@ -916,6 +964,12 @@ def main() -> int:
                     help="Subtract OSM water polygons (lakes, rivers, reservoirs) from the play "
                          "polygon when computing area for game-size inference. Adds one extra "
                          "Overpass call. Pass --no-water-subtract to skip.")
+    ap.add_argument("--include-transit-stations", action=argparse.BooleanOptionalAction, default=True,
+                    help="Include actual public-transit stations from OSM (train stations, tram "
+                         "stops, bus stations, ferry terminals, etc.) alongside generated POI "
+                         "stations. Transit stations are exempt from the per-cluster cap (they're "
+                         "additive) and from the closed-hours penalty (they're always-accessible "
+                         "meeting points). Pass --no-include-transit-stations to skip.")
     ap.add_argument("--subtract-polygon", type=Path, default=None,
                     help="Additional GeoJSON/text polygon to subtract from the play area before "
                          "inferring game size (e.g. a national-forest boundary you're skipping, "
@@ -998,19 +1052,27 @@ def main() -> int:
         print(f"Game size: {game_size} ({game_size_source})", file=sys.stderr)
     print(f"Cluster radius: {cluster_radius_m:.0f}m ({radius_source})", file=sys.stderr)
 
-    query = build_overpass_query(polygon)
+    query = build_overpass_query(polygon, include_transit=args.include_transit_stations)
     print("Querying Overpass for POIs…", file=sys.stderr)
     t0 = wall_time.time()
     elements = query_overpass(query)
     print(f"Got {len(elements)} elements in {wall_time.time() - t0:.1f}s", file=sys.stderr)
 
     candidates = parse_pois(elements, playing_window)
-    n_open = sum(1 for p in candidates if p.open_during_play is True)
-    n_closed = sum(1 for p in candidates if p.open_during_play is False)
-    n_unknown = sum(1 for p in candidates if p.open_during_play is None)
+    n_transit = sum(1 for p in candidates if p.category in TRANSIT_CATEGORY_LABELS)
+    n_poi = len(candidates) - n_transit
+    poi_candidates = [p for p in candidates if p.category not in TRANSIT_CATEGORY_LABELS]
+    n_open = sum(1 for p in poi_candidates if p.open_during_play is True)
+    n_closed = sum(1 for p in poi_candidates if p.open_during_play is False)
+    n_unknown = sum(1 for p in poi_candidates if p.open_during_play is None)
+    if args.include_transit_stations:
+        transit_clause = f"{n_transit} real transit stations (always included)"
+    else:
+        transit_clause = "transit stations skipped (--no-include-transit-stations)"
     print(
-        f"Recognized {len(candidates)} POIs "
-        f"(open during play: {n_open}, closed: {n_closed}, hours unknown: {n_unknown})",
+        f"Recognized {len(candidates)} candidates: "
+        f"{n_poi} POIs (open during play: {n_open}, closed: {n_closed}, hours unknown: {n_unknown}); "
+        f"{transit_clause}",
         file=sys.stderr,
     )
     if not candidates:
@@ -1054,8 +1116,11 @@ def main() -> int:
 
     cluster_count = len({cid for _, cid in stations_with_cluster})
     cap_note = f", cap {max_per_cluster}/cluster ({cap_source})" if max_per_cluster else ", no cap"
+    kept_transit = sum(1 for p, _ in stations_with_cluster if p.category in TRANSIT_CATEGORY_LABELS)
+    kept_poi = len(stations_with_cluster) - kept_transit
+    transit_note = f" ({kept_poi} POI + {kept_transit} real transit)" if kept_transit else ""
     print(
-        f"Selected {len(stations_with_cluster)} stations across {cluster_count} clusters "
+        f"Selected {len(stations_with_cluster)} stations{transit_note} across {cluster_count} clusters "
         f"(intra-cluster ≥ {args.min_station_spacing_m:.0f}m, "
         f"cluster radius ≤ {cluster_radius_m:.0f}m [{radius_source}]{cap_note}); "
         f"{len(rejections)} candidates rejected",
