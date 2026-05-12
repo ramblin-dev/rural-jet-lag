@@ -1,6 +1,6 @@
 # Vehicle stations — cross-game mechanic
 
-The single shared mechanic that all rural Jet Lag adaptations in this repo are built on. Each per-game directory (`hide-and-seek/`, future `tag/`, etc.) defines its own rules but adapts only the *transportation layer* — and that layer is the same idea everywhere: **cars play the role of buses and trains, anchored to a generated set of "vehicle stations" with a wait-time roll on every departure.**
+The single shared mechanic that all rural Jet Lag adaptations in this repo are built on. Each per-game directory (`hide-and-seek/`, future `tag/`, etc.) defines its own rules but adapts only the *transportation layer* — and that layer is the same idea everywhere: **personal vehicles, ride-sharing, and taxis play the role of buses and trains, anchored to a generated set of "vehicle stations" with a wait-time roll on every departure.** Real bus / train / ferry service in your play area, if any, plays per the official rulebook alongside vehicle stations.
 
 This file is the canonical write-up of that idea. Per-game `rules.md` files reference it instead of restating it.
 
@@ -93,9 +93,39 @@ There is no separate "transfer" mechanic — a mid-route change is just two rout
 
 ---
 
+## By-request transport (ride-sharing, taxis, hotel shuttles)
+
+Some play areas have no real transit, or no players with personal vehicles, but do have on-demand ride options — Uber, Lyft, Via, local taxi services, hotel shuttles, etc. These play under a small variant of the basic mechanic that credits the ride's estimated arrival time against the rolled wait.
+
+When you're ready to leave a station by by-request transport:
+
+1. **Open the app and read the ETA** for a vehicle to reach your station. (Don't request the ride yet.)
+2. **Declare your route** and make a normal 2d6 departure roll against the starting station's wait-time range.
+3. **Adjusted wait = rolled wait − ride ETA, clamped to a 0 minimum.** Wait that adjusted amount of time.
+4. **Request the ride** when the adjusted wait clears.
+5. The ride arrives (after its ETA elapses) and you depart on your declared route.
+
+> **Why the ETA credit.** Without it, by-request riders would be double-penalized — once for the station roll, once for the ride to arrive. Crediting the ETA against the rolled wait means total time-to-vehicle-arrival ≈ rolled wait when the ride is faster than the schedule, and ≈ the ride's ETA when the ride is slower than the schedule. Same friction shape as transit; same expected pacing.
+
+**Changing your mind before requesting** — you may switch services, switch destination, or call off the trip entirely *up until you actually request the ride*. Doing so counts as a **missed departure** and requires a fresh departure roll (just like missing a departure on a personal-vehicle route). Once requested, the ride is committed and you ride it to the destination you declared.
+
+### Mixing transport modes in one game
+
+The mechanic is mode-agnostic, so any combination works:
+
+- **Personal vehicles only** — the default rural framing.
+- **Ride-sharing / taxis only** — for groups without access to a car, or for urban-edge play.
+- **Personal vehicles + ride-sharing** — drive long legs, hail rides inside town.
+- **Real transit + ride-sharing** — use a real bus line where it exists, fall back to Uber elsewhere.
+- **All three** — real transit + personal vehicles + by-request transport.
+
+Each mode resolves at the station the same way: declare → roll → wait → depart. Personal vehicles use the basic mechanic above; by-request transport uses the ETA-credit variant; real bus / train / ferry lines follow the official rulebook unchanged.
+
+---
+
 ## What this mechanic doesn't change
 
-The vehicle-stations layer governs how *cars* move and nothing else. It does not by itself re-balance:
+The vehicle-stations layer governs how *non-transit vehicles* (personal cars, ride-sharing, taxis) move and nothing else. It does not by itself re-balance:
 
 - The official rulebook's card decks, question books, or scoring.
 - Game-size tiers (S/M/L) or any time-budget mechanics specific to a format.
