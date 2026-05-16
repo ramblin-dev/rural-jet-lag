@@ -1,8 +1,11 @@
 """Capture / re-run the Python baseline for the JS-vs-Python parity test.
 
-Shells out to the ``vehicle-stations`` CLI with a fixed polygon, fixed args,
-and the snapshotted Overpass fixture in ``./fixtures``. Writes deterministic
-output filenames (no timestamp) to ``./baseline``.
+Shells out to the legacy ``generate_vehicle_stations.py`` script directly
+(the ``vehicle-stations`` console script was dropped when the tool moved to
+``old-tools/``; the hyphen in the directory name makes it un-importable as
+a Python module). Uses a fixed polygon, fixed args, and the snapshotted
+Overpass fixture in ``./fixtures``. Writes deterministic output filenames
+(no timestamp) to ``./baseline``.
 
 First run (with empty ``fixtures/``): hits Overpass twice (POIs + water) and
 saves both responses into ``fixtures/`` so subsequent runs are reproducible.
@@ -25,7 +28,8 @@ REPO_ROOT = HERE.parent.parent
 
 def main() -> int:
     cmd = [
-        "uv", "run", "vehicle-stations",
+        "uv", "run", "python",
+        str(REPO_ROOT / "old-tools" / "generate_vehicle_stations.py"),
         "--polygon-file", str(HERE / "polygon.geojson"),
         "--name", "python-sioux",
         "--overpass-fixture-dir", str(HERE / "fixtures"),

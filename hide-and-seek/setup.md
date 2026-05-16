@@ -11,7 +11,7 @@ How to set up a Rural Hide + Seek game from scratch. Nothing here changes the of
 - Your physical Hide + Seek box (base game and the Vol. 1 expansion). See the [Before you play](../README.md#before-you-play) section of the top-level README for where to buy it.
 - A vehicle for each team.
 - Phones with location sharing enabled — the original game's live-tracking convention applies unchanged.
-- A computer to run the vehicle-stations tool. Python 3.12, [uv](https://github.com/astral-sh/uv), and a clone of this repo. See [`/tools/README.md`](../tools/README.md) for the tool's full usage and options, and [`/vehicle-stations.md`](../vehicle-stations.md) for what stations are and how the in-game mechanic uses them.
+- A computer to run the vehicle-stations tool. Python 3.12, [uv](https://github.com/astral-sh/uv), and a clone of this repo. See [`/old-tools/README.md`](../old-tools/README.md) for the tool's full usage and options, and [`/vehicle-stations.md`](../vehicle-stations.md) for what stations are and how the in-game mechanic uses them.
 
 ---
 
@@ -19,7 +19,7 @@ How to set up a Rural Hide + Seek game from scratch. Nothing here changes the of
 
 Draw a polygon over your intended play area in [geojson.io](https://geojson.io) (easiest) or [felt.com](https://felt.com). Save the result as a GeoJSON file. Either the polygon tool or the line tool works — the vehicle-stations tool accepts both.
 
-For ready-to-run examples, see [`/tools/geojson-samples/`](../tools/geojson-samples/).
+For ready-to-run examples, see [`/old-tools/geojson-samples/`](../old-tools/geojson-samples/).
 
 A few notes on choosing the area:
 
@@ -33,19 +33,19 @@ A few notes on choosing the area:
 From the repo root:
 
 ```bash
-uv run vehicle-stations --polygon-file path/to/polygon.geojson --name my-game
+uv run python old-tools/generate_vehicle_stations.py --polygon-file path/to/polygon.geojson --name my-game
 ```
 
 That's it. With no other flags, the tool computes the polygon's area (subtracting OSM water bodies), bins it into the rulebook's S/M/L map-size tier, sets the cluster radius to the official hiding-zone radius for that tier (¼ mile for S/M, ½ mile for L), and auto-tunes the per-cluster station cap so the total station count lands inside the rulebook's S/M/L station band (S 30–100, M 100–500, L 500+). Every inference step prints to stderr so you can see why the tool chose what it chose.
 
 If you already know the tier you want, pass `--game-size {S,M,L}` to skip the area-binning step. To exclude additional land from the area calc (a national-forest boundary you're skipping, a closed military range), pass `--subtract-polygon FILE` with another GeoJSON. To skip the OSM water query entirely (faster on huge polygons where it can time out), pass `--no-water-subtract`.
 
-Two files appear in `tools/.output/`:
+Two files appear in `old-tools/.output/`:
 
 - `my-game-{timestamp}.csv` — for spreadsheets and reference. Includes name, category, cluster id, lat / lon, wait-time range, density tier, nearby-POI count, open-during-play status, raw OSM `opening_hours` string.
 - `my-game-{timestamp}.kml` — for upload to a mapping app. Single Folder containing all stations.
 
-For finer control (intra-cluster spacing, manual cap, etc.), see `uv run vehicle-stations --help` and the [tools README](../tools/README.md).
+For finer control (intra-cluster spacing, manual cap, etc.), see `uv run python old-tools/generate_vehicle_stations.py --help` and the [old-tools README](../old-tools/README.md).
 
 ---
 

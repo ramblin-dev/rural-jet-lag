@@ -26,7 +26,7 @@ between two runs.
 ## Capturing / re-running the Python baseline
 
 ```bash
-uv run python tools/parity-test/run_python.py
+uv run python old-tools/parity-test/run_python.py
 ```
 
 First run hits Overpass twice (POIs + water) and saves both responses into

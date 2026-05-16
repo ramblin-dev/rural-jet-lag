@@ -16,7 +16,7 @@ The vehicle-stations mechanic re-introduces transit-shaped friction without requ
 
 ## What a vehicle station is
 
-A vehicle station is a real-world location — a museum, park, gas station, restaurant, etc. — that the [`tools/generate_vehicle_stations.py`](./tools/) script picked from OpenStreetMap inside your play-area polygon. Each station carries:
+A vehicle station is a real-world location — a museum, park, gas station, restaurant, etc. — that the [`old-tools/generate_vehicle_stations.py`](./old-tools/) script picked from OpenStreetMap inside your play-area polygon. Each station carries:
 
 - **Coordinates** — for display in Google My Maps or any KML-capable map app.
 - **A category** — what kind of POI it is (museum, café, gas station, …).
@@ -28,7 +28,7 @@ A vehicle station is a real-world location — a museum, park, gas station, rest
 
 Stations are spaced using a two-tier rule: ~300 m minimum within a cluster (matching average urban bus stop spacing), ~1000 m minimum between clusters (matching light-rail / metro spacing). The result on the map is groups of stations around towns and commercial areas with visible gaps between them — the same shape transit stops take in real cities.
 
-See [`tools/README.md`](./tools/) for how to generate the station map for your play area.
+See [`old-tools/README.md`](./old-tools/) for how to generate the station map for your play area.
 
 ---
 
@@ -146,4 +146,4 @@ Per-game `rules.md` files are responsible for spelling out how their format hand
 
 ## Tunability
 
-All of the numbers above are starting points, not measured calibration targets. The tool exposes the spacing parameters as CLI flags, and the wait-tier breakpoints + 2d6 outcome table are constants near the top of [`tools/generate_vehicle_stations.py`](./tools/generate_vehicle_stations.py). If you find that play-tests want denser station maps, looser cluster spacing, longer waits in sparse areas, or a different miss probability — change them. The framing the rest of this file describes does not depend on the specific numbers.
+All of the numbers above are starting points, not measured calibration targets. The tool exposes the spacing parameters as CLI flags, and the wait-tier breakpoints + 2d6 outcome table are constants near the top of [`old-tools/generate_vehicle_stations.py`](./old-tools/generate_vehicle_stations.py). If you find that play-tests want denser station maps, looser cluster spacing, longer waits in sparse areas, or a different miss probability — change them. The framing the rest of this file describes does not depend on the specific numbers.

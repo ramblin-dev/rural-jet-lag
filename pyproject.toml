@@ -12,12 +12,14 @@ dependencies = [
     "shapely>=2.1.2",
 ]
 
-[project.scripts]
-vehicle-stations = "tools.generate_vehicle_stations:main"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+# The Python tool now lives in old-tools/ as a transitional reference; the
+# hyphen makes it un-importable as a Python module, so there's no console
+# script and no Python package shipped from this repo. Invoke the legacy
+# tool directly: `uv run python old-tools/generate_vehicle_stations.py …`.
+# The new JS tooling under tools/ replaces it.
 [tool.hatch.build.targets.wheel]
-packages = ["tools"]
+bypass-selection = true
