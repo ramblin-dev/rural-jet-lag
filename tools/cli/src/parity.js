@@ -1,6 +1,7 @@
-// JS-side parity runner. Mirrors old-tools/parity-test/run_python.py:
-// reads the same fixture, writes a js-sioux baseline alongside the
-// python-sioux one, and (optionally) diffs them.
+// JS-side regression runner. Reads the frozen Overpass fixture under
+// tools/parity-test/, regenerates js-sioux.{csv,kml}, and diffs against
+// the checked-in python-sioux.{csv,kml} reference originally captured
+// from the Python implementation that seeded this port.
 
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -9,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "..", "..", "..");
-const PARITY_DIR = join(REPO_ROOT, "old-tools", "parity-test");
+const PARITY_DIR = join(REPO_ROOT, "tools", "parity-test");
 const CLI_MAIN = join(HERE, "main.js");
 
 function run(cmd, args) {
@@ -74,7 +75,7 @@ async function main() {
   const jsKml = join(PARITY_DIR, "baseline", "js-sioux.kml");
   if (!existsSync(pyCsv) || !existsSync(pyKml)) {
     process.stderr.write(
-      `error: Python baseline missing. Run old-tools/parity-test/run_python.py first.\n`,
+      `error: reference baseline missing at ${pyCsv}\n`,
     );
     process.exit(2);
   }

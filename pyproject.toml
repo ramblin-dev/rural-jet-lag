@@ -4,22 +4,20 @@ version = "0.1.0"
 description = "Unofficial fan adaptation of Jet Lag: The Game for rural environments"
 readme = "README.md"
 requires-python = ">=3.10"
+# Python remains here only for the OCR pipeline that processes scanned
+# rulebook material into per-game reference notes (hide-and-seek/tools/
+# ocr_expansion_cards.py). The cross-game vehicle-stations generator is
+# JS — see tools/.
 dependencies = [
-    "opening-hours-py>=1.2.0",
-    "pypdf>=6.10.2",
     "rapidocr-onnxruntime>=1.4.4",
-    "requests>=2.33.1",
-    "shapely>=2.1.2",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-# The Python tool now lives in old-tools/ as a transitional reference; the
-# hyphen makes it un-importable as a Python module, so there's no console
-# script and no Python package shipped from this repo. Invoke the legacy
-# tool directly: `uv run python old-tools/generate_vehicle_stations.py …`.
-# The new JS tooling under tools/ replaces it.
+# Nothing to package — the repo ships content + a JS workspace; the one
+# remaining Python script under hide-and-seek/tools/ is invoked directly
+# via uv run, not installed as a console script.
 [tool.hatch.build.targets.wheel]
 bypass-selection = true

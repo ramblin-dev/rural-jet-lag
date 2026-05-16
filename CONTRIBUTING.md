@@ -27,8 +27,8 @@ Found an ambiguity in the ruleset? Open an issue or submit a PR to the game's `r
 - Please ensure your designs don't reproduce copyrighted artwork from the official show.
 
 ### 🛠️ Tools & Scripts
-- Tools that work across game formats belong in the top-level [`/tools/`](./tools/) directory.
-- Tools specific to a single format belong in that game's `tools/` directory.
+- Cross-game tooling lives in the top-level [`/tools/`](./tools/) npm workspace (`core/` shared logic, `cli/` Node CLI, `site/` static site). Run `npm install` in `tools/` to get set up; `npm run dev:site` for the dev server, `npm run parity:js` to verify the regression test still passes.
+- Tools specific to a single format belong in that game's `tools/` directory and may be in Python (`uv run python <game>/tools/<script>.py`) since per-game directories aren't packaged.
 - All code contributions are covered by the [MIT License](./LICENSE).
 - Include a docstring or `README.md` section explaining how to use your tool.
 

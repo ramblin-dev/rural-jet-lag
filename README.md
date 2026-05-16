@@ -13,19 +13,15 @@ Hide + Seek (and most Jet Lag formats) leans on the friction of public transit �
 ## Set up and play a rural Hide + Seek game
 
 1. **Get the official game.** Buy the [Hide + Seek home game and Vol. 1 expansion from Nebula](https://store.nebula.tv/collections/jetlag). This project is supplemental — it adapts the official rules, it doesn't replace them. The rulebooks, dice, hider deck, and Investigation Book all come in the box.
-2. **Draw your play area.** Open [geojson.io](https://geojson.io), draw a polygon over your intended rural play area, and save as GeoJSON.
-3. **Generate vehicle stations.** From the repo root, run:
-   ```bash
-   uv run vehicle-stations --polygon-file your-area.geojson --name my-game
-   ```
-   With no other flags, the tool infers the official S/M/L game size from polygon area, sets cluster radius to the hiding-zone radius for that size, and auto-tunes the per-cluster cap to land the station count inside the rulebook's band. Outputs a `.kml` you can import into Google My Maps as a single shareable map layer.
+2. **Generate vehicle stations.** Open the in-browser generator under [`tools/site/`](./tools/site/), draw a polygon over your intended rural play area, and download the auto-generated KML. (Prefer the command line? See [`tools/cli/`](./tools/cli/).)
+3. **Import the stations to a map.** Upload the KML to [Google My Maps](https://mymaps.google.com) — one click creates a shareable map layer the whole table can see during play.
 4. **Play.** Follow the official rulebook for everything *except* seeker / hider transportation, which uses the rural cars-as-trains mechanic in [`vehicle-stations.md`](./vehicle-stations.md). Per-format rules live in [`hide-and-seek/rules.md`](./hide-and-seek/rules.md); the full setup walkthrough is in [`hide-and-seek/setup.md`](./hide-and-seek/setup.md).
 
 ---
 
 ## Games
 
-Each game format from the show gets its own directory with rules and any format-specific assets and tools. Cross-game tooling lives in [`/tools/`](./tools/).
+Each game format from the show gets its own directory with rules and any format-specific assets and tools. The cross-game vehicle-stations generator (in-browser site + Node CLI sharing one core) lives in [`/tools/`](./tools/).
 
 | Directory | Game | Status |
 |-----------|------|--------|
