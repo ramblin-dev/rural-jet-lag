@@ -26,7 +26,10 @@ html, body { margin: 0; height: 100%; font: 14px/1.45 system-ui, sans-serif; }
 #sidebar h2 { font-size: 14px; margin: 18px 0 6px 0; text-transform: uppercase; letter-spacing: .03em; color: GrayText; }
 
 .byline { color: GrayText; margin: 0 0 8px 0; }
+.byline.small { font-size: 11px; }
 .hint { color: GrayText; font-size: 12px; margin: 4px 0 0 0; }
+.intro-steps { padding-left: 20px; margin: 6px 0 10px 0; }
+.intro-steps li { margin: 3px 0; }
 
 #draw-mode label { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
 

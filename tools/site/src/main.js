@@ -54,6 +54,7 @@ function persist() {
     playPolygon: state.playPolygon,
     exclPolygons: state.exclPolygons,
     settings: state.settings,
+    drawMode: state.drawMode,
   });
 }
 
@@ -103,6 +104,9 @@ map.addControl(drawControl);
 
 function setDrawMode(mode) {
   state.drawMode = mode;
+  // Sync the radio buttons (they may be stale after a refresh that
+  // restored drawMode from localStorage but left the HTML default checked).
+  drawModeRadios.forEach((r) => { r.checked = r.value === mode; });
   // Swap which group the toolbar operates on, and the polygon's draw colour.
   const opts = mode === "excl" ? EXCL_STYLE : PLAY_STYLE;
   drawControl.setDrawingOptions({ polygon: { shapeOptions: opts } });
@@ -112,6 +116,7 @@ function setDrawMode(mode) {
   drawHint.textContent = mode === "play"
     ? "Click the polygon tool on the map to draw your play area."
     : "Click the polygon tool to draw an exclusion zone. Add as many as you like.";
+  persist();
 }
 
 drawModeRadios.forEach((r) => r.addEventListener("change", (e) => {

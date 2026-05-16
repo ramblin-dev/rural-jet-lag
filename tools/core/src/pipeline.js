@@ -16,6 +16,7 @@ import {
   TRANSIT_CATEGORY_LABELS,
 } from "./constants.js";
 import { countNearby, waitRangeForDensity } from "./density.js";
+import { pointInAnyRing } from "./point-in-polygon.js";
 import { parsePOIs } from "./pois.js";
 
 export function inferGameSize(areaKm2) {
@@ -83,8 +84,14 @@ export function generate({
     throw new Error("clusterRadiusM must be greater than minStationSpacingM");
   }
 
-  // Parse POIs.
-  const candidates = parsePOIs(poisElements, playingWindow);
+  // Parse POIs, then drop any whose coordinates fall inside an exclusion
+  // ring. (Exclusion polygons both subtract from the area calc above AND
+  // remove stations that would otherwise land inside them — important for
+  // closed military ranges, private property, etc.)
+  const allCandidates = parsePOIs(poisElements, playingWindow);
+  const candidates = exclRings.length === 0
+    ? allCandidates
+    : allCandidates.filter((p) => !pointInAnyRing(p.lat, p.lon, exclRings));
 
   // Resolve cap.
   let maxPerCluster;

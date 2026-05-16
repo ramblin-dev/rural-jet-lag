@@ -9,4 +9,5 @@ export * from "./density.js";
 export * from "./cluster.js";
 export * from "./csv.js";
 export * from "./kml.js";
+export * from "./point-in-polygon.js";
 export * from "./pipeline.js";
