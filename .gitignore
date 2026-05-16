@@ -222,3 +222,8 @@ __marimo__/
 
 # tool output
 .output/
+
+# Node / JS tooling
+node_modules/
+tools/site/dist/
+*.tsbuildinfo

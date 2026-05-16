@@ -1,0 +1,17 @@
+{
+  "name": "rural-jet-lag-tools",
+  "private": true,
+  "type": "module",
+  "description": "Vehicle-stations generator (CLI + static site) for the rural-jet-lag repo. The Python equivalent lives at /old-tools/ during the transition.",
+  "workspaces": [
+    "core",
+    "cli",
+    "site"
+  ],
+  "scripts": {
+    "dev:site": "npm run dev --workspace=@rural-jet-lag/site",
+    "build:site": "npm run build --workspace=@rural-jet-lag/site",
+    "cli": "node cli/src/main.js",
+    "parity:js": "node cli/src/parity.js"
+  }
+}

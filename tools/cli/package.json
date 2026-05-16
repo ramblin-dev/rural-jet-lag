@@ -1,0 +1,13 @@
+{
+  "name": "@rural-jet-lag/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Node CLI for the vehicle-stations generator. Mirrors the legacy Python CLI's flags so the parity test can diff outputs.",
+  "bin": {
+    "vehicle-stations": "src/main.js"
+  },
+  "dependencies": {
+    "@rural-jet-lag/core": "*"
+  }
+}

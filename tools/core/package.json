@@ -1,0 +1,11 @@
+{
+  "name": "@rural-jet-lag/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Isomorphic algorithmic core for the vehicle-stations generator: clustering, spacing filter, cap auto-tune, wait-range tiers, area calc, Overpass query construction, POI parsing, KML rendering. No filesystem or browser-only deps.",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  }
+}
