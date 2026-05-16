@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rural-jet-lag/core": "*"
+    "@rural-jet-lag/core": "*",
+    "leaflet": "^1.9.4",
+    "leaflet-draw": "^1.0.4"
   },
   "devDependencies": {
     "vite": "^5.4.0"

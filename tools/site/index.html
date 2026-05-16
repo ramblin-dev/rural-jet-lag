@@ -4,9 +4,92 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vehicle stations — rural-jet-lag</title>
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <main id="app">Scaffold. Real UI lands in phase 6.</main>
+    <div id="app">
+      <div id="map" aria-label="Play-area map"></div>
+      <aside id="sidebar">
+        <header>
+          <h1>Vehicle stations</h1>
+          <p class="byline">
+            Draw your play area on the map. Stations generate automatically.
+            Tweak the settings, then download a KML to upload to
+            <a href="https://mymaps.google.com" target="_blank" rel="noopener">Google My Maps</a>.
+          </p>
+        </header>
+
+        <section id="draw-mode">
+          <h2>Drawing</h2>
+          <label><input type="radio" name="draw-mode" value="play" checked /> Play area</label>
+          <label><input type="radio" name="draw-mode" value="excl" /> Exclusion zone</label>
+          <p class="hint" id="draw-hint">Click the polygon tool on the map to draw your play area.</p>
+        </section>
+
+        <section id="status">
+          <h2>Status</h2>
+          <p id="status-text">No play area drawn yet.</p>
+        </section>
+
+        <section id="settings" hidden>
+          <h2>Settings</h2>
+
+          <fieldset>
+            <legend>Auto-inferred (override if needed)</legend>
+            <label>Game size
+              <select name="gameSize">
+                <option value="">Auto (from polygon area)</option>
+                <option value="S">S — small</option>
+                <option value="M">M — medium</option>
+                <option value="L">L — large</option>
+              </select>
+            </label>
+            <label>Cluster radius (m)
+              <input type="number" name="clusterRadiusM" min="1" placeholder="auto from game-size" />
+            </label>
+            <label>Max stations per cluster
+              <input type="number" name="maxStationsPerCluster" min="0" placeholder="auto-tune (0 = no cap)" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Tunable</legend>
+            <label>Min station spacing (m)
+              <input type="number" name="minStationSpacingM" min="1" value="300" />
+            </label>
+            <label>Density radius (m)
+              <input type="number" name="densityRadiusM" min="1" value="1609" />
+            </label>
+            <label>Playing hours
+              <input type="text" name="playingHours" value="7am-7pm" />
+            </label>
+            <label>Playing days
+              <input type="text" name="playingDaysOfWeek" value="sat,sun" />
+            </label>
+            <label><input type="checkbox" name="waterSubtract" checked /> Subtract OSM water from area calc</label>
+            <label><input type="checkbox" name="includeTransitStations" checked /> Include real OSM transit stations</label>
+          </fieldset>
+        </section>
+
+        <section id="download" hidden>
+          <h2>Download</h2>
+          <button type="button" id="download-btn">Download KML</button>
+          <details>
+            <summary>How to upload to Google My Maps</summary>
+            <ol>
+              <li>Open <a href="https://mymaps.google.com" target="_blank" rel="noopener">mymaps.google.com</a> and click <em>Create a new map</em>.</li>
+              <li>Under the default layer, click <em>Import</em> and drop your downloaded KML file.</li>
+              <li>Each station becomes a pin. The whole import is one layer — delete it in one click after the game.</li>
+              <li>Share the map with the other team so seekers and the hider can see the stations.</li>
+            </ol>
+          </details>
+        </section>
+
+        <section id="reset" hidden>
+          <p class="hint">To start over, delete the play-area polygon with the trash tool on the map. Settings persist.</p>
+        </section>
+      </aside>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

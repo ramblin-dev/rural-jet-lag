@@ -1,0 +1,54 @@
+@import "leaflet/dist/leaflet.css";
+@import "leaflet-draw/dist/leaflet.draw.css";
+
+:root { color-scheme: light dark; }
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; height: 100%; font: 14px/1.45 system-ui, sans-serif; }
+
+#app {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  height: 100vh;
+}
+
+#map { height: 100%; }
+
+#sidebar {
+  overflow-y: auto;
+  padding: 16px 20px;
+  border-left: 1px solid #ccc;
+  background: Canvas;
+}
+
+#sidebar h1 { font-size: 18px; margin: 0 0 4px 0; }
+#sidebar h2 { font-size: 14px; margin: 18px 0 6px 0; text-transform: uppercase; letter-spacing: .03em; color: GrayText; }
+
+.byline { color: GrayText; margin: 0 0 8px 0; }
+.hint { color: GrayText; font-size: 12px; margin: 4px 0 0 0; }
+
+#draw-mode label { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
+
+fieldset { border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px 12px 12px; margin: 8px 0; }
+fieldset legend { padding: 0 6px; color: GrayText; font-size: 12px; }
+fieldset label { display: flex; flex-direction: column; gap: 2px; margin: 8px 0; font-size: 13px; }
+fieldset label input[type="checkbox"] { margin-right: 6px; }
+fieldset label:has(input[type="checkbox"]) { flex-direction: row; align-items: center; }
+
+input[type="number"], input[type="text"], select {
+  padding: 4px 6px; border: 1px solid #bbb; border-radius: 4px; font: inherit;
+}
+
+button { padding: 8px 12px; font: inherit; border: 1px solid #888; border-radius: 4px; cursor: pointer; background: ButtonFace; color: ButtonText; }
+button:hover { filter: brightness(1.05); }
+
+@media (max-width: 720px) {
+  #app { grid-template-columns: 1fr; grid-template-rows: 60vh 1fr; }
+  #sidebar { border-left: none; border-top: 1px solid #ccc; }
+}
+
+/* Distinct colours for the two polygon layers. Leaflet's default styling
+   is overridden via the layer's own pane to keep exclusion shapes red. */
+.leaflet-overlay-pane path.excl-poly { stroke: #c0392b; fill: #e74c3c; fill-opacity: .25; }
+.leaflet-overlay-pane path.play-poly { stroke: #2c5fa8; fill: #3498db; fill-opacity: .15; }
