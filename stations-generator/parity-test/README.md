@@ -1,51 +1,71 @@
 # Parity / regression test
 
 Frozen reference output for the vehicle-stations generator. The JS CLI runs
-against a checked-in Overpass snapshot and its output is diffed against a
-baseline that was originally captured from the Python reference
-implementation (now removed; see git history at and before the deletion of
-`old-tools/`).
+against checked-in Overpass snapshots and its output is diffed against a
+blessed baseline per test case. A failure here means algorithmic drift in
+the JS implementation — not OSM drift between two runs, because every
+Overpass response is snapshotted.
 
-A failure here means an algorithmic drift in the JS implementation — not
-OSM drift between two runs, because the Overpass response is snapshotted.
+## Layout
 
-## Files
+Each test case lives in `cases/<name>/`:
 
-- `polygon.geojson` — fixed Sioux Falls metro play area. Picked because it
-  exercises clustering, the spacing filter, the per-cluster cap, water
-  subtraction, and at least one real OSM transit station.
-- `fixtures/pois.json` — snapshotted Overpass response for the POI query.
-- `fixtures/water.json` — snapshotted Overpass response for the water-polygon
-  query used by the area calc.
-- `baseline/python-sioux.csv`, `baseline/python-sioux.kml` — frozen
-  reference output. Named for the Python implementation that produced
-  them; treated as the canonical expected output the JS port must match.
+```
+cases/<name>/
+  polygon.geojson           # play-area polygon
+  exclusion.geojson         # optional exclusion polygon (passed as --subtract-polygon)
+  fixtures/
+    pois.json               # frozen Overpass POI response
+    water.json              # frozen Overpass water-polygon response
+  baseline/
+    expected.csv            # blessed reference CSV
+    expected.kml            # blessed reference KML
+```
 
-## Running the test
+## Cases
+
+| Case | Polygon | Notable |
+|---|---|---|
+| `sioux` | Sioux Falls metro, ~330 km² | Exercises auto-tune, water subtraction, real OSM transit stations. Originally captured from the Python reference implementation that seeded the JS port. |
+| `town-excl` | Dell Rapids, SD, ~33 km² | Small-town footprint with a hand-drawn exclusion polygon removing two POIs (Brown Memorial Park and County Fair Grocery) from the northern portion of town. Exercises the exclusion code path. |
+
+## Running
 
 ```bash
 cd stations-generator
 npm run parity:js
 ```
 
-This runs the JS CLI against the fixture, writes `baseline/js-sioux.{csv,kml}`,
-and diffs them against `baseline/python-sioux.{csv,kml}`. Exits non-zero on
-any diff. The diff normalises the `--name` value (`python-sioux` vs
-`js-sioux`) in the KML layer name; everything else must be byte-identical.
+Iterates every case, regenerates output into a tmp dir, diffs against the
+case's `expected.{csv,kml}`. Exits non-zero on any drift.
 
-## Updating the baseline
+## Adding a case
 
-If you deliberately change algorithmic behavior in `stations-generator/core/`, the diff
-will fail. To bless the new output as the expected baseline:
+1. Create `cases/<new-name>/polygon.geojson` (and `exclusion.geojson` if
+   you want one).
+2. Run the CLI with `--overpass-fixture-dir cases/<new-name>/fixtures
+   --output-dir cases/<new-name>/baseline --name expected --no-timestamp`
+   (and `--subtract-polygon cases/<new-name>/exclusion.geojson` if applicable).
+   The first run hits Overpass and saves both the fixture and the baseline.
+3. Add the case to the `CASES` array in `stations-generator/cli/src/parity.js`.
+4. Re-run `npm run parity:js` to confirm it passes.
+
+## Updating a baseline
+
+If you deliberately change algorithmic behavior in `stations-generator/core/`,
+the diff will fail. To bless the new output for a case as the expected
+baseline:
 
 ```bash
 cd stations-generator
-npm run parity:js   # produces js-sioux.{csv,kml}
-cp parity-test/baseline/js-sioux.csv parity-test/baseline/python-sioux.csv
-cp parity-test/baseline/js-sioux.kml parity-test/baseline/python-sioux.kml
-# Then in the new python-sioux.kml, change the two <name>js-sioux</name>
-# occurrences back to <name>python-sioux</name> so the normaliser sees
-# the python- prefix on the reference file.
+node cli/src/main.js \
+  --polygon-file parity-test/cases/<case>/polygon.geojson \
+  --overpass-fixture-dir parity-test/cases/<case>/fixtures \
+  --output-dir parity-test/cases/<case>/baseline \
+  --name expected --no-timestamp \
+  --min-station-spacing-m 300 --density-radius-m 1609 \
+  --playing-hours 7am-7pm --playing-days-of-week sat,sun
+  # plus --subtract-polygon parity-test/cases/<case>/exclusion.geojson if the case has one
 ```
 
 Commit the new baseline with a message explaining why the output changed.

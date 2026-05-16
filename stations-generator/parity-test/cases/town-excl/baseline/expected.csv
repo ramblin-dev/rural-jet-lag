@@ -1,0 +1,12 @@
+name,category,cluster_id,latitude,longitude,wait_min_minutes,wait_max_minutes,density_tier,nearby_poi_count,open_during_play,opening_hours,osm_type,osm_id
+The Meeting Nook,cafe,1,43.823598,-96.711405,5,15,dense,17,unknown,,way,1040060759
+Prohibition Pub,bar,1,43.823020,-96.706953,5,15,dense,17,unknown,,way,1040063108
+Dell Rapids City Park,park,2,43.820918,-96.704233,5,15,dense,16,unknown,,relation,15831962
+Dells of the Sioux Recreation Area,park,3,43.811920,-96.713273,10,30,moderate,13,unknown,,relation,16346779
+Historic Dam Site Park,park,4,43.819803,-96.723681,5,15,dense,17,unknown,,relation,15834227
+Casey's General Store,convenience_store,4,43.822893,-96.722077,5,15,dense,17,unknown,,way,564850296
+Lions Park,park,5,43.818437,-96.711374,5,15,dense,17,unknown,,relation,15904363
+Veterans Memorial Park,park,6,43.824756,-96.722867,5,15,dense,16,unknown,,relation,15828621
+T&C Self Service,convenience_store,6,43.823860,-96.719322,5,15,dense,17,unknown,,way,564850294
+Dells One Stop,convenience_store,7,43.822362,-96.718129,5,15,dense,17,unknown,,way,1040063125
+T and C's Other Place,convenience_store,8,43.826430,-96.706319,5,15,dense,16,unknown,,relation,17408267
