@@ -225,5 +225,5 @@ __marimo__/
 
 # Node / JS tooling
 node_modules/
-tools/site/dist/
+stations-generator/site/dist/
 *.tsbuildinfo

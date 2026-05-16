@@ -1,5 +1,5 @@
 // JS-side regression runner. Reads the frozen Overpass fixture under
-// tools/parity-test/, regenerates js-sioux.{csv,kml}, and diffs against
+// stations-generator/parity-test/, regenerates js-sioux.{csv,kml}, and diffs against
 // the checked-in python-sioux.{csv,kml} reference originally captured
 // from the Python implementation that seeded this port.
 
@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, "..", "..", "..");
-const PARITY_DIR = join(REPO_ROOT, "tools", "parity-test");
+const PARITY_DIR = join(REPO_ROOT, "stations-generator", "parity-test");
 const CLI_MAIN = join(HERE, "main.js");
 
 function run(cmd, args) {

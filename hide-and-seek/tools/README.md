@@ -1,6 +1,6 @@
 # Tools — Rural Hide and Seek
 
-Hide and Seek-specific scripts. Cross-game tools (including the vehicle-stations generator) live in [`/tools/`](../../tools/).
+Hide and Seek-specific scripts. The cross-game vehicle-stations generator lives in [`/stations-generator/`](../../stations-generator/).
 
 ---
 

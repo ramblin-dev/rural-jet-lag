@@ -11,7 +11,7 @@ How to set up a Rural Hide + Seek game from scratch. Nothing here changes the of
 - Your physical Hide + Seek box (base game and the Vol. 1 expansion). See the [Before you play](../README.md#before-you-play) section of the top-level README for where to buy it.
 - A vehicle for each team.
 - Phones with location sharing enabled — the original game's live-tracking convention applies unchanged.
-- A device with a modern browser to run the vehicle-stations generator. The full tool is in [`/tools/`](../tools/) — either the in-browser site (most convenient) or the Node CLI. See [`/vehicle-stations.md`](../vehicle-stations.md) for what stations are and how the in-game mechanic uses them.
+- A device with a modern browser to run the vehicle-stations generator. The full tool is in [`/stations-generator/`](../stations-generator/) — either the in-browser site (most convenient) or the Node CLI. See [`/vehicle-stations.md`](../vehicle-stations.md) for what stations are and how the in-game mechanic uses them.
 
 ---
 
@@ -20,7 +20,7 @@ How to set up a Rural Hide + Seek game from scratch. Nothing here changes the of
 From the repo root, start the site:
 
 ```bash
-cd tools
+cd stations-generator
 npm install        # one-time
 npm run dev:site
 ```
@@ -35,7 +35,7 @@ A few notes on choosing the area:
 
 The sidebar shows the inferred game size, the cluster radius, the per-cluster cap, and the total station count. Tweak any sidebar setting and stations re-render instantly without re-hitting Overpass.
 
-Prefer the command line? `npm run cli -- --polygon-file path/to/polygon.geojson --name my-game` produces a `.csv` (for spreadsheets and reference) and a `.kml` (for upload to a mapping app) under `tools/.output/`. Same flags as the sidebar settings — see `npm run cli -- --help`.
+Prefer the command line? `npm run cli -- --polygon-file path/to/polygon.geojson --name my-game` produces a `.csv` (for spreadsheets and reference) and a `.kml` (for upload to a mapping app) under `stations-generator/.output/`. Same flags as the sidebar settings — see `npm run cli -- --help`.
 
 ---
 

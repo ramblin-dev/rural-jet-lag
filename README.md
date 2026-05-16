@@ -13,7 +13,7 @@ Hide + Seek (and most Jet Lag formats) leans on the friction of public transit â
 ## Set up and play a rural Hide + Seek game
 
 1. **Get the official game.** Buy the [Hide + Seek home game and Vol. 1 expansion from Nebula](https://store.nebula.tv/collections/jetlag). This project is supplemental â€” it adapts the official rules, it doesn't replace them. The rulebooks, dice, hider deck, and Investigation Book all come in the box.
-2. **Generate vehicle stations.** Open the in-browser generator under [`tools/site/`](./tools/site/), draw a polygon over your intended rural play area, and download the auto-generated KML. (Prefer the command line? See [`tools/cli/`](./tools/cli/).)
+2. **Generate vehicle stations.** Open the in-browser generator under [`stations-generator/site/`](./stations-generator/site/), draw a polygon over your intended rural play area, and download the auto-generated KML. (Prefer the command line? See [`stations-generator/cli/`](./stations-generator/cli/).)
 3. **Import the stations to a map.** Upload the KML to [Google My Maps](https://mymaps.google.com) â€” one click creates a shareable map layer the whole table can see during play.
 4. **Play.** Follow the official rulebook for everything *except* seeker / hider transportation, which uses the rural cars-as-trains mechanic in [`vehicle-stations.md`](./vehicle-stations.md). Per-format rules live in [`hide-and-seek/rules.md`](./hide-and-seek/rules.md); the full setup walkthrough is in [`hide-and-seek/setup.md`](./hide-and-seek/setup.md).
 
@@ -21,7 +21,7 @@ Hide + Seek (and most Jet Lag formats) leans on the friction of public transit â
 
 ## Games
 
-Each game format from the show gets its own directory with rules and any format-specific assets and tools. The cross-game vehicle-stations generator (in-browser site + Node CLI sharing one core) lives in [`/tools/`](./tools/).
+Each game format from the show gets its own directory with rules and any format-specific assets and tools. The cross-game vehicle-stations generator (in-browser site + Node CLI sharing one core) lives in [`/stations-generator/`](./stations-generator/).
 
 | Directory | Game | Status |
 |-----------|------|--------|

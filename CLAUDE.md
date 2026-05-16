@@ -28,7 +28,7 @@ Currently only `hide-and-seek/` exists. When adding a new format (e.g. `tag/`), 
 The cross-game pieces:
 
 - `vehicle-stations.md` (repo root) — the canonical write-up of the cars-as-trains mechanic that every rural Jet Lag adaptation in this repo shares (what a station is, how the 2d6 departure roll works, route declaration / mid-route changes). Per-game `rules.md` files reference it instead of restating the mechanic. When you change the cross-game mechanic, edit it here, not in the per-game files.
-- `tools/` (repo root) — JS workspace shipping the cross-game vehicle-stations generator in two forms: `tools/cli/` (Node CLI) and `tools/site/` (Vite static site). Both consume one shared `tools/core/` algorithmic core. A `tools/parity-test/` directory holds a frozen Overpass fixture + reference CSV/KML so `npm run parity:js` catches algorithmic drift. Game-specific scripts (Python, currently) still live in `<game>/tools/`.
+- `stations-generator/` (repo root) — JS workspace shipping the cross-game vehicle-stations generator in two forms: `stations-generator/cli/` (Node CLI) and `stations-generator/site/` (Vite static site). Both consume one shared `stations-generator/core/` algorithmic core. A `stations-generator/parity-test/` directory holds a frozen Overpass fixture + reference CSV/KML so `npm run parity:js` catches algorithmic drift. Game-specific scripts (Python, currently) still live in `<game>/tools/`. If additional cross-game tools appear later, they should get their own top-level directories named after their purpose, not a generic shared `tools/` slot.
 - `reference/` (repo root) — cross-game research that supports the shared mechanics (currently `transit-friction.md` on the academic literature behind the vehicle-stations mechanic). Per-game *original-rulebook* reference material stays under `<game>/reference/`.
 
 The repo-root `.input/` is **gitignored** and serves as a personal-reference cache for scans, saved web pages, and PDFs of source material that we don't want in the repo. Never check anything into `.input/`, and don't suggest publishing its contents. It exists so we can read source material when verifying inventory or designing rules without committing it.
@@ -47,18 +47,18 @@ Tool scripts write outputs to `.output/` directories (also gitignored repo-wide)
 
 The repo has two language ecosystems, side by side:
 
-- **JS** under `tools/` — the cross-game vehicle-stations generator (CLI + site + shared core). Managed as an npm workspace; Node 20+. Common commands:
+- **JS** under `stations-generator/` — the cross-game vehicle-stations generator (CLI + site + shared core). Managed as an npm workspace; Node 20+. Common commands:
 
   ```bash
-  cd tools
+  cd stations-generator
   npm install              # one-time
   npm run dev:site         # Vite dev server with HMR
-  npm run build:site       # produces tools/site/dist/ for GitHub Pages
+  npm run build:site       # produces stations-generator/site/dist/ for GitHub Pages
   npm run cli -- --help    # invoke the Node CLI
   npm run parity:js        # run the regression test against the frozen fixture
   ```
 
-  When changing algorithm behavior in `tools/core/`, the parity test will fail; see `tools/parity-test/README.md` for how to bless a new baseline.
+  When changing algorithm behavior in `stations-generator/core/`, the parity test will fail; see `stations-generator/parity-test/README.md` for how to bless a new baseline.
 
 - **Python** under `hide-and-seek/tools/` — the OCR pipeline for processing scanned rulebook material. Single root `pyproject.toml`; managed with [uv](https://github.com/astral-sh/uv). Per-game directory names contain hyphens, so scripts aren't installable as console commands; invoke directly:
 

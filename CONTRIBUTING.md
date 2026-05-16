@@ -12,7 +12,7 @@ Each Jet Lag game format has its own top-level directory. When contributing, wor
 |-----------|------|
 | [`/hide-and-seek`](./hide-and-seek/) | Hide and Seek — rural driving variant |
 
-Cross-game material — the shared cars-as-trains mechanic write-up at [`/vehicle-stations.md`](./vehicle-stations.md) and any tools that work across formats in [`/tools/`](./tools/) — lives at the repo root.
+Cross-game material — the shared cars-as-trains mechanic write-up at [`/vehicle-stations.md`](./vehicle-stations.md) and the vehicle-stations generator in [`/stations-generator/`](./stations-generator/) — lives at the repo root.
 
 ---
 
@@ -27,7 +27,7 @@ Found an ambiguity in the ruleset? Open an issue or submit a PR to the game's `r
 - Please ensure your designs don't reproduce copyrighted artwork from the official show.
 
 ### 🛠️ Tools & Scripts
-- Cross-game tooling lives in the top-level [`/tools/`](./tools/) npm workspace (`core/` shared logic, `cli/` Node CLI, `site/` static site). Run `npm install` in `tools/` to get set up; `npm run dev:site` for the dev server, `npm run parity:js` to verify the regression test still passes.
+- The cross-game vehicle-stations generator lives in the top-level [`/stations-generator/`](./stations-generator/) npm workspace (`core/` shared logic, `cli/` Node CLI, `site/` static site). Run `npm install` in `stations-generator/` to get set up; `npm run dev:site` for the dev server, `npm run parity:js` to verify the regression test still passes.
 - Tools specific to a single format belong in that game's `tools/` directory and may be in Python (`uv run python <game>/tools/<script>.py`) since per-game directories aren't packaged.
 - All code contributions are covered by the [MIT License](./LICENSE).
 - Include a docstring or `README.md` section explaining how to use your tool.

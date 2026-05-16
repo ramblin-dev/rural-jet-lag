@@ -16,7 +16,7 @@ isomorphic algorithmic core.
 ## Setup
 
 ```bash
-cd tools
+cd stations-generator
 npm install
 ```
 

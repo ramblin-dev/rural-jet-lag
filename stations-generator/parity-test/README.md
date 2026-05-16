@@ -24,7 +24,7 @@ OSM drift between two runs, because the Overpass response is snapshotted.
 ## Running the test
 
 ```bash
-cd tools
+cd stations-generator
 npm run parity:js
 ```
 
@@ -35,11 +35,11 @@ any diff. The diff normalises the `--name` value (`python-sioux` vs
 
 ## Updating the baseline
 
-If you deliberately change algorithmic behavior in `tools/core/`, the diff
+If you deliberately change algorithmic behavior in `stations-generator/core/`, the diff
 will fail. To bless the new output as the expected baseline:
 
 ```bash
-cd tools
+cd stations-generator
 npm run parity:js   # produces js-sioux.{csv,kml}
 cp parity-test/baseline/js-sioux.csv parity-test/baseline/python-sioux.csv
 cp parity-test/baseline/js-sioux.kml parity-test/baseline/python-sioux.kml
