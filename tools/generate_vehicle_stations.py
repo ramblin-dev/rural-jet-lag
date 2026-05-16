@@ -472,6 +472,24 @@ def query_overpass(query: str) -> list[dict]:
     return r.json().get("elements", [])
 
 
+def query_overpass_cached(query: str, fixture_path: Path | None) -> list[dict]:
+    """Like ``query_overpass`` but reads/writes a JSON fixture file when given.
+
+    If ``fixture_path`` is provided and the file exists, the cached elements
+    are returned with no network call. If the file does not exist, the live
+    query runs and the response is written to the file before returning.
+    This is used by the parity test to freeze a known Overpass response so
+    the JS port can be diffed against the Python output without OSM drift.
+    """
+    if fixture_path is not None and fixture_path.exists():
+        return json.loads(fixture_path.read_text())
+    elements = query_overpass(query)
+    if fixture_path is not None:
+        fixture_path.parent.mkdir(parents=True, exist_ok=True)
+        fixture_path.write_text(json.dumps(elements))
+    return elements
+
+
 # Tags that mark a polygon as a body of water / non-playable land cover.
 # Subtracted from the play area when computing map size for game-size inference.
 WATER_TAG_FILTERS: list[tuple[str, str]] = [
@@ -484,7 +502,10 @@ WATER_TAG_FILTERS: list[tuple[str, str]] = [
 ]
 
 
-def query_water_polygons(polygon: list[tuple[float, float]]) -> list[list[tuple[float, float]]]:
+def query_water_polygons(
+    polygon: list[tuple[float, float]],
+    fixture_path: Path | None = None,
+) -> list[list[tuple[float, float]]]:
     """Query Overpass for water polygons inside the play polygon.
 
     Returns a list of (lat, lon) outer-ring polylines, one per water way.
@@ -500,7 +521,7 @@ def query_water_polygons(polygon: list[tuple[float, float]]) -> list[list[tuple[
         parts.append(f'  way["{key}"="{value}"](poly:"{poly_str}");')
     body = "\n".join(parts)
     query = f"[out:json][timeout:{OVERPASS_TIMEOUT_SEC}];\n(\n{body}\n);\nout geom;"
-    elements = query_overpass(query)
+    elements = query_overpass_cached(query, fixture_path)
     rings: list[list[tuple[float, float]]] = []
     for el in elements:
         geom = el.get("geometry") or []
@@ -525,6 +546,7 @@ def compute_play_area(
     polygon: list[tuple[float, float]],
     subtract_water: bool,
     extra_subtract_ring: list[tuple[float, float]] | None,
+    water_fixture_path: Path | None = None,
 ) -> PlayArea:
     """Compute play area in km², optionally subtracting water and a user polygon.
 
@@ -545,7 +567,7 @@ def compute_play_area(
 
     if subtract_water:
         try:
-            rings = query_water_polygons(polygon)
+            rings = query_water_polygons(polygon, fixture_path=water_fixture_path)
             print(f"Water polygons fetched: {len(rings)}", file=sys.stderr)
             water_geoms = []
             for ring in rings:
@@ -887,7 +909,7 @@ def write_csv(out_path: Path, rows: list[dict]) -> None:
             w.writerow(row)
 
 
-def write_kml(out_path: Path, layer_name: str, rows: list[dict]) -> None:
+def write_kml(out_path: Path, layer_name: str, rows: list[dict], generated_at: str | None = None) -> None:
     """Write a KML file with all stations in a single Folder.
 
     Google My Maps imports the file as one map layer named ``layer_name``,
@@ -895,7 +917,8 @@ def write_kml(out_path: Path, layer_name: str, rows: list[dict]) -> None:
     OsmAnd, GAIA, and QGIS also read the file natively.
     """
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    generated_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    if generated_at is None:
+        generated_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     placemarks = []
     for r in rows:
         desc = (
@@ -982,6 +1005,19 @@ def main() -> int:
     ap.add_argument("--playing-days-of-week", type=str, default=DEFAULT_PLAYING_DAYS,
                     help=f"Comma-delimited weekdays during which the game will be played. "
                          f"Used together with --playing-hours. Default: {DEFAULT_PLAYING_DAYS}.")
+    ap.add_argument("--overpass-fixture-dir", type=Path, default=None,
+                    help="Directory holding cached Overpass responses ('pois.json', "
+                         "'water.json'). If the files exist, they're read instead of "
+                         "calling Overpass. If not, the live queries run and responses "
+                         "are written to this directory. Used by the parity test to "
+                         "freeze a known Overpass response so the JS port can be diffed "
+                         "against the Python output without OSM drift.")
+    ap.add_argument("--output-dir", type=Path, default=None,
+                    help="Directory to write CSV/KML output to (default: tools/.output/).")
+    ap.add_argument("--no-timestamp", action="store_true",
+                    help="Omit the UTC timestamp from output filenames. With this set, "
+                         "output is '{name}.csv' and '{name}.kml' (overwrites prior runs); "
+                         "without it, '{name}-{timestamp}.{ext}'.")
     ap.add_argument("--debug-candidates", action="store_true",
                     help="Print one line per candidate POI to stdout in shell-style "
                          "key=value format (kept and rejected, with reason). Designed to "
@@ -1015,10 +1051,15 @@ def main() -> int:
         area_info = None
     else:
         try:
+            water_fixture = (
+                args.overpass_fixture_dir / "water.json"
+                if args.overpass_fixture_dir is not None else None
+            )
             area_info = compute_play_area(
                 polygon,
                 subtract_water=args.water_subtract,
                 extra_subtract_ring=extra_excl_ring,
+                water_fixture_path=water_fixture,
             )
             game_size = infer_game_size(area_info.net_km2)
             chain = f"{area_info.gross_km2:.0f} km² gross"
@@ -1053,9 +1094,13 @@ def main() -> int:
     print(f"Cluster radius: {cluster_radius_m:.0f}m ({radius_source})", file=sys.stderr)
 
     query = build_overpass_query(polygon, include_transit=args.include_transit_stations)
+    pois_fixture = (
+        args.overpass_fixture_dir / "pois.json"
+        if args.overpass_fixture_dir is not None else None
+    )
     print("Querying Overpass for POIs…", file=sys.stderr)
     t0 = wall_time.time()
-    elements = query_overpass(query)
+    elements = query_overpass_cached(query, pois_fixture)
     print(f"Got {len(elements)} elements in {wall_time.time() - t0:.1f}s", file=sys.stderr)
 
     candidates = parse_pois(elements, playing_window)
@@ -1158,13 +1203,17 @@ def main() -> int:
             }
         )
 
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    out_dir = Path(__file__).resolve().parent / ".output"
-    stem = f"{args.name}-{timestamp}"
+    out_dir = args.output_dir if args.output_dir is not None else Path(__file__).resolve().parent / ".output"
+    if args.no_timestamp:
+        stem = args.name
+    else:
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        stem = f"{args.name}-{timestamp}"
     csv_path = out_dir / f"{stem}.csv"
     kml_path = out_dir / f"{stem}.kml"
     write_csv(csv_path, rows)
-    write_kml(kml_path, args.name, rows)
+    kml_generated_at = "fixture" if args.no_timestamp else None
+    write_kml(kml_path, args.name, rows, generated_at=kml_generated_at)
     print(f"Wrote {csv_path}", file=sys.stderr)
     print(f"Wrote {kml_path}", file=sys.stderr)
     return 0
