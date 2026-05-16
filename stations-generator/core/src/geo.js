@@ -31,7 +31,7 @@ export function polygonCentroid(ring) {
 
 // Equirectangular projection of a [lat, lon] ring to local (x, y) km.
 // Matches old-tools/generate_vehicle_stations.py:project_ring_to_km — same
-// 111 km/° constant and same cos(lat0) scaling — so the parity test's area
+// 111 km/° constant and same cos(lat0) scaling — so the regression test's area
 // numbers come out identical.
 export function projectRingToKm(ring, lat0, lon0) {
   const cosLat0 = Math.cos((lat0 * Math.PI) / 180);

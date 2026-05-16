@@ -1,5 +1,5 @@
 // KML emission. Returns a string. Mirrors the exact format of
-// old-tools write_kml so the parity diff is byte-clean.
+// old-tools write_kml so the regression diff is byte-clean.
 
 // Matches Python's xml.sax.saxutils.escape default: only &, <, >. Quotes
 // are intentionally NOT escaped (the Python reference doesn't escape them

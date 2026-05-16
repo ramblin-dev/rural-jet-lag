@@ -1,6 +1,6 @@
 // Seed-and-grow clustering + intra-cluster spacing filter + per-cluster cap.
 // Mirrors old-tools/generate_vehicle_stations.py:filter_two_tier exactly so
-// the parity test passes.
+// the regression test passes.
 
 import {
   AUTO_TUNE_CAP_RANGE,
@@ -17,7 +17,7 @@ function comparePriority(a, b) {
   // Python: name.lower(); JS localeCompare is locale-dependent. Use
   // case-insensitive lex sort with the C locale to match Python's
   // .lower() ordering on ASCII content (the only thing that matters for
-  // the parity fixture; non-ASCII names tie-break the same in both langs
+  // the regression fixture; non-ASCII names tie-break the same in both langs
   // since both compare on lowercased UCS code points).
   const an = a.name.toLowerCase();
   const bn = b.name.toLowerCase();

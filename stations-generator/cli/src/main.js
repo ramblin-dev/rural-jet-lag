@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // vehicle-stations CLI (JS port). Mirrors the Python flag set so the
-// parity test can diff outputs byte-for-byte (modulo the KML
+// regression test can diff outputs byte-for-byte (modulo the KML
 // `generated_at` literal under --no-timestamp).
 
 import { readFile, writeFile, mkdir } from "node:fs/promises";
@@ -98,7 +98,7 @@ async function main() {
     settings,
   });
 
-  // Status logging — mirrors Python stderr lines (best-effort, not parity-checked).
+  // Status logging — mirrors Python stderr lines (best-effort, not covered by the regression test).
   if (stats.gameSize !== null) {
     process.stderr.write(`Game size: ${stats.gameSize} (${stats.gameSizeSource})\n`);
   }
