@@ -1,8 +1,10 @@
 # Vehicle-stations tooling
 
-JS workspace that powers the rural-jet-lag vehicle-stations generator in two
-forms — a Node CLI and a browser-based static site. Both share an
-isomorphic algorithmic core.
+The cross-game vehicle-stations algorithm and its Node CLI. The *browser*
+form of the generator lives in the site (at [`/site/stations/`](../site/stations/),
+served as the `/stations` route on [ruralhs.ramblin.dev](https://ruralhs.ramblin.dev))
+and consumes `@rural-jet-lag/core` from this directory as a workspace
+dependency.
 
 ## Layout
 
@@ -10,23 +12,23 @@ isomorphic algorithmic core.
 |---|---|
 | [`core/`](./core/) | Isomorphic algorithmic core — clustering, spacing filter, cap auto-tune, wait-range tiers, area calc, Overpass query construction, POI parsing, KML rendering. No filesystem or browser-only deps. |
 | [`cli/`](./cli/) | Node CLI. Mirrors what the sidebar settings on the site let you tweak; useful for batch / scripted runs. |
-| [`site/`](./site/) | Vite-built static site. Draw a polygon, auto-generate stations, tweak settings, download KML for Google My Maps. |
 | [`test/`](./test/) | Frozen Overpass fixture + reference output for the regression test. |
 
 ## Setup
 
 ```bash
-cd stations-generator
-npm install
+npm install              # from the repo root
 ```
 
 ## Common commands
 
+All run from the repo root:
+
 ```bash
-npm run dev:site         # Vite dev server with HMR
-npm run build:site       # produces site/dist/ for GitHub Pages
-npm run cli -- --help    # invoke the CLI through the workspace
-npm test        # run the regression test against the frozen fixture
+npm run dev              # Vite dev server for the site (the generator UI lives at /stations)
+npm run build            # produces site/dist/ for Netlify
+npm run cli -- --help    # invoke the Node CLI directly
+npm test                 # run the regression test against the frozen fixture
 ```
 
 ## Parity / regression test

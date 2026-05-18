@@ -1,8 +1,10 @@
 # Rural Hide and Seek — Rules
 
+<!-- repo-only -->
 > Part of [Rural Jet Lag](../README.md). For setup instructions (drawing a play area, generating vehicle stations, importing to Google Maps, etc.) see [`setup.md`](./setup.md).
 
 > **Disclaimer:** This is an unofficial fan project. Not affiliated with Jet Lag: The Game, Nebula, or Wendover Productions. The official Hide + Seek rulebook, card text, and Investigation Book are © Wendover Productions / Nebula. You'll need your physical copy of the official game to play — see the [Before you play](../README.md#before-you-play) section of the top-level README for where to buy it.
+<!-- /repo-only -->
 
 ---
 
@@ -22,7 +24,7 @@ The rural variant therefore **does not use the official "Playing Without Public 
 
 ## Transportation
 
-The shared transportation mechanic — what a vehicle station is, how to declare a route, how the 2d6 departure roll works, how missed departures and mid-route changes resolve — lives in [`/vehicle-stations.md`](../vehicle-stations.md). Read that first; everything below is the Hide + Seek-specific overlay.
+The shared transportation mechanic — what a vehicle station is, how to declare a route, how the 2d6 departure roll works, how missed departures and mid-route changes resolve — lives in [the cross-game vehicle-stations write-up](../vehicle-stations.md). Read that first; everything below is the Hide + Seek-specific overlay.
 
 ### Who it applies to, and when
 
@@ -35,7 +37,7 @@ Once the hider arrives at their zone, transportation rules no longer apply to th
 
 ### Departure rolls and round boundaries
 
-In addition to the cases listed in [`/vehicle-stations.md`](../vehicle-stations.md#the-departure-roll), seekers must make a fresh departure roll for **their first route after a new round begins** — even if they remained in their vehicle the whole time between rounds. The round transition resets the rule's "every route begins with a roll" clock.
+In addition to the cases listed in [the cross-game departure-roll rules](../vehicle-stations.md#the-departure-roll), seekers must make a fresh departure roll for **their first route after a new round begins** — even if they remained in their vehicle the whole time between rounds. The round transition resets the rule's "every route begins with a roll" clock.
 
 ### Route privacy
 
@@ -60,7 +62,7 @@ For everything outside transportation, **follow the official Hide + Seek ruleboo
 - Card mechanics (hider deck, hand limits, casting costs).
 - Map borders and the S/M/L game-size tiers.
 
-You'll need your physical rulebook for the canonical wording. Structural reference (paraphrased, no quotes) is in [`reference/notes.md`](./reference/notes.md).
+You'll need your physical rulebook for the canonical wording.<!-- repo-only --> Structural reference (paraphrased, no quotes) is in [`reference/notes.md`](./reference/notes.md).<!-- /repo-only -->
 
 ---
 

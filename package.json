@@ -1,0 +1,18 @@
+{
+  "name": "rural-jet-lag",
+  "private": true,
+  "type": "module",
+  "description": "Unofficial fan adaptation of Jet Lag: The Game for rural play. JS workspace root: the ruralhs.ramblin.dev site plus the vehicle-stations generator (core / cli / site).",
+  "workspaces": [
+    "stations-generator/core",
+    "stations-generator/cli",
+    "site"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@rural-jet-lag/site",
+    "build": "npm run build --workspace=@rural-jet-lag/site",
+    "preview": "npm run preview --workspace=@rural-jet-lag/site",
+    "cli": "node stations-generator/cli/src/main.js",
+    "test": "node --test stations-generator/test/"
+  }
+}

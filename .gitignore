@@ -164,8 +164,8 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
+# mkdocs documentation (not used here — `/site/` is our Vite app, kept in VCS)
+# /site
 
 # mypy
 .mypy_cache/
@@ -225,5 +225,5 @@ __marimo__/
 
 # Node / JS tooling
 node_modules/
-stations-generator/site/dist/
+site/dist/
 *.tsbuildinfo

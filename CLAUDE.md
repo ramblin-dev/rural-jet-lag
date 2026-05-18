@@ -28,7 +28,8 @@ Currently only `hide-and-seek/` exists. When adding a new format (e.g. `tag/`), 
 The cross-game pieces:
 
 - `vehicle-stations.md` (repo root) — the canonical write-up of the cars-as-trains mechanic that every rural Jet Lag adaptation in this repo shares (what a station is, how the 2d6 departure roll works, route declaration / mid-route changes). Per-game `rules.md` files reference it instead of restating the mechanic. When you change the cross-game mechanic, edit it here, not in the per-game files.
-- `stations-generator/` (repo root) — JS workspace shipping the cross-game vehicle-stations generator in two forms: `stations-generator/cli/` (Node CLI) and `stations-generator/site/` (Vite static site). Both consume one shared `stations-generator/core/` algorithmic core. A `stations-generator/test/` directory holds a frozen Overpass fixture + reference CSV/KML so `npm test` catches algorithmic drift. Game-specific scripts (Python, currently) still live in `<game>/tools/`. If additional cross-game tools appear later, they should get their own top-level directories named after their purpose, not a generic shared `tools/` slot.
+- `stations-generator/` (repo root) — JS workspaces holding the cross-game vehicle-stations algorithm: `stations-generator/core/` (isomorphic algorithmic core), `stations-generator/cli/` (Node CLI), and `stations-generator/test/` (frozen Overpass fixture + reference CSV/KML so `npm test` catches algorithmic drift). The *browser* form of the generator lives in the site (see below) and consumes `@rural-jet-lag/core` as a workspace dependency. Game-specific scripts (Python, currently) still live in `<game>/tools/`. If additional cross-game tools appear later, they should get their own top-level directories named after their purpose, not a generic shared `tools/` slot.
+- `site/` (repo root) — the Vite multi-page site at `ruralhs.ramblin.dev`. Landing page + rules/setup/vehicle-stations pages rendered at build time from the source `.md` files (single source of truth — no duplication) via the plugin in `site/plugins/markdown.js`, plus the vehicle-stations generator UI at `/stations`. Deploys to Netlify (`netlify.toml` at repo root) on push to `main`. `site/shared/` holds site-wide CSS and the generator-only stylesheet.
 - `reference/` (repo root) — cross-game research that supports the shared mechanics (currently `transit-friction.md` on the academic literature behind the vehicle-stations mechanic). Per-game *original-rulebook* reference material stays under `<game>/reference/`.
 
 The repo-root `.input/` is **gitignored** and serves as a personal-reference cache for scans, saved web pages, and PDFs of source material that we don't want in the repo. Never check anything into `.input/`, and don't suggest publishing its contents. It exists so we can read source material when verifying inventory or designing rules without committing it.
@@ -47,18 +48,20 @@ Tool scripts write outputs to `.output/` directories (also gitignored repo-wide)
 
 The repo has two language ecosystems, side by side:
 
-- **JS** under `stations-generator/` — the cross-game vehicle-stations generator (CLI + site + shared core). Managed as an npm workspace; Node 20+. Common commands:
+- **JS** — npm workspaces rooted at the repo root (`stations-generator/core`, `stations-generator/cli`, `site`). Node 20+. Common commands, all run from the repo root:
 
   ```bash
-  cd stations-generator
   npm install              # one-time
-  npm run dev:site         # Vite dev server with HMR
-  npm run build:site       # produces stations-generator/site/dist/ for GitHub Pages
-  npm run cli -- --help    # invoke the Node CLI
-  npm test        # run the regression test against the frozen fixture
+  npm run dev              # Vite dev server for the site (with HMR)
+  npm run build            # produces site/dist/ for Netlify
+  npm run preview          # serve the built dist locally
+  npm run cli -- --help    # invoke the Node vehicle-stations CLI
+  npm test                 # regression test for the vehicle-stations pipeline
   ```
 
   When changing algorithm behavior in `stations-generator/core/`, the regression test will fail; see `stations-generator/test/README.md` for how to bless a new baseline.
+
+  The site's markdown pipeline (`site/plugins/markdown.js`) reads source `.md` files from outside `site/` (e.g. `hide-and-seek/rules.md`) at build time and inlines the rendered HTML into each page's `<main>`. Relative links in those sources are rewritten to in-site routes where one exists, falling back to canonical GitHub URLs otherwise. Don't duplicate rules content into `site/` — keep the source `.md` files as the single source of truth and let the pipeline render them.
 
 - **Python** under `hide-and-seek/tools/` — the OCR pipeline for processing scanned rulebook material. Single root `pyproject.toml`; managed with [uv](https://github.com/astral-sh/uv). Per-game directory names contain hyphens, so scripts aren't installable as console commands; invoke directly:
 
@@ -67,4 +70,4 @@ The repo has two language ecosystems, side by side:
   uv run python hide-and-seek/tools/<script>.py        # direct script invocation
   ```
 
-There are no lint configs yet — add them when the first non-trivial tool needs them, not preemptively. `stations-generator/test/` is currently the only automated test suite — `npm test` from `stations-generator/` runs it and exits non-zero on any regression.
+There are no lint configs yet — add them when the first non-trivial tool needs them, not preemptively. `stations-generator/test/` is currently the only automated test suite — `npm test` from the repo root runs it and exits non-zero on any regression.

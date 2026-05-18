@@ -1,0 +1,10 @@
+# Netlify build config for ruralhs.ramblin.dev.
+# Static Vite multi-page site under /site, deployed from the repo root
+# so Netlify can resolve npm workspaces.
+
+[build]
+  command = "npm run build"
+  publish = "site/dist"
+
+[build.environment]
+  NODE_VERSION = "20"

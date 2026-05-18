@@ -1,8 +1,10 @@
 # Vehicle stations — cross-game mechanic
 
-The single shared mechanic that all rural Jet Lag adaptations in this repo are built on. Each per-game directory (`hide-and-seek/`, future `tag/`, etc.) defines its own rules but adapts only the *transportation layer* — and that layer is the same idea everywhere: **personal vehicles, ride-sharing, and taxis play the role of buses and trains, anchored to a generated set of "vehicle stations" with a wait-time roll on every departure.** Real bus / train / ferry service in your play area, if any, plays per the official rulebook alongside vehicle stations.
+The single shared mechanic that all rural Jet Lag adaptations are built on. Each format defines its own rules but adapts only the *transportation layer* — and that layer is the same idea everywhere: **personal vehicles, ride-sharing, and taxis play the role of buses and trains, anchored to a generated set of "vehicle stations" with a wait-time roll on every departure.** Real bus / train / ferry service in your play area, if any, plays per the official rulebook alongside vehicle stations.
 
+<!-- repo-only -->
 This file is the canonical write-up of that idea. Per-game `rules.md` files reference it instead of restating it.
+<!-- /repo-only -->
 
 ---
 
@@ -10,7 +12,7 @@ This file is the canonical write-up of that idea. Per-game `rules.md` files refe
 
 Jet Lag: The Game leans on the friction of public transit — waiting for the next train, transferring between lines, walking the last block — to shape interesting decisions for both seekers and hiders. In rural environments where the buses don't run and the nearest train station is in the next state, that friction disappears the moment players get in a car. Free driving is too fast and too unconstrained, and a "fuel budget" alone doesn't reproduce the *temporal* texture of transit (the unpredictable wait, the choice of where to transfer).
 
-The vehicle-stations mechanic re-introduces transit-shaped friction without requiring transit infrastructure. Cars become the buses; clustered points-of-interest become the stations; a 2d6 departure roll becomes the schedule. Background research and per-component cost weights live in [`reference/transit-friction.md`](./reference/transit-friction.md).
+The vehicle-stations mechanic re-introduces transit-shaped friction without requiring transit infrastructure. Cars become the buses; clustered points-of-interest become the stations; a 2d6 departure roll becomes the schedule. Background research and per-component cost weights live in [the transit-friction reference](./reference/transit-friction.md).
 
 ---
 
@@ -28,7 +30,12 @@ A vehicle station is a real-world location — a museum, park, gas station, rest
 
 Stations are spaced using a two-tier rule: ~300 m minimum within a cluster (matching average urban bus stop spacing), ~1000 m minimum between clusters (matching light-rail / metro spacing). The result on the map is groups of stations around towns and commercial areas with visible gaps between them — the same shape transit stops take in real cities.
 
+<!-- repo-only -->
 See [`stations-generator/README.md`](./stations-generator/) for how to generate the station map for your play area.
+<!-- /repo-only -->
+<!-- site-only -->
+Open [the generator](https://ruralhs.ramblin.dev/stations/) to generate the station map for your play area.
+<!-- /site-only -->
 
 ---
 
@@ -87,7 +94,7 @@ If your game includes any real transit (a bus, train, tram, or ferry line that p
 2. **On arrival at your destination station, wait 2× the drive time** before you may dismount-and-declare your next route or board another mode. (Example: a 12-minute drive incurs a 24-minute cooldown on arrival.)
 3. The cooldown is dead time at the destination station — you can stretch, eat, browse the POI you stopped at, but you can't start the next departure roll until it clears.
 
-Why 2× the drive time: transit is roughly **3× slower** than driving over a comparable trip — that's the midpoint of the 2–3.5× per-minute commercial-speed gap and the 2–4× door-to-door range derived in [`reference/transit-friction.md`](./reference/transit-friction.md#implied-speed-gap). A 1× drive plus a 2× post-arrival cooldown sums to **3× the drive time on the clock**, putting a vehicle leg roughly on par with the transit alternative. Without this, every mixed-mode game would just favor driving. In games with no real transit at all, this rule does nothing useful and is skipped.
+Why 2× the drive time: transit is roughly **3× slower** than driving over a comparable trip — that's the midpoint of the 2–3.5× per-minute commercial-speed gap and the 2–4× door-to-door range derived in [the transit-friction reference](./reference/transit-friction.md#implied-speed-gap). A 1× drive plus a 2× post-arrival cooldown sums to **3× the drive time on the clock**, putting a vehicle leg roughly on par with the transit alternative. Without this, every mixed-mode game would just favor driving. In games with no real transit at all, this rule does nothing useful and is skipped.
 
 ### Changing your route mid-trip
 
@@ -140,7 +147,7 @@ The vehicle-stations layer governs how *non-transit vehicles* (personal cars, ri
 - Game-size tiers (S/M/L) or any time-budget mechanics specific to a format.
 - Hider mechanics (hiding zones, end-game triggers, found conditions in Hide + Seek; equivalents in Tag, etc.).
 
-Per-game `rules.md` files are responsible for spelling out how their format handles the few official mechanics that do depend on transit topology (e.g. "end of the line" wording in Hide + Seek's Curse of the Express Route). Those caveats live with the format that needs them, not here.
+Each format's own rules are responsible for spelling out how it handles the few official mechanics that do depend on transit topology (e.g. "end of the line" wording in Hide + Seek's Curse of the Express Route). Those caveats live with the format that needs them, not here.
 
 ---
 

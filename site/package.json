@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Static site: draw a play-area polygon, auto-generate vehicle stations, download as KML for Google My Maps. Real logic lands in phase 6.",
+  "description": "ruralhs.ramblin.dev — landing, rules pages rendered from the source .md files, and the vehicle-stations generator at /stations.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,7 +12,9 @@
   "dependencies": {
     "@rural-jet-lag/core": "*",
     "leaflet": "^1.9.4",
-    "leaflet-draw": "^1.0.4"
+    "leaflet-draw": "^1.0.4",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0"
   },
   "devDependencies": {
     "vite": "^5.4.0"
